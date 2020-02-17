@@ -9,6 +9,12 @@ With version `v1.0.0` or later, you now can configure:
 1. `Config Portal Static IP address, Name and Password.`
 2. `Static IP address, Gateway, Subnet Mask and 2 DNS Servers IP addresses.`
 
+## Prerequisite
+1. [`Arduino IDE 1.8.11 or later` for Arduino](https://www.arduino.cc/en/Main/Software)
+2. `Arduino AVR core 1.8.2 or later` for Arduino (Use Arduino Board Manager)
+3. [`Blynk library 0.6.1 or later`](https://www.arduino.cc/en/guide/libraries#toc3)
+4. [ESP8266_AT_WebServer library](https://github.com/khoih-prog/ESP8266_AT_WebServer)
+
 ### Installation
 
 The suggested way to install is to:
