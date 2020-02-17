@@ -3,7 +3,7 @@
  * For AVR Mega using ESP8266 WiFi Shield
  *
  * Forked from Blynk library v0.6.1 https://github.com/blynkkk/blynk-library/releases
- * Built by Khoi Hoang https://github.com/khoih-prog/Blynk_Teensy
+ * Built by Khoi Hoang https://github.com/khoih-prog/Blynk_Esp8266AT_WM
  * Licensed under MIT license
  * Version: 1.0.0
  *
