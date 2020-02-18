@@ -6,7 +6,7 @@
  * Forked from Blynk library v0.6.1 https://github.com/blynkkk/blynk-library/releases
  * Built by Khoi Hoang https://github.com/khoih-prog/Blynk_WM
  * Licensed under MIT license
- * Version: 1.0.0
+ * Version: 1.0.1
  *
  * Original Blynk Library author:
  * @file       BlynkSimpleShieldEsp8266_Teensy.h
@@ -18,7 +18,8 @@
  *
  * Version Modified By   Date        Comments
  * ------- -----------  ----------   -----------
- *  1.0.0   K Hoang      29/01/2020  Initial coding
+ *  1.0.0   K Hoang      16/02/2020  Initial coding
+ *  1.0.1   K Hoang      17/02/2019  Add checksum, fix bug
  *****************************************************************************************************************************/
 
 #ifndef BlynkSimpleShieldEsp8266_Teensy_h

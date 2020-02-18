@@ -8,7 +8,7 @@
  * Forked from Blynk library v0.6.1 https://github.com/blynkkk/blynk-library/releases
  * Built by Khoi Hoang https://github.com/khoih-prog/Blynk_WM
  * Licensed under MIT license
- * Version: 1.0.0
+ * Version: 1.0.1
  *
  * Original Blynk Library author:
  * @file       BlynkSimpleShieldEsp8266.h
@@ -18,9 +18,10 @@
  * @date       Jun 2015
  * @brief
  *
- * Version Modified By   Date      Comments
- * ------- -----------  ---------- -----------
- *  1.0.0   K Hoang      28/10/2019 Initial coding
+ * Version Modified By   Date        Comments
+ * ------- -----------  ----------   -----------
+ *  1.0.0   K Hoang      16/02/2020  Initial coding
+ *  1.0.1   K Hoang      17/02/2019  Add checksum, fix bug
  *****************************************************************************************************************************/
 
 #ifndef BlynkSimpleShieldEsp8266_WM_h
@@ -66,6 +67,7 @@ typedef struct Configuration
     char blynk_server   [32];
     int  blynk_port;
     char blynk_token    [36];
+    int  checkSum;
 } Blynk_WF_Configuration;
 
 // Currently CONFIG_DATA_SIZE  =   152
@@ -857,12 +859,28 @@ private:
     #error EPROM_START + CONFIG_DATA_SIZE > EEPROM_SIZE. Please adjust.
   #endif
 #endif
+
+    int calcChecksum()
+    {
+      int checkSum = 0;
+      for (uint16_t index = 0; index < (sizeof(Blynk8266_WM_config) - sizeof(Blynk8266_WM_config.checkSum)); index++)
+      {
+        checkSum += * ( ( (byte*) &Blynk8266_WM_config ) + index);
+      }
+     
+      return checkSum;
+    }
               
     bool getConfigData()
     {
       EEPROM.get(EEPROM_START, Blynk8266_WM_config);
 
-      if (strncmp(Blynk8266_WM_config.header, BLYNK_BOARD_TYPE, strlen(BLYNK_BOARD_TYPE)) != 0) 
+      int calChecksum = calcChecksum();
+      
+      BLYNK_LOG4(BLYNK_F("Calc Cksum = "), calChecksum, BLYNK_F(", Read Cksum = "), Blynk8266_WM_config.checkSum);     
+
+      if ( (strncmp(Blynk8266_WM_config.header, BLYNK_BOARD_TYPE, strlen(BLYNK_BOARD_TYPE)) != 0) ||
+           (calChecksum != Blynk8266_WM_config.checkSum) )
       {
           memset(&Blynk8266_WM_config, 0, sizeof(Blynk8266_WM_config));
           
@@ -876,6 +894,8 @@ private:
           strcpy(Blynk8266_WM_config.blynk_server,     NO_CONFIG);
           Blynk8266_WM_config.blynk_port = BLYNK_SERVER_HARDWARE_PORT;
           strcpy(Blynk8266_WM_config.blynk_token,      NO_CONFIG);
+          // Don't need
+          Blynk8266_WM_config.checkSum = 0;
 
           EEPROM.put(EEPROM_START, Blynk8266_WM_config);
 
@@ -899,13 +919,17 @@ private:
     
     void saveConfigData()
     {      
-      BLYNK_LOG2(BLYNK_F("Save EEPROM, size = "), EEPROM.length());
+      int calChecksum = calcChecksum();
+      Blynk8266_WM_config.checkSum = calChecksum;
+      BLYNK_LOG4(BLYNK_F("Save EEPROM, size = "), EEPROM.length(), BLYNK_F(", chkSum = "), calChecksum);
+      
       EEPROM.put(EEPROM_START, Blynk8266_WM_config);
     }
 		
     boolean connectToWifi(int timeout)
     {
       int sleep_time = 250;
+      unsigned long currMillis = millis();
 
 	    BLYNK_LOG1(BLYNK_F("con2WF: start"));
 	    
@@ -916,9 +940,9 @@ private:
         wifi->setStationIp(IPAddressToString(static_IP), IPAddressToString(static_GW), IPAddressToString(static_SN));       
       }
 	
-      while ( !wifi_connected && ( 0 < timeout ) )
+      while ( !wifi_connected && ( 0 < timeout ) && ( (millis() - currMillis) < (unsigned long) timeout )  )
       {
-          BLYNK_LOG1(BLYNK_F("con2W: Try con2W"));
+          BLYNK_LOG2(BLYNK_F("con2WF: spent millis = "), millis() - currMillis);
           
           if (connectWiFi(Blynk8266_WM_config.wifi_ssid, Blynk8266_WM_config.wifi_pw))
           {
@@ -933,12 +957,12 @@ private:
 
 	    if (wifi_connected)
 	    {
-		    BLYNK_LOG1(BLYNK_F("con2W: OK"));
+		    BLYNK_LOG1(BLYNK_F("con2WF: OK"));
 		    displayWiFiData();
 		  }
 	    else
 	    {
-		    BLYNK_LOG1(BLYNK_F("con2W: fail"));
+		    BLYNK_LOG1(BLYNK_F("con2WF: failed"));
 		  }
 	
       return wifi_connected;    
