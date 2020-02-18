@@ -316,6 +316,12 @@ void loop()
 }
 ```
 
+### Releases v1.0.1
+
+1. Add ESP8266_AT_WebServer dependency for autoinstall via Library Manager
+2. Add prerequisite to README.md
+3. Add checksum, fix bug
+
 ### Releases v1.0.0
 
 ***Features***
