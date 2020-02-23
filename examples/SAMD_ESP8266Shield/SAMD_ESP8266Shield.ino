@@ -1,6 +1,6 @@
 /****************************************************************************************************************************
- * Teensy40_ESP8266Shield.ino
- * For Teensy 4.0 using ESP8266 WiFi Shield
+ * SAMD_ESP8266Shield.ino
+ * For AVR Mega using ESP8266 WiFi Shield
  *
  * Forked from Blynk library v0.6.1 https://github.com/blynkkk/blynk-library/releases
  * Built by Khoi Hoang https://github.com/khoih-prog/Blynk_Esp8266AT_WM
@@ -25,42 +25,62 @@
 /* Comment this out to disable prints and save space */
 #define BLYNK_PRINT Serial
 
-#if ( defined(ESP8266) || defined(ESP32) || defined(ARDUINO_AVR_MEGA) || defined(ARDUINO_AVR_MEGA2560) || !defined(CORE_TEENSY) )
-#error This code is intended to run on Teensy platform! Please check your Tools->Board setting.
+#if    ( defined(ARDUINO_SAM_DUE) || defined(ARDUINO_SAMD_ZERO) || defined(ARDUINO_SAMD_MKR1000) || defined(ARDUINO_SAMD_MKRWIFI1010) \
+      || defined(ARDUINO_SAMD_NANO_33_IOT) || defined(ARDUINO_SAMD_MKRFox1200) || defined(ARDUINO_SAMD_MKRWAN1300) || defined(ARDUINO_SAMD_MKRWAN1310) \
+      || defined(ARDUINO_SAMD_MKRGSM1400) || defined(ARDUINO_SAMD_MKRNB1500) || defined(ARDUINO_SAMD_MKRVIDOR4000) || defined(__SAMD21G18A__) \
+      || defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS) || defined(__SAM3X8E__) || defined(__CPU_ARC__) )      
+  #if defined(ESP8266_AT_USE_SAMD)
+    #undef ESP8266_AT_USE_SAMD
+  #endif
+  #define ESP8266_AT_USE_SAMD      true
+#else
+  #error This code is intended to run only on the SAMD boards ! Please check your Tools->Board setting.  
 #endif
 
-#ifdef CORE_TEENSY
-  // For Teensy 4.0
-  #define EspSerial Serial2   //Serial2, Pin RX2 : 7, TX2 : 8
-  #if defined(__IMXRT1062__)
-    #define BOARD_TYPE      "TEENSY 4.0"
+#if defined(ESP8266_AT_USE_SAMD) 
+// For SAMD
+  #define EspSerial Serial1
+  
+  #if defined(ARDUINO_SAMD_ZERO)
+    #define BOARD_TYPE      "SAMD Zero"
+  #elif defined(ARDUINO_SAMD_MKR1000)
+    #define BOARD_TYPE      "SAMD MKR1000"    
+  #elif defined(ARDUINO_SAMD_MKRWIFI1010)
+    #define BOARD_TYPE      "SAMD MKRWIFI1010"
+  #elif defined(ARDUINO_SAMD_NANO_33_IOT)
+    #define BOARD_TYPE      "SAMD NANO_33_IOT"  
+  #elif defined(ARDUINO_SAMD_MKRFox1200)
+    #define BOARD_TYPE      "SAMD MKRFox1200"
+  #elif ( defined(ARDUINO_SAMD_MKRWAN1300) || defined(ARDUINO_SAMD_MKRWAN1310) )
+    #define BOARD_TYPE      "SAMD MKRWAN13X0"
+  #elif defined(ARDUINO_SAMD_MKRGSM1400)
+    #define BOARD_TYPE      "SAMD MKRGSM1400"
+  #elif defined(ARDUINO_SAMD_MKRNB1500)
+    #define BOARD_TYPE      "SAMD MKRNB1500"
+  #elif defined(ARDUINO_SAMD_MKRVIDOR4000)
+    #define BOARD_TYPE      "SAMD MKRVIDOR4000"
+  #elif defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS)
+    #define BOARD_TYPE      "SAMD ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS"  
+  #elif ( defined(__SAM3X8E__) || (__SAM3X8E__) || (__CPU_ARC__) )
+    #define BOARD_TYPE      "SAMD Board"
   #else
-    #define BOARD_TYPE      BLYNK_INFO_DEVICE
+    #define BOARD_TYPE      "SAMD Unknown"
   #endif
-
-#else
-// For Mega
-#define EspSerial Serial3
-#define BOARD_TYPE      "AVR Mega"
 #endif
 
 #include <ESP8266_Lib.h>
 
 // Start location in EEPROM to store config data. Default 0
 // Config data Size currently is 128 bytes)
-#define EEPROM_START     0
+#define EEPROM_START     256
 
 #define USE_BLYNK_WM      true
 //#define USE_BLYNK_WM      false
 
 #if USE_BLYNK_WM
-  #ifdef CORE_TEENSY
-    #include <BlynkSimpleShieldEsp8266_Teensy_WM.h>
-  #else
-    #include <BlynkSimpleShieldEsp8266_WM.h>
-  #endif
+  #include <BlynkSimpleShieldEsp8266_SAMD_WM.h>
 #else
-  #include <BlynkSimpleShieldEsp8266_Teensy.h>
+  #include <BlynkSimpleShieldEsp8266_SAMD.h>
 
   #define USE_LOCAL_SERVER      true
 
@@ -81,7 +101,7 @@
   
 #endif
 
-// Your Teensy <-> ESP8266 baud rate:
+// Your Megay <-> ESP8266 baud rate:
 #define ESP8266_BAUD 115200
 
 ESP8266 wifi(&EspSerial);
@@ -137,12 +157,12 @@ void setup()
   Serial.println("\nStart Blynk WiFiManager using ESP8266_AT_Shield on " + String(BOARD_TYPE));
 
   #if USE_BLYNK_WM
-    Serial.println("Start Blynk_WM");
-    Blynk.setConfigPortalIP(IPAddress(192, 168, 100, 1));
-    //Blynk.setConfigPortal("Teensy4", "MyTeensy4");  
+    Serial.println(F("Start Blynk_WM"));
+    Blynk.setConfigPortalIP(IPAddress(192, 168, 120, 1));
+    //Blynk.setConfigPortal("Mega", "MyMega");  
     Blynk.begin(wifi);
   #else
-    Serial.println("Start Blynk");
+    Serial.println(F("Start Blynk"));
     Blynk.begin(auth, wifi, ssid, pass, BlynkServer.c_str(), BLYNK_SERVER_HARDWARE_PORT);
   #endif
 }

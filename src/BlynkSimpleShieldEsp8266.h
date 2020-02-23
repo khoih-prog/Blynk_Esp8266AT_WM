@@ -1,12 +1,12 @@
 /****************************************************************************************************************************
  * BlynkSimpleShieldEsp8266.h
- * For ESP8266 AT-command shields
+ * For AVR boards using ESP8266 WiFi Shields
  *
- * Blynk_Teensy is a library for the Teensy Arduino platform (https://github.com/esp8266/Arduino) 
+ * Blynk_Esp8266AT_WM is a library for the Mega, Teensy and SAMD boards (https://github.com/khoih-prog/Blynk_Esp8266AT_WM)
  * Forked from Blynk library v0.6.1 https://github.com/blynkkk/blynk-library/releases
  * Built by Khoi Hoang https://github.com/khoih-prog/Blynk_WM
  * Licensed under MIT license
- * Version: 1.0.1
+ * Version: 1.0.2
  *
  * Original Blynk Library author:
  * @file       BlynkSimpleShieldEsp8266.h
@@ -20,6 +20,7 @@
  * ------- -----------  ----------   -----------
  *  1.0.0   K Hoang      16/02/2020  Initial coding
  *  1.0.1   K Hoang      17/02/2019  Add checksum, fix bug
+ *  1.0.2   K Hoang      22/02/2019  Add support to SAMD boards
  *****************************************************************************************************************************/
 
 #ifndef BlynkSimpleShieldEsp8266_h

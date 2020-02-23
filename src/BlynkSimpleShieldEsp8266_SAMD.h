@@ -1,8 +1,10 @@
 /****************************************************************************************************************************
- * BlynkSimpleShieldEsp8266_Teensy.h
- * For ESP8266 AT-command shields
+ * BlynkSimpleShieldEsp8266_SAMD.h
+ * For SAMD boards using ESP8266 WiFi Shields
  *
  * Blynk_Esp8266AT_WM is a library for the Mega, Teensy and SAMD boards (https://github.com/khoih-prog/Blynk_Esp8266AT_WM)
+ * to enable easy configuration/reconfiguration and autoconnect/autoreconnect of WiFi/Blynk
+ * 
  * Forked from Blynk library v0.6.1 https://github.com/blynkkk/blynk-library/releases
  * Built by Khoi Hoang https://github.com/khoih-prog/Blynk_WM
  * Licensed under MIT license
@@ -23,16 +25,22 @@
  *  1.0.2   K Hoang      22/02/2019  Add support to SAMD boards
  *****************************************************************************************************************************/
 
-#ifndef BlynkSimpleShieldEsp8266_Teensy_h
-#define BlynkSimpleShieldEsp8266_Teensy_h
+#ifndef BlynkSimpleShieldEsp8266_SAMD_h
+#define BlynkSimpleShieldEsp8266_SAMD_h
 
-#if ( defined(ESP8266) || defined(ESP32) )
-#error This code is not intended to run on the ESP8266 platform! Please check your Tools->Board setting.
+#if ( defined(ESP8266) || defined(ESP32) || defined(ARDUINO_AVR_MEGA2560) || defined(ARDUINO_AVR_MEGA) )
+#error This code is not intended to run on the ESP8266, ESP32 nor AVR platform! Please check your Tools->Board setting.
 #endif
 
-//#ifndef CORE_TEENSY
-//#error This code is intended to run on the Teensy platform! Please check your Tools->Board setting.
-//#endif
+#if    ( defined(ARDUINO_SAM_DUE) || defined(ARDUINO_SAMD_ZERO) || defined(ARDUINO_SAMD_MKR1000) || defined(ARDUINO_SAMD_MKRWIFI1010) \
+      || defined(ARDUINO_SAMD_NANO_33_IOT) || defined(ARDUINO_SAMD_MKRFox1200) || defined(ARDUINO_SAMD_MKRWAN1300) || defined(ARDUINO_SAMD_MKRWAN1310) \
+      || defined(ARDUINO_SAMD_MKRGSM1400) || defined(ARDUINO_SAMD_MKRNB1500) || defined(ARDUINO_SAMD_MKRVIDOR4000) || defined(__SAMD21G18A__) \
+      || defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS) || defined(__SAM3X8E__) || defined(__CPU_ARC__) )      
+  #if defined(ESP8266_AT_USE_SAMD)
+    #undef BLYNK_ESP8266_AT_USE_SAMD
+  #endif
+  #define BLYNK_ESP8266_AT_USE_SAMD      true
+#endif
 
 #ifndef BLYNK_INFO_CONNECTION
 #define BLYNK_INFO_CONNECTION  "ESP8266"
@@ -271,27 +279,18 @@ public:
 private:
     ESP8266* client;
     bool status;
+
     //KH   
-    #ifdef CORE_TEENSY
-      #if defined(__IMXRT1062__)
-      // For Teensy 4.0
-        BlynkFifo<uint8_t, 4096> buffer;
-        #warning Board Teensy 4.0 uses 4k FIFO buffer        
-      #elif ( defined(__MKL26Z64__) || defined(ARDUINO_ARCH_AVR) )
-        // For Teensy LC and 2.0       
-        BlynkFifo<uint8_t, 512> buffer;
-        #warning Teensy LC and 2.0 uses 512bytes FIFO buffer        
-      #else
-        // For Teensy 3.x
-        BlynkFifo<uint8_t, 2048> buffer;
-        #warning Teensy 3.x uses 2k FIFO buffer
-      #endif
+    #if (BLYNK_ESP8266_AT_USE_SAMD)
+      // For NANO_33_IOT, MKRFox1200, MKRWAN1300, MKRWAN1310, MKRGSM1400, MKRNB1500, MKRVIDOR4000.
+      BlynkFifo<uint8_t, 4096> buffer;
+      #warning Board SAMD uses 4k FIFO buffer        
     #else
-      // For other AVR Mega
+      // For other boards
       //BlynkFifo<uint8_t,256> buffer;
       // For MeGa 2560 or 1280
       BlynkFifo<uint8_t,512> buffer;  
-      #warning Not Teensy board => uses 512bytes FIFO buffer    
+      #warning Not SAMD board => uses 512bytes FIFO buffer    
     #endif
     
     const char* domain;
@@ -390,9 +389,9 @@ public:
       #if 1
       ipAddress = wifi->getStationIp();
       #else
-      ipAddress = wifi->getLocalIP().replace("+CIFSR:STAIP,\"", "");
-      ipAddress = ipAddress.replace("\"", "");
-      
+      ipAddress = wifi->getLocalIP();
+      ipAddress.replace("+CIFSR:STAIP,\"", "");
+      ipAddress.replace("\"", "");     
       #endif
       
       BLYNK_LOG2(BLYNK_F("IP = "), ipAddress);

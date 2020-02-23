@@ -5,11 +5,21 @@
  * Forked from Blynk library v0.6.1 https://github.com/blynkkk/blynk-library/releases
  * Built by Khoi Hoang https://github.com/khoih-prog/Blynk_Esp8266AT_WM
  * Licensed under MIT license
- * Version: 1.0.0
+ * Version: 1.0.2
+ *
+ * Original Blynk Library author:
+ * @file       BlynkSimpleShieldEsp8266.h
+ * @author     Volodymyr Shymanskyy
+ * @license    This project is released under the MIT License (MIT)
+ * @copyright  Copyright (c) 2015 Volodymyr Shymanskyy
+ * @date       Jun 2015
+ * @brief
  *
  * Version Modified By   Date        Comments
  * ------- -----------  ----------   -----------
- *  1.0.0   K Hoang      17/02/2020  Initial coding
+ *  1.0.0   K Hoang      16/02/2020  Initial coding
+ *  1.0.1   K Hoang      17/02/2019  Add checksum, fix bug
+ *  1.0.2   K Hoang      22/02/2019  Add support to SAMD boards
  *****************************************************************************************************************************/
 
 /* Comment this out to disable prints and save space */

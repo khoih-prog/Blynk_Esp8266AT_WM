@@ -2,14 +2,14 @@
  * BlynkDetectDevice.h
  * For ESP8266 AT-command shields
  *
- * Blynk_Teensy is a library for the Teensy Arduino platform (https://github.com/esp8266/Arduino) 
+ * Blynk_Esp8266AT_WM is a library for the Mega, Teensy and SAMD boards (https://github.com/khoih-prog/Blynk_Esp8266AT_WM)
  * Forked from Blynk library v0.6.1 https://github.com/blynkkk/blynk-library/releases
  * Built by Khoi Hoang https://github.com/khoih-prog/Blynk_WM
  * Licensed under MIT license
- * Version: 1.0.1
+ * Version: 1.0.2
  *
  * Original Blynk Library author:
- * @file       BlynkDetectDevice.h
+ * @file       BlynkSimpleShieldEsp8266.h
  * @author     Volodymyr Shymanskyy
  * @license    This project is released under the MIT License (MIT)
  * @copyright  Copyright (c) 2015 Volodymyr Shymanskyy
@@ -20,6 +20,7 @@
  * ------- -----------  ----------   -----------
  *  1.0.0   K Hoang      16/02/2020  Initial coding
  *  1.0.1   K Hoang      17/02/2019  Add checksum, fix bug
+ *  1.0.2   K Hoang      22/02/2019  Add support to SAMD boards
  *****************************************************************************************************************************/
 
 #ifndef BlynkDetectDevice_h
@@ -318,7 +319,17 @@
         #define BLYNK_INFO_DEVICE  "MKR WiFi 1010"
         #elif defined(ARDUINO_SAMD_MKRVIDOR4000)
         #define BLYNK_INFO_DEVICE  "MKR Vidor 4000"
-
+        //KH
+        #elif defined(ARDUINO_SAMD_NANO_33_IOT)
+        #define BLYNK_INFO_DEVICE  "NANO_33_IOT"
+        #elif defined(ARDUINO_SAMD_MKRWAN1310)
+        #define BLYNK_INFO_DEVICE  "MKR WAN 1310"
+        #elif defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS)
+        #define BLYNK_INFO_DEVICE  "ADAFRUIT CP EXPRESS"
+        #elif ( defined(__SAMD21G18A__) || defined(__SAM3X8E__) || defined(__CPU_ARC__) )
+        #define BLYNK_INFO_DEVICE  "SAMD"
+        //
+        
         /* Intel */
         #elif defined(ARDUINO_GALILEO)
         #define BLYNK_INFO_DEVICE  "Galileo"

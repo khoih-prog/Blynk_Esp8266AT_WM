@@ -2,6 +2,10 @@
 
 [![arduino-library-badge](https://www.ardu-badge.com/badge/Blynk_Esp8266AT_WM.svg?)](https://www.ardu-badge.com/Blynk_Esp8266AT_WM)
 
+### New Version v1.0.2
+
+1. Add support to SAMD (DUE, ZERO, MKR, NANO_33_IOT, M0, M0 Pro, AdaFruit CIRCUITPLAYGROUND_EXPRESS, etc.) boards
+
 To help you to eliminate `hardcoding` your Wifi and Blynk credentials for Mega/Teensy boards running ESP8266 AT shields, and updating/reflashing every time when you need to change them. Configuration data are saved in configurable locatioon in EEPROM.
 
 With version `v1.0.0` or later, you now can configure:
@@ -11,31 +15,40 @@ With version `v1.0.0` or later, you now can configure:
 
 ## Prerequisite
 1. [`Arduino IDE 1.8.11 or later` for Arduino](https://www.arduino.cc/en/Main/Software)
-2. `Arduino AVR core 1.8.2 or later` for Arduino (Use Arduino Board Manager)
-3. [`Blynk library 0.6.1 or later`](https://www.arduino.cc/en/guide/libraries#toc3)
-4. [ESP8266_AT_WebServer library](https://github.com/khoih-prog/ESP8266_AT_WebServer)
+2. [`Blynk library 0.6.1 or later`](https://www.arduino.cc/en/guide/libraries#toc3)
+3. [`ESP8266_AT_WebServer library`](https://github.com/khoih-prog/ESP8266_AT_WebServer)
+4. `Arduino AVR core 1.8.2 or later` for AVR boards (Use Arduino Board Manager)
+5. [`Teensy core 1.49 or later`](https://www.pjrc.com/teensy/td_download.html) for Teensy boards
+6. [`FlashStorage library`](https://github.com/khoih-prog/FlashStorage) for SAMD boards
 
 ### Installation
 
-The suggested way to install is to:
+## Installation
+
+### Use Arduino Library Manager
+The suggested way is to use `Arduino Library Manager`. Search for `ESP8266_AT_Web_Server`, then select / install the latest version.
+
+### Manual Install
+
+Another way to install is to:
 
 1. Navigate to [Blynk_Esp8266AT_WM](https://github.com/khoih-prog/Blynk_Esp8266AT_WM) page.
 2. Download the latest release `Blynk_Esp8266AT_WM-master.zip`.
 3. Extract the zip file to `Blynk_Esp8266AT_WM-master` directory 
 4. Copy whole `Blynk_Esp8266AT_WM-master/src` folder to Arduino libraries' directory such as `~/Arduino/libraries/`.
 
-Another way is to use `Arduino Library Manager`. Search for `Blynk_Esp8266AT_WM`, then select / install the latest version.
-
 ### How to use
 
 In your code, replace
 1. `BlynkSimpleShieldEsp8266.h` with `BlynkSimpleShieldEsp8266_WM.h` for Mega boards.
 2. `BlynkSimpleShieldEsp8266.h` with `BlynkSimpleShieldEsp8266_Teensy_WM.h`  for Teensy boards.
+3. `BlynkSimpleShieldEsp8266.h` with `BlynkSimpleShieldEsp8266_SAMD_WM.h`  for SAMD boards.
 
-to use EEPROM ( 152 bytes for Mega, 176 bytes for Teensy from address EEPROM_START ) to save your configuration data.
+to use EEPROM ( 156 bytes for Mega, 180 bytes for Teensy from address EEPROM_START ) to save your configuration data.
 EEPROM_SIZE can be specified from 256 to 4096 bytes.
+For SAMD boards, data is stored in Flash using 256-byte block.
 
-See examples [Mega_ESP8266Shield](examples/Mega_ESP8266Shield) and [Teensy40_ESP8266Shield](examples/Teensy40_ESP8266Shield).
+See examples [Mega_ESP8266Shield](examples/Mega_ESP8266Shield), [Teensy40_ESP8266Shield](examples/Teensy40_ESP8266Shield) and [SAMD_ESP8266Shield](examples/SAMD_ESP8266Shield).
 
 
 ```
@@ -57,9 +70,10 @@ That's it.
 Also see examples: 
 1. [Mega_ESP8266Shield](examples/Mega_ESP8266Shield)
 2. [Teensy40_ESP8266Shield](examples/Teensy40_ESP8266Shield)
+3. [SAMD_ESP8266Shield](examples/SAMD_ESP8266Shield)
 
 ## So, how it works?
-If it cannot connect to the Blynk server in 30 seconds, it will switch to `Configuration Mode`. You will see your built-in LED turned ON. In `Configuration Mode`, it starts a configurable access poi, default called `Teensy4_XXXXXX` or `Mega_XXXXXX`. Connect to it using password `Teensy4_XXXXXX` or `MyMega_XXXXXX`.
+If it cannot connect to the Blynk server in 30 seconds, it will switch to `Configuration Mode`. You will see your built-in LED turned ON. In `Configuration Mode`, it starts a configurable access point, default called `Teensy4_XXXXXX`, `SAMD_XXXXXX` or `Mega_XXXXXX`. Connect to it using password `MyTeensy4_XXXXXX`, `MySAMD_XXXXXX` or `MyMega_XXXXXX`.
 
 <p align="center">
     <img src="https://github.com/khoih-prog/Blynk_Esp8266AT_WM/blob/master/pics/AccessPoint.jpg">
@@ -163,12 +177,6 @@ void loop()
   ...
 }
 ```
-
-## Prerequisite
-1. `Arduino IDE 1.8.10 or later` for Arduino (https://www.arduino.cc/en/Main/Software)
-2. `Arduino AVR core 1.8.2 or later` for Arduino (Use Arduino Board Manager) for Mega boards
-3. `Teensy core 1.49 or later`  (https://www.pjrc.com/teensy/td_download.html) for Teensy boards
-4. [`Blynk library 0.6.1 or later`](https://www.arduino.cc/en/guide/libraries#toc3)
 
 ## TO DO
 
@@ -316,13 +324,17 @@ void loop()
 }
 ```
 
-### Releases v1.0.1
+### New Release v1.0.2
+
+1. Add support to SAMD (DUE, ZERO, MKR, NANO_33_IOT, M0, M0 Pro, AdaFruit CIRCUITPLAYGROUND_EXPRESS, etc.) boards
+
+### Release v1.0.1
 
 1. Add ESP8266_AT_WebServer dependency for autoinstall via Library Manager
 2. Add prerequisite to README.md
 3. Add checksum, fix bug
 
-### Releases v1.0.0
+### Release v1.0.0
 
 ***Features***
 
