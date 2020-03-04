@@ -1,6 +1,6 @@
 /****************************************************************************************************************************
- * Teensy40_ESP8266Shield.ino
- * For Teensy 4.0 using ESP8266 WiFi Shield
+ * STM32_ESP8266Shield.ino
+ * For STM32 using ESP8266 WiFi Shield
  *
  * Forked from Blynk library v0.6.1 https://github.com/blynkkk/blynk-library/releases
  * Built by Khoi Hoang https://github.com/khoih-prog/Blynk_Esp8266AT_WM
@@ -26,19 +26,38 @@
 /* Comment this out to disable prints and save space */
 #define BLYNK_PRINT Serial
 
-#if ( defined(ESP8266) || defined(ESP32) || defined(ARDUINO_AVR_MEGA) || defined(ARDUINO_AVR_MEGA2560) || !defined(CORE_TEENSY) )
-#error This code is intended to run on Teensy platform! Please check your Tools->Board setting.
+#if ( defined(STM32F0) || defined(STM32F1) || defined(STM32F2) || defined(STM32F3)  ||defined(STM32F4) || defined(STM32F7) )
+  #if defined(ESP8266_AT_USE_STM32)
+    #undef ESP8266_AT_USE_STM32
+  #endif
+  #define ESP8266_AT_USE_STM32      true
 #endif
 
-#ifdef CORE_TEENSY
-  // For Teensy 4.0
-  #define EspSerial Serial2   //Serial2, Pin RX2 : 7, TX2 : 8
-  #if defined(__IMXRT1062__)
-    #define BOARD_TYPE      "TEENSY 4.0"
-  #else
-    #define BOARD_TYPE      BLYNK_INFO_DEVICE
-  #endif
+#if ( defined(ESP8266) || defined(ESP32) || defined(ARDUINO_AVR_MEGA) || defined(ARDUINO_AVR_MEGA2560) || defined(CORE_TEENSY) || !(ESP8266_AT_USE_STM32) )
+//#error This code is intended to run on STM32 platform! Please check your Tools->Board setting.
+#endif
 
+#if ESP8266_AT_USE_STM32
+  // For STM32, you have to declare and enable coreresponding Serial Port somewhere else before using it
+  #define EspSerial Serial1
+ 
+  #if defined(STM32F0)
+    #define BOARD_TYPE  "STM32F0"
+    #error Board STM32F0 not supported
+  #elif defined(STM32F1)
+    #define BOARD_TYPE  "STM32F1"
+  #elif defined(STM32F2)
+    #define BOARD_TYPE  "STM32F2"
+  #elif defined(STM32F3)
+    #define BOARD_TYPE  "STM32F3"
+  #elif defined(STM32F4)
+    #define BOARD_TYPE  "STM32F4"
+  #elif defined(STM32F7)
+    #define BOARD_TYPE  "STM32F7"  
+  #else
+    #warning STM32 unknown board selected
+    #define BOARD_TYPE  "STM32 Unknown"  
+  #endif
 #else
 // For Mega
 #define EspSerial Serial3
@@ -55,13 +74,13 @@
 //#define USE_BLYNK_WM      false
 
 #if USE_BLYNK_WM
-  #ifdef CORE_TEENSY
-    #include <BlynkSimpleShieldEsp8266_Teensy_WM.h>
+  #if ESP8266_AT_USE_STM32
+    #include <BlynkSimpleShieldEsp8266_STM32_WM.h>
   #else
     #include <BlynkSimpleShieldEsp8266_WM.h>
   #endif
 #else
-  #include <BlynkSimpleShieldEsp8266_Teensy.h>
+  #include <BlynkSimpleShieldEsp8266_STM32.h>
 
   #define USE_LOCAL_SERVER      true
 

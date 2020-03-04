@@ -2,6 +2,10 @@
 
 [![arduino-library-badge](https://www.ardu-badge.com/badge/Blynk_Esp8266AT_WM.svg?)](https://www.ardu-badge.com/Blynk_Esp8266AT_WM)
 
+### New Version v1.0.3
+
+1. Add support to STM32 (STM32F1, F2, F3, F4, F7, etc) boards
+
 ### New Version v1.0.2
 
 1. Add support to SAMD (DUE, ZERO, MKR, NANO_33_IOT, M0, M0 Pro, AdaFruit CIRCUITPLAYGROUND_EXPRESS, etc.) boards
@@ -14,19 +18,19 @@ With version `v1.0.0` or later, you now can configure:
 2. `Static IP address, Gateway, Subnet Mask and 2 DNS Servers IP addresses.`
 
 ## Prerequisite
-1. [`Arduino IDE 1.8.11 or later` for Arduino](https://www.arduino.cc/en/Main/Software)
+1. [`Arduino IDE 1.8.12 or later` for Arduino](https://www.arduino.cc/en/Main/Software)
 2. [`Blynk library 0.6.1 or later`](https://www.arduino.cc/en/guide/libraries#toc3)
 3. [`ESP8266_AT_WebServer library`](https://github.com/khoih-prog/ESP8266_AT_WebServer)
 4. `Arduino AVR core 1.8.2 or later` for AVR boards (Use Arduino Board Manager)
-5. [`Teensy core 1.49 or later`](https://www.pjrc.com/teensy/td_download.html) for Teensy boards
-6. [`FlashStorage library`](https://github.com/khoih-prog/FlashStorage) for SAMD boards
-
-### Installation
+5. [`Teensy core 1.51 or later`](https://www.pjrc.com/teensy/td_download.html) for Teensy boards
+6. [`Arduino Core for STM32 v1.8.0 or later`](https://github.com/khoih-prog/Arduino_Core_STM32) for STM32 boards
+7. [`FlashStorage library`](https://github.com/khoih-prog/FlashStorage) for SAMD boards
 
 ## Installation
 
 ### Use Arduino Library Manager
-The suggested way is to use `Arduino Library Manager`. Search for `ESP8266_AT_Web_Server`, then select / install the latest version.
+The best and easiest way is to use `Arduino Library Manager`. Search for `Blynk_Esp8266AT_WM`, then select / install the latest version.
+You can also use this link [![arduino-library-badge](https://www.ardu-badge.com/badge/Blynk_Esp8266AT_WM.svg?)](https://www.ardu-badge.com/Blynk_Esp8266AT_WM) for more detailed instructions.
 
 ### Manual Install
 
@@ -48,7 +52,11 @@ to use EEPROM ( 156 bytes for Mega, 180 bytes for Teensy from address EEPROM_STA
 EEPROM_SIZE can be specified from 256 to 4096 bytes.
 For SAMD boards, data is stored in Flash using 256-byte block.
 
-See examples [Mega_ESP8266Shield](examples/Mega_ESP8266Shield), [Teensy40_ESP8266Shield](examples/Teensy40_ESP8266Shield) and [SAMD_ESP8266Shield](examples/SAMD_ESP8266Shield).
+See examples 
+1. [Mega_ESP8266Shield](examples/Mega_ESP8266Shield)
+2. [Teensy40_ESP8266Shield](examples/Teensy40_ESP8266Shield)
+3. [SAMD_ESP8266Shield](examples/SAMD_ESP8266Shield)
+3. [STM32_ESP8266Shield](examples/STM32_ESP8266Shield)
 
 
 ```
@@ -67,13 +75,9 @@ in your code. Keep `Blynk.run()` intact.
 
 That's it.
 
-Also see examples: 
-1. [Mega_ESP8266Shield](examples/Mega_ESP8266Shield)
-2. [Teensy40_ESP8266Shield](examples/Teensy40_ESP8266Shield)
-3. [SAMD_ESP8266Shield](examples/SAMD_ESP8266Shield)
 
 ## So, how it works?
-If it cannot connect to the Blynk server in 30 seconds, it will switch to `Configuration Mode`. You will see your built-in LED turned ON. In `Configuration Mode`, it starts a configurable access point, default called `Teensy4_XXXXXX`, `SAMD_XXXXXX` or `Mega_XXXXXX`. Connect to it using password `MyTeensy4_XXXXXX`, `MySAMD_XXXXXX` or `MyMega_XXXXXX`.
+If it cannot connect to the Blynk server in 30 seconds, it will switch to `Configuration Mode`. You will see your built-in LED turned ON. In `Configuration Mode`, it starts a configurable access point, default called `Teensy4_XXXXXX`, `SAMD_XXXXXX`, `Mega_XXXXXX` or `STM32_XXXXXX`. Connect to it using password `MyTeensy4_XXXXXX`, `MySAMD_XXXXXX`, `MyMega_XXXXXX` or `MySTM32_XXXXXX`.
 
 <p align="center">
     <img src="https://github.com/khoih-prog/Blynk_Esp8266AT_WM/blob/master/pics/AccessPoint.jpg">
@@ -181,6 +185,7 @@ void loop()
 ## TO DO
 
 1. Same features for other boards ESP8266 AT-command WiFi shields.
+2. To fix the ***EEPROM not working*** in some STM32 boards
 
 ## DONE
 
@@ -220,13 +225,17 @@ Please take a look at examples, as well.
 
 // Start location in EEPROM to store config data. Default 0
 // Config data Size currently is 128 bytes)
-#define EEPROM_START     48
+#define EEPROM_START     0
 
 #define USE_BLYNK_WM      true
 //#define USE_BLYNK_WM      false
 
 #if USE_BLYNK_WM
-  #include <BlynkSimpleShieldEsp8266_Teensy_WM.h>
+  #ifdef CORE_TEENSY
+    #include <BlynkSimpleShieldEsp8266_Teensy_WM.h>
+  #else
+    #include <BlynkSimpleShieldEsp8266_WM.h>
+  #endif
 #else
   #include <BlynkSimpleShieldEsp8266_Teensy.h>
 
@@ -237,7 +246,7 @@ Please take a look at examples, as well.
     String BlynkServer = "account.duckdns.org";
     //String BlynkServer = "192.168.2.112";
   #else
-    char auth[] = "******";
+    char auth[] = "****";
     String BlynkServer = "blynk-cloud.com";
   #endif
 
@@ -306,9 +315,7 @@ void setup()
 
   #if USE_BLYNK_WM
     Serial.println("Start Blynk_WM");
-    // Set Config Portal AP IP Address
     Blynk.setConfigPortalIP(IPAddress(192, 168, 100, 1));
-    // Set Config Portal SSID and Password
     //Blynk.setConfigPortal("Teensy4", "MyTeensy4");
     Blynk.begin(wifi);
   #else
@@ -323,6 +330,9 @@ void loop()
   check_status();
 }
 ```
+### New Version v1.0.3
+
+1. Add support to STM32 (STM32F1, F2, F3, F4, F7, etc) boards
 
 ### New Release v1.0.2
 

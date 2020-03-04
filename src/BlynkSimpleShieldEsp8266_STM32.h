@@ -1,10 +1,8 @@
 /****************************************************************************************************************************
- * BlynkSimpleShieldEsp8266_SAMD.h
- * For SAMD boards using ESP8266 WiFi Shields
+ * BlynkSimpleShieldEsp8266_STM32.h
+ * For ESP8266 AT-command shields
  *
  * Blynk_Esp8266AT_WM is a library for the Mega, Teensy and SAMD boards (https://github.com/khoih-prog/Blynk_Esp8266AT_WM)
- * to enable easy configuration/reconfiguration and autoconnect/autoreconnect of WiFi/Blynk
- * 
  * Forked from Blynk library v0.6.1 https://github.com/blynkkk/blynk-library/releases
  * Built by Khoi Hoang https://github.com/khoih-prog/Blynk_WM
  * Licensed under MIT license
@@ -26,21 +24,18 @@
  *  1.0.3   K Hoang      03/03/2019  Add support to STM32 boards, except STM32F0
  *****************************************************************************************************************************/
 
-#ifndef BlynkSimpleShieldEsp8266_SAMD_h
-#define BlynkSimpleShieldEsp8266_SAMD_h
+#ifndef BlynkSimpleShieldEsp8266_STM32_h
+#define BlynkSimpleShieldEsp8266_STM32_h
 
-#if    ( defined(ARDUINO_SAM_DUE) || defined(ARDUINO_SAMD_ZERO) || defined(ARDUINO_SAMD_MKR1000) || defined(ARDUINO_SAMD_MKRWIFI1010) \
-      || defined(ARDUINO_SAMD_NANO_33_IOT) || defined(ARDUINO_SAMD_MKRFox1200) || defined(ARDUINO_SAMD_MKRWAN1300) || defined(ARDUINO_SAMD_MKRWAN1310) \
-      || defined(ARDUINO_SAMD_MKRGSM1400) || defined(ARDUINO_SAMD_MKRNB1500) || defined(ARDUINO_SAMD_MKRVIDOR4000) || defined(__SAMD21G18A__) \
-      || defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS) || defined(__SAM3X8E__) || defined(__CPU_ARC__) )      
-  #if defined(ESP8266_AT_USE_SAMD)
-    #undef BLYNK_ESP8266_AT_USE_SAMD
+#if ( defined(STM32F0) || defined(STM32F1) || defined(STM32F2) || defined(STM32F3)  ||defined(STM32F4) || defined(STM32F7) )
+  #if defined(ESP8266_AT_USE_STM32)
+    #undef ESP8266_AT_USE_STM32
   #endif
-  #define BLYNK_ESP8266_AT_USE_SAMD      true
+  #define ESP8266_AT_USE_STM32      true
 #endif
 
-#if ( defined(ESP8266) || defined(ESP32) || defined(ARDUINO_AVR_MEGA2560) || defined(ARDUINO_AVR_MEGA) || defined(CORE_TEENSY) || !(BLYNK_ESP8266_AT_USE_SAMD) )
-#error This code is intended to run on the SAMD platform! Please check your Tools->Board setting.
+#if ( defined(ESP8266) || defined(ESP32) || defined(ARDUINO_AVR_MEGA) || defined(ARDUINO_AVR_MEGA2560) || defined(CORE_TEENSY) || !(ESP8266_AT_USE_STM32) )
+#error This code is intended to run on STM32 platform! Please check your Tools->Board setting.
 #endif
 
 #ifndef BLYNK_INFO_CONNECTION
@@ -280,18 +275,43 @@ public:
 private:
     ESP8266* client;
     bool status;
-
     //KH   
-    #if (BLYNK_ESP8266_AT_USE_SAMD)
-      // For NANO_33_IOT, MKRFox1200, MKRWAN1300, MKRWAN1310, MKRGSM1400, MKRNB1500, MKRVIDOR4000.
-      BlynkFifo<uint8_t, 4096> buffer;
-      #warning Board SAMD uses 4k FIFO buffer        
+    #if ESP8266_AT_USE_STM32   
+      #if defined(STM32F0)
+        // For STM32 F0
+        BlynkFifo<uint8_t, 512> buffer;
+        #error Board STM32F0 not supported
+      #elif defined(STM32F1)
+        // For STM32 F1
+        BlynkFifo<uint8_t, 512> buffer;
+        #warning Board STM32F1 uses 512bytes FIFO buffer 
+      #elif defined(STM32F2)
+        // For STM32 F2
+        BlynkFifo<uint8_t, 512> buffer;
+        #warning Board STM32F2 uses 512bytes FIFO buffer 
+      #elif defined(STM32F3)
+        // For STM32 F3
+        BlynkFifo<uint8_t, 1024> buffer;
+        #warning Board STM32F3 uses 1K FIFO buffer 
+      #elif defined(STM32F4)
+        // For STM32 F4
+        BlynkFifo<uint8_t, 2048> buffer;
+        #warning Board STM32F4 uses 2K FIFO buffer 
+      #elif defined(STM32F7)
+        // For STM32 F7
+        BlynkFifo<uint8_t, 4096> buffer;
+        #warning Board STM32F7 uses 4K FIFO buffer 
+      #else
+        // For STM32 Unknow
+        BlynkFifo<uint8_t, 512> buffer;
+        #warning Board STM32 unknown uses 512bytes FIFO buffer  
+      #endif
     #else
-      // For other boards
+      // For other AVR Mega
       //BlynkFifo<uint8_t,256> buffer;
       // For MeGa 2560 or 1280
       BlynkFifo<uint8_t,512> buffer;  
-      #warning Not SAMD board => uses 512bytes FIFO buffer    
+      #warning Not STM32 board => uses 512bytes FIFO buffer    
     #endif
     
     const char* domain;
@@ -390,9 +410,9 @@ public:
       #if 1
       ipAddress = wifi->getStationIp();
       #else
-      ipAddress = wifi->getLocalIP();
-      ipAddress.replace("+CIFSR:STAIP,\"", "");
-      ipAddress.replace("\"", "");     
+      ipAddress = wifi->getLocalIP().replace("+CIFSR:STAIP,\"", "");
+      ipAddress = ipAddress.replace("\"", "");
+      
       #endif
       
       BLYNK_LOG2(BLYNK_F("IP = "), ipAddress);

@@ -8,7 +8,7 @@
  * Forked from Blynk library v0.6.1 https://github.com/blynkkk/blynk-library/releases
  * Built by Khoi Hoang https://github.com/khoih-prog/Blynk_WM
  * Licensed under MIT license
- * Version: 1.0.2
+ * Version: 1.0.3
  *
  * Original Blynk Library author:
  * @file       BlynkSimpleShieldEsp8266.h
@@ -23,12 +23,13 @@
  *  1.0.0   K Hoang      16/02/2020  Initial coding
  *  1.0.1   K Hoang      17/02/2019  Add checksum, fix bug
  *  1.0.2   K Hoang      22/02/2019  Add support to SAMD boards
+ *  1.0.3   K Hoang      03/03/2019  Add support to STM32 boards, except STM32F0
  *****************************************************************************************************************************/
 
 #ifndef BlynkSimpleShieldEsp8266_Teensy_WM_h
 #define BlynkSimpleShieldEsp8266_Teensy_WM_h
 
-#if ( defined(ESP8266) || defined(ESP32) || !defined(CORE_TEENSY) )
+#if ( defined(ESP8266) || defined(ESP32) || defined(ARDUINO_AVR_MEGA2560) || defined(ARDUINO_AVR_MEGA) || !defined(CORE_TEENSY) )
 #error This code is intended to run on Teensy platform! Please check your Tools->Board setting.
 #endif
 
