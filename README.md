@@ -23,7 +23,7 @@ With version `v1.0.0` or later, you now can configure:
 3. [`ESP8266_AT_WebServer library`](https://github.com/khoih-prog/ESP8266_AT_WebServer)
 4. `Arduino AVR core 1.8.2 or later` for AVR boards (Use Arduino Board Manager)
 5. [`Teensy core 1.51 or later`](https://www.pjrc.com/teensy/td_download.html) for Teensy boards
-6. [`Arduino Core for STM32 v1.8.0 or later`](https://github.com/khoih-prog/Arduino_Core_STM32) for STM32 boards
+6. [`Arduino Core for STM32 v1.8.0 or later`](https://github.com/stm32duino/Arduino_Core_STM32) for STM32 boards
 7. [`FlashStorage library`](https://github.com/khoih-prog/FlashStorage) for SAMD boards
 
 ## Installation
