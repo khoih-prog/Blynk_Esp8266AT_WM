@@ -761,6 +761,12 @@ public:
       return ipAddress;
     }
     
+    void clearConfigData()
+    {
+      memset(&Blynk8266_WM_config, 0, sizeof(Blynk8266_WM_config));
+      EEPROM.put(EEPROM_START, Blynk8266_WM_config);
+    } 
+    
     void resetFunc()
     {
       asm volatile ("  jmp 0");

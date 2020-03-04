@@ -88,7 +88,7 @@ uint16_t CONFIG_DATA_SIZE = sizeof(Blynk_WF_Configuration);
 <head> \
 <meta charset=\"utf-8\"> \
 <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"> \
-<title>BlynkSimpleEsp8266_Teensy_WM</title> \
+<title>BlynkSimpleEsp8266_STM32_WM</title> \
 </head> \
 <body> \
 <div align=\"center\"> \
@@ -850,6 +850,12 @@ public:
       //BLYNK_LOG2(BLYNK_F("getLocalIP: IP = "), ipAddress);
       return ipAddress;
     }
+    
+    void clearConfigData()
+    {
+      memset(&Blynk8266_WM_config, 0, sizeof(Blynk8266_WM_config));
+      EEPROM.put(EEPROM_START, Blynk8266_WM_config);
+    } 
     
     void resetFunc()
     {

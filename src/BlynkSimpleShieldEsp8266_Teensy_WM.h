@@ -824,6 +824,12 @@ public:
       return ipAddress;
     }
     
+    void clearConfigData()
+    {
+      memset(&Blynk8266_WM_config, 0, sizeof(Blynk8266_WM_config));
+      EEPROM.put(EEPROM_START, Blynk8266_WM_config);
+    } 
+    
     void resetFunc()
     {
       SCB_AIRCR = 0x05FA0004; //write value for restart for Teensy

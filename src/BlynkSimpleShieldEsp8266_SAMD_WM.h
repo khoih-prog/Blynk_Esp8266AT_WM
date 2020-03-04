@@ -830,6 +830,13 @@ public:
       return ipAddress;
     }
     
+    void clearConfigData()
+    {
+      memset(&Blynk8266_WM_config, 0, sizeof(Blynk8266_WM_config));
+      //EEPROM.put(EEPROM_START, BlynkEthernet_WM_config);
+      Blynk8266_WM_config_data.write(Blynk8266_WM_config);
+    }
+    
     void resetFunc()
     {
       BlynkReset();

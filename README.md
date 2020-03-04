@@ -5,6 +5,7 @@
 ### New Version v1.0.3
 
 1. Add support to STM32 (STM32F1, F2, F3, F4, F7, etc) boards
+2. Add clearConfigData() function.
 
 ### New Version v1.0.2
 
@@ -340,6 +341,7 @@ void loop()
 ### New Version v1.0.3
 
 1. Add support to STM32 (STM32F1, F2, F3, F4, F7, etc) boards
+2. Add clearConfigData() function.
 
 ### New Release v1.0.2
 
