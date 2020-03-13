@@ -2,14 +2,20 @@
 
 [![arduino-library-badge](https://www.ardu-badge.com/badge/Blynk_Esp8266AT_WM.svg?)](https://www.ardu-badge.com/Blynk_Esp8266AT_WM)
 
+### New Releases v1.0.4
+
+1. Add support to SAM DUE
+2. Reduce html and code size for faster Config Portal response. 
+3. Enhance GUI.
+
 ### New Version v1.0.3
 
-1. Add support to STM32 (STM32F1, F2, F3, F4, F7, etc) boards
+1. Add support to STM32 (STM32F1, F2, F3, F4, F7, etc) boards. STM32F0 boards are not supported.
 2. Add clearConfigData() function.
 
 ### New Version v1.0.2
 
-1. Add support to SAMD (DUE, ZERO, MKR, NANO_33_IOT, M0, M0 Pro, AdaFruit CIRCUITPLAYGROUND_EXPRESS, etc.) boards
+1. Add support to SAMD (ZERO, MKR, NANO_33_IOT, M0, M0 Pro, AdaFruit CIRCUITPLAYGROUND_EXPRESS, etc.) boards
 
 To help you to eliminate `hardcoding` your Wifi and Blynk credentials for Mega/Teensy boards running ESP8266 AT shields, and updating/reflashing every time when you need to change them. Configuration data are saved in configurable locatioon in EEPROM.
 
@@ -23,9 +29,10 @@ With version `v1.0.0` or later, you now can configure:
 2. [`Blynk library 0.6.1 or later`](https://www.arduino.cc/en/guide/libraries#toc3)
 3. [`ESP8266_AT_WebServer library`](https://github.com/khoih-prog/ESP8266_AT_WebServer)
 4. `Arduino AVR core 1.8.2 or later` for AVR boards (Use Arduino Board Manager)
-5. [`Teensy core 1.51 or later`](https://www.pjrc.com/teensy/td_download.html) for Teensy boards
+5. [`Teensy core 1.51 or later`](https://www.pjrc.com/teensy/td_download.html) for Teensy (4.0, 3.6, 3.5, 3,2, 3.1, 3.0, LC) boards
 6. [`Arduino Core for STM32 v1.8.0 or later`](https://github.com/stm32duino/Arduino_Core_STM32) for STM32 boards
-7. [`FlashStorage library`](https://github.com/khoih-prog/FlashStorage) for SAMD boards
+7. [`FlashStorage library`](https://github.com/khoih-prog/FlashStorage) for SAMD boards (ZERO, MKR, NANO_33_IOT, M0, M0 Pro, AdaFruit CIRCUITPLAYGROUND_EXPRESS, etc.)
+8. [`DueFlashStorage library`](https://github.com/sebnil/DueFlashStorage) for SAM DUE
 
 ## Installation
 
@@ -64,7 +71,8 @@ See examples
 1. [Mega_ESP8266Shield](examples/Mega_ESP8266Shield)
 2. [Teensy40_ESP8266Shield](examples/Teensy40_ESP8266Shield)
 3. [SAMD_ESP8266Shield](examples/SAMD_ESP8266Shield)
-3. [STM32_ESP8266Shield](examples/STM32_ESP8266Shield)
+4. [SAM_DUE_ESP8266Shield](examples/SAM_DUE_ESP8266Shield)
+5. [STM32_ESP8266Shield](examples/STM32_ESP8266Shield)
 
 
 ```
@@ -85,7 +93,7 @@ That's it.
 
 
 ## So, how it works?
-If it cannot connect to the Blynk server in 30 seconds, it will switch to `Configuration Mode`. You will see your built-in LED turned ON. In `Configuration Mode`, it starts a configurable access point, default called `Teensy4_XXXXXX`, `SAMD_XXXXXX`, `Mega_XXXXXX` or `STM32_XXXXXX`. Connect to it using password `MyTeensy4_XXXXXX`, `MySAMD_XXXXXX`, `MyMega_XXXXXX` or `MySTM32_XXXXXX`.
+If it cannot connect to the Blynk server in 30 seconds, it will switch to `Configuration Mode`. You will see your built-in LED turned ON. In `Configuration Mode`, it starts a configurable access point, default called `Teensy4_XXXXXX`, `SAMD_XXXXXX`, `DUE_XXXXXX`,`Mega_XXXXXX` or `STM32_XXXXXX`. Connect to it using password `MyTeensy4_XXXXXX`, `MySAMD_XXXXXX`, `MyDUE_XXXXXX`, `MyMega_XXXXXX` or `MySTM32_XXXXXX`.
 
 <p align="center">
     <img src="https://github.com/khoih-prog/Blynk_Esp8266AT_WM/blob/master/pics/AccessPoint.jpg">
@@ -94,10 +102,16 @@ If it cannot connect to the Blynk server in 30 seconds, it will switch to `Confi
 After you connected, please, go to http://192.168.4.1 or the AP IP you specified.
 
 <p align="center">
+    <img src="https://github.com/khoih-prog/Blynk_Esp8266AT_WM/blob/master/pics/Main.png">
+</p>
+
+Enter your credentials : WiFi SSID/Password, Blynk Server, Port and Token, Board Name.
+
+<p align="center">
     <img src="https://github.com/khoih-prog/Blynk_Esp8266AT_WM/blob/master/pics/Config_Portal.png">
 </p>
 
-Enter your credentials, then click `Save`. After you restarted, you will see your built-in LED turned OFF. That means, it connected to your Blynk server successfully.
+Then click `Save`. After you restarted, you will see your built-in LED turned OFF. That means, it connected to your Blynk server successfully.
 
 The following is the sample terminal output when running example [Teensy40_ESP8266Shield](examples/Teensy40_ESP8266Shield)
 
@@ -106,10 +120,10 @@ The following is the sample terminal output when running example [Teensy40_ESP82
 ```
 Start Blynk WiFiManager using ESP8266_AT_Shield on TEENSY 4.0
 Start Blynk_WM
-[7866] AT version:0.40.0.0(Aug  8 2015 14:45:58)
-SDK version:1.3.0
-Ai-Thinker Technology Co.,Ltd.
-Build:1.3.0.2 Sep 11 2015 11:48:04
+[7866] AT version:1.1.0.0(May 11 2016 18:09:56)
+SDK version:1.5.4(baaeaebb)
+Ai-Thinker Technology Co. Ltd.
+Jun 13 2016 11:29:20
 OK
 [8392] Init new EEPROM, size = 1080
 [8393] bg: No configdat. Stay forever in config portal
@@ -123,10 +137,10 @@ OK
 ```
 Start Blynk WiFiManager using ESP8266_AT_Shield on TEENSY 4.0
 Start Blynk_WM
-[7866] AT version:0.40.0.0(Aug  8 2015 14:45:58)
-SDK version:1.3.0
-Ai-Thinker Technology Co.,Ltd.
-Build:1.3.0.2 Sep 11 2015 11:48:04
+[7866] AT version:1.1.0.0(May 11 2016 18:09:56)
+SDK version:1.5.4(baaeaebb)
+Ai-Thinker Technology Co. Ltd.
+Jun 13 2016 11:29:20
 OK
 [8390] Header = SHD_ESP8266, SSID = ****, PW = ****
 [8390] Server = ****.duckdns.org, Port = 8080, Token = ****
@@ -141,10 +155,10 @@ OK
 [8390] con2WF: start
 [8390] connectToWifi: Try connectWiFi
 [8390] Connecting to ****
-[14956] AT version:0.40.0.0(Aug  8 2015 14:45:58)
-SDK version:1.3.0
-Ai-Thinker Technology Co.,Ltd.
-Build:1.3.0.2 Sep 11 2015 11:48:04
+[14956] AT version:1.1.0.0(May 11 2016 18:09:56)
+SDK version:1.5.4(baaeaebb)
+Ai-Thinker Technology Co. Ltd.
+Jun 13 2016 11:29:20
 OK
 [15493] Get macAddress = 5c:cf:7f:66:05:d2
 [22526] IP = 192.168.2.107
@@ -338,6 +352,13 @@ void loop()
   check_status();
 }
 ```
+
+### New Releases v1.0.4
+
+1. Add support to SAM DUE
+2. Reduce html and code size for faster Config Portal response. 
+3. Enhance GUI.
+
 ### New Version v1.0.3
 
 1. Add support to STM32 (STM32F1, F2, F3, F4, F7, etc) boards

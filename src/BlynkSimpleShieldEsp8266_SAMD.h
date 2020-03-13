@@ -2,13 +2,13 @@
    BlynkSimpleShieldEsp8266_SAMD.h
    For SAMD boards using ESP8266 WiFi Shields
 
-   Blynk_Esp8266AT_WM is a library for the Mega, Teensy and SAMD boards (https://github.com/khoih-prog/Blynk_Esp8266AT_WM)
+   Blynk_Esp8266AT_WM is a library for the Mega, Teensy, SAM DUE and SAMD boards (https://github.com/khoih-prog/Blynk_Esp8266AT_WM)
    to enable easy configuration/reconfiguration and autoconnect/autoreconnect of WiFi/Blynk
 
    Forked from Blynk library v0.6.1 https://github.com/blynkkk/blynk-library/releases
    Built by Khoi Hoang https://github.com/khoih-prog/Blynk_WM
    Licensed under MIT license
-   Version: 1.0.3
+   Version: 1.0.4
 
    Original Blynk Library author:
    @file       BlynkSimpleShieldEsp8266.h
@@ -24,16 +24,17 @@
     1.0.1   K Hoang      17/02/2019  Add checksum, fix bug
     1.0.2   K Hoang      22/02/2019  Add support to SAMD boards
     1.0.3   K Hoang      03/03/2019  Add support to STM32 boards, except STM32F0
+    1.0.4   K Hoang      13/03/2019  Add SAM DUE support. Enhance GUI.  
  *****************************************************************************************************************************/
 
 #ifndef BlynkSimpleShieldEsp8266_SAMD_h
 #define BlynkSimpleShieldEsp8266_SAMD_h
 
-#if    ( defined(ARDUINO_SAM_DUE) || defined(ARDUINO_SAMD_ZERO) || defined(ARDUINO_SAMD_MKR1000) || defined(ARDUINO_SAMD_MKRWIFI1010) \
+#if    ( defined(ARDUINO_SAMD_ZERO) || defined(ARDUINO_SAMD_MKR1000) || defined(ARDUINO_SAMD_MKRWIFI1010) \
       || defined(ARDUINO_SAMD_NANO_33_IOT) || defined(ARDUINO_SAMD_MKRFox1200) || defined(ARDUINO_SAMD_MKRWAN1300) || defined(ARDUINO_SAMD_MKRWAN1310) \
       || defined(ARDUINO_SAMD_MKRGSM1400) || defined(ARDUINO_SAMD_MKRNB1500) || defined(ARDUINO_SAMD_MKRVIDOR4000) || defined(__SAMD21G18A__) \
-      || defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS) || defined(__SAM3X8E__) || defined(__CPU_ARC__) )
-#if defined(ESP8266_AT_USE_SAMD)
+      || defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS) )
+#if defined(BLYNK_ESP8266_AT_USE_SAMD)
 #undef BLYNK_ESP8266_AT_USE_SAMD
 #endif
 #define BLYNK_ESP8266_AT_USE_SAMD      true
@@ -59,7 +60,7 @@
 #include <utility/BlynkFifo.h>
 #include <ESP8266_Lib.h>
 
-#define SIMPLE_SHIELD_ESP8266_DEBUG       1
+#define SIMPLE_SHIELD_ESP8266_DEBUG       0
 
 class BlynkTransportShieldEsp8266
 {
@@ -74,7 +75,7 @@ class BlynkTransportShieldEsp8266
 
       //KH
 #if (SIMPLE_SHIELD_ESP8266_DEBUG > 1)
-      BLYNK_LOG4("Got: ", len, ", Free: ", buffer.free());
+      BLYNK_LOG4("Got:", len, ", Free:", buffer.free());
 #endif
       //
 
@@ -82,9 +83,8 @@ class BlynkTransportShieldEsp8266
       {
         //KH
 #if (SIMPLE_SHIELD_ESP8266_DEBUG > 0)
-        BLYNK_LOG4("Got: ", len, ", Free: ", buffer.free());
+        BLYNK_LOG4("OVF,Got:", len, ",Free:", buffer.free());
 #endif
-        BLYNK_LOG1(BLYNK_F("Buffer overflow"));
         return;
       }
       while (len) {
@@ -145,7 +145,7 @@ class BlynkTransportShieldEsp8266
       //Check to see if all data are read or not
 
 #if (SIMPLE_SHIELD_ESP8266_DEBUG > 1)
-      BLYNK_LOG4("read: Data len: ", len, " Buffer: ", buffer.size());
+      BLYNK_LOG4("rd:len=", len, ",Buf=", buffer.size());
 #endif
 
       while ((buffer.size() < len) && (BlynkMillis() - start < 1500))
@@ -154,109 +154,8 @@ class BlynkTransportShieldEsp8266
         // then call onData() to get len bytes of data to buffer => BlynkProtocol::ProcessInput()
         client->run();
       }
-      //KH Mod
-#if 0
-      // Check to see if got sequence [14|0D|0A]+IPD,<id>,<len>:<data> => discard until end of <data>
-
-      /*static*/ uint8_t tempBuff[128];
-      if (len < sizeof(tempBuff))
-      {
-        buffer.get(tempBuff, len);
-        //tempBuff[len] = 0;
-      }
-
-      char testString1[5] = { 0x0D, 0x0A, '+', 'I', 0};
-      char testString2[6] = { '+', 'I', 'P', 'D', ',', 0 };
-      char testString3[3] = { 'P', 'D', 0 };
-      char testString4[3] = { 0x0D, 0x0A, 0 };
-
-      /*static*/ uint8_t localBuff[128];
-      /*static*/ unsigned int localLength;
-      /*static*/ unsigned int copyLength;
-
-      /*+IPD,<id>,<len>:<data>*/
-      if ( strstr((char*) tempBuff, testString1) /*|| strstr((char*) tempBuff, testString2) || strstr((char*) tempBuff, testString3)*/ )
-      {
-        //Got +I, next => PD,<id>,<len>:<data>
-        //                012  3 4  5  6  7
-        BLYNK_LOG2("read: Bad sequence a ", (char*) tempBuff);
-        // Read and discard more
-        if (buffer.size() < sizeof(tempBuff))
-        {
-          buffer.get(tempBuff, buffer.size());
-
-          if ( (tempBuff[0] == 'P') && (tempBuff[1] == 'D') && (tempBuff[2] == ',') /*&& (tempBuff[3] == '1') && (tempBuff[4] == ',')*/ )
-          {
-            BLYNK_LOG2("read: Bad sequence2 ", (char*) tempBuff);
-            localLength = tempBuff[5];
-            copyLength = localLength < sizeof(localBuff) ? localLength : sizeof(localBuff);
-            memcpy(localBuff, tempBuff + 7, copyLength );
-            memcpy(tempBuff, localBuff, copyLength);
-            BLYNK_LOG2("read: Bad sequence3 ", (char*) tempBuff);
-            return copyLength;
-          }
-        }
-
-        return 0;
-      }
-      else if ( strstr((char*) tempBuff, testString2) /*|| strstr((char*) tempBuff, testString3)*/ )
-      {
-        //Got +IPD, next => <id>,<len>:<data>
-        //                    0 1  2  3  4
-        BLYNK_LOG2("read: Bad sequence b ", (char*) tempBuff);
-        // Read and discard more
-        if (buffer.size() < sizeof(tempBuff))
-        {
-          buffer.get(tempBuff, buffer.size());
-
-          if ( (tempBuff[1] == ',') && (tempBuff[3] == ':') )
-          {
-            BLYNK_LOG2("read: Bad sequence4 ", (char*) tempBuff);
-            localLength = tempBuff[2];
-            copyLength = localLength < sizeof(localBuff) ? localLength : sizeof(localBuff);
-            memcpy(localBuff, tempBuff + 4, copyLength );
-            memcpy(tempBuff, localBuff, copyLength);
-            BLYNK_LOG2("read: Bad sequence5 ", (char*) tempBuff);
-            return copyLength;
-          }
-        }
-
-        return 0;
-      }
-      else if ( strstr((char*) tempBuff, testString4) /*|| strstr((char*) tempBuff, testString3)*/ )
-      {
-        //Got X X X 0x0D, 0x0A, next +IPD, just discard this 5 bytes
-        //    0 1 2  3     4
-        BLYNK_LOG2("read: Bad sequence c ", (char*) tempBuff);
-        // Read and discard more
-        if (buffer.size() < sizeof(tempBuff))
-        {
-          buffer.get(tempBuff, buffer.size());
-
-          //if ( (tempBuff[1] == ',') && (tempBuff[3] == ':') )
-          {
-            //BLYNK_LOG2("read: Bad sequence4 ", (char*) tempBuff);
-            //localLength = tempBuff[2];
-            //copyLength = localLength < sizeof(localBuff)? localLength : sizeof(localBuff);
-            memcpy(localBuff, tempBuff + 5, sizeof(tempBuff) - 5 );
-            memcpy(tempBuff, localBuff, sizeof(tempBuff) - 5);
-            BLYNK_LOG2("read: Bad sequence5 ", (char*) tempBuff);
-            return 0;
-          }
-        }
-
-        return 0;
-      }
-      else
-      {
-        memcpy(buf, tempBuff, len);
-        return len;
-      }
-
-#else
       //All data got in FIFO buffer, copy to destination buf and return len
       return buffer.get((uint8_t*)buf, len);
-#endif
     }
 
     size_t write(const void* buf, size_t len) {
@@ -274,7 +173,7 @@ class BlynkTransportShieldEsp8266
     {
       client->run();
 #if (SIMPLE_SHIELD_ESP8266_DEBUG > 2)
-      BLYNK_LOG2("Still: ", buffer.size());
+      BLYNK_LOG2("Still:", buffer.size());
 #endif
       return buffer.size();
     }
@@ -310,25 +209,22 @@ class BlynkWifi
       , wifi(NULL)
     {}
 
-    bool connectWiFi(const char* ssid, const char* pass)
+    bool WiFiInit()
     {
-      //BlynkDelay(500);
-      BLYNK_LOG2(BLYNK_F("Connecting to "), ssid);
-#if 1
       if (!wifi->restart()) {
-        BLYNK_LOG1(BLYNK_F("Failed to restart"));
+        BLYNK_LOG1(BLYNK_F("Fail2Rst"));
         return false;
       }
-#endif
+
       if (!wifi->kick())
       {
-        BLYNK_LOG1(BLYNK_F("ESP is not responding"));
+        BLYNK_LOG1(BLYNK_F("ESP no respond"));
         //TODO: BLYNK_LOG_TROUBLE(BLYNK_F("esp8266-not-responding"));
         return false;
       }
       if (!wifi->setEcho(0))
       {
-        BLYNK_LOG1(BLYNK_F("Failed to disable Echo"));
+        BLYNK_LOG1(BLYNK_F("FailEcho"));
         return false;
       }
 
@@ -340,14 +236,24 @@ class BlynkWifi
 
       if (!wifi->enableMUX())
       {
-        BLYNK_LOG1(BLYNK_F("Failed to enable MUX"));
+        BLYNK_LOG1(BLYNK_F("FailMUX"));
+        return false;
       }
 
       if (!wifi->setOprToStation())
       {
-        BLYNK_LOG1(BLYNK_F("Failed to set STA mode"));
+        BLYNK_LOG1(BLYNK_F("FailSTA"));
         return false;
       }
+
+      return true;
+    }
+
+    bool connectWiFi(const char* ssid, const char* pass)
+    {
+      BLYNK_LOG2(BLYNK_F("Con2:"), ssid);
+
+      WiFiInit();
 
       if (wifi->joinAP(ssid, pass))
       {
@@ -355,11 +261,12 @@ class BlynkWifi
       }
       else
       {
-        BLYNK_LOG1(BLYNK_F("Failed to connect WiFi"));
+        BLYNK_LOG1(BLYNK_F("FailW"));
         return false;
       }
 
-      BLYNK_LOG1(BLYNK_F("Connected to WiFi"));
+      BLYNK_LOG1(BLYNK_F("WOK"));
+
       return true;
     }
 

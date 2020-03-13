@@ -1,6 +1,6 @@
 /****************************************************************************************************************************
-   BlynkSimpleShieldEsp8266_Teensy_WM.h
-   For Teensy boards using ESP8266 WiFi Shields
+   BlynkSimpleShieldEsp8266_DUE_WM.h
+   For SAM DUE boards using ESP8266 WiFi Shields
 
    Blynk_Esp8266AT_WM is a library for the Mega, Teensy, SAM DUE and SAMD boards (https://github.com/khoih-prog/Blynk_Esp8266AT_WM)
    to enable easy configuration/reconfiguration and autoconnect/autoreconnect of WiFi/Blynk
@@ -27,11 +27,20 @@
     1.0.4   K Hoang      13/03/2019  Add SAM DUE support. Enhance GUI. 
  *****************************************************************************************************************************/
 
-#ifndef BlynkSimpleShieldEsp8266_Teensy_WM_h
-#define BlynkSimpleShieldEsp8266_Teensy_WM_h
+#ifndef BlynkSimpleShieldEsp8266_DUE_WM_h
+#define BlynkSimpleShieldEsp8266_DUE_WM_h
 
-#if ( defined(ESP8266) || defined(ESP32) || defined(ARDUINO_AVR_MEGA2560) || defined(ARDUINO_AVR_MEGA) || !defined(CORE_TEENSY) )
-#error This code is intended to run on Teensy platform! Please check your Tools->Board setting.
+#if ( defined(ARDUINO_SAM_DUE) || defined(__SAM3X8E__) )
+  #if defined(BLYNK_ESP8266_AT_USE_SAM_DUE)
+  #undef BLYNK_ESP8266_AT_USE_SAM_DUE
+  #endif
+  #define BLYNK_ESP8266_AT_USE_SAM_DUE      true
+  #warning Use SAM_DUE architecture from Blynk_Esp8266AT_WM
+#endif
+
+#if ( defined(ESP8266) || defined(ESP32) || defined(ARDUINO_AVR_MEGA2560) || defined(ARDUINO_AVR_MEGA) || \
+      defined(CORE_TEENSY) || defined(CORE_TEENSY) || !(BLYNK_ESP8266_AT_USE_SAM_DUE) )
+#error This code is intended to run on the SAM DUE platform! Please check your Tools->Board setting.
 #endif
 
 #ifndef BLYNK_INFO_CONNECTION
@@ -50,9 +59,12 @@
 #include <utility/BlynkFifo.h>
 #include <ESP8266_Lib.h>
 
-//#include <ESP8266WebServer.h>
 #include <ESP8266_AT_WebServer.h>
-#include <EEPROM.h>
+
+//Use DueFlashStorage to simulate EEPROM
+#include <DueFlashStorage.h>                 //https://github.com/sebnil/DueFlashStorage
+
+DueFlashStorage dueFlashStorage;
 
 #define SIMPLE_SHIELD_ESP8266_DEBUG       0
 
@@ -74,7 +86,7 @@ typedef struct Configuration
 uint16_t CONFIG_DATA_SIZE = sizeof(Blynk_WF_Configuration);
 
 #define root_html_template "\
-<!DOCTYPE html><html><head><title>BlynkEspAT_Teensy_WM</title><style>.em{padding-bottom:0px;}div,input{padding:5px;font-size:1em;}input{width:95%;}\
+<!DOCTYPE html><html><head><title>BlynkEspAT_DUE_WM</title><style>.em{padding-bottom:0px;}div,input{padding:5px;font-size:1em;}input{width:95%;}\
 body{text-align: center;}button{background-color:#16A1E7;color:#fff;line-height:2.4rem;font-size:1.2rem;width:100%;}fieldset{border-radius:0.3rem;margin:0px;}\
 </style></head><div style=\"text-align:left;display:inline-block;min-width:260px;\">\
 <fieldset><div><label>SSID</label><input value=\"[[id]]\"id=\"id\"><div></div></div><div><label>PWD</label><input value=\"[[pw]]\"id=\"pw\"><div></div></div></fieldset>\
@@ -221,24 +233,17 @@ class BlynkTransportShieldEsp8266
     bool status;
 
     //KH
-#ifdef CORE_TEENSY
-#if defined(__IMXRT1062__)
-    // For Teensy 4.0
+    //KH
+#if (BLYNK_ESP8266_AT_USE_SAM_DUE)
+    // For SAM DUE
     BlynkFifo<uint8_t, 4096> buffer;
-#warning Board Teensy 4.0 uses 4k FIFO buffer
-#elif ( defined(__MKL26Z64__) || defined(ARDUINO_ARCH_AVR) )
-    // For Teensy LC and 2.0
+#warning Board SAM DUE uses 4k FIFO buffer
+#else
+    // For other boards
+    //BlynkFifo<uint8_t,256> buffer;
+    // For MeGa 2560 or 1280
     BlynkFifo<uint8_t, 512> buffer;
-#warning Teensy LC and 2.0 uses 512bytes FIFO buffer
-#else
-    // For Teensy 3.x
-    BlynkFifo<uint8_t, 2048> buffer;
-#warning Teensy 3.x uses 2k FIFO buffer
-#endif
-#else
-    // For other AVR Mega
-    BlynkFifo<uint8_t, 256> buffer;
-#warning Not Teensy board => uses 256bytes FIFO buffer
+#warning Not SAM DUE board => uses 512bytes FIFO buffer
 #endif
 
     const char* domain;
@@ -254,6 +259,7 @@ class BlynkWifi
       : Base(transp)
       , wifi(NULL)
     {}
+
 
     bool WiFiInit()
     {
@@ -346,7 +352,7 @@ class BlynkWifi
                uint16_t    port   = BLYNK_DEFAULT_PORT)
     {
       config(esp8266, auth, domain, port);
-      BLYNK_LOG1(BLYNK_F("begin: connectWiFi"));
+      BLYNK_LOG1(BLYNK_F("b:conW"));
       connectWiFi(ssid, pass);
       while (this->connect() != true) {}
     }
@@ -608,12 +614,13 @@ class BlynkWifi
     void clearConfigData()
     {
       memset(&Blynk8266_WM_config, 0, sizeof(Blynk8266_WM_config));
-      EEPROM.put(EEPROM_START, Blynk8266_WM_config);
+      //EEPROM.put(EEPROM_START, BlynkEthernet_WM_config);
+      dueFlashStorage.write(EEPROM_START, (byte *) &Blynk8266_WM_config, sizeof(Blynk8266_WM_config));
     }
 
     void resetFunc()
     {
-      SCB_AIRCR = 0x05FA0004; //write value for restart for Teensy
+      BlynkReset();
     }
 
   private:
@@ -662,67 +669,6 @@ class BlynkWifi
 #define BLYNK_BOARD_TYPE   "SHD_ESP8266"
 #define NO_CONFIG           "nothing"
 
-    //#define EEPROM_SIZE       E2END
-    //#define EEPROM_SIZE       512
-
-    //KH
-    // Teensy 4.0 :  EEPROM_SIZE = 3824 = (255 * 15) - 1, why 1080 ???
-    // Teensy++2.0, 3.5 and 3.6 : EEPROM_SIZE = 4096
-    // Teensy++1.0, 3.0, 3.1 and 3.2 : EEPROM_SIZE = 2048
-    // Teensy2.0 : EEPROM_SIZE = 1024
-    // Teensy1.0 : EEPROM_SIZE = 512
-    // Teensy LC : EEPROM_SIZE = 128
-
-    /*
-      Teensy 4.0 => EEPROM_SIZE = 3824 = (255 * 15) - 1
-      #define FLASH_SECTORS  15
-      #if E2END > (255*FLASH_SECTORS-1)
-      #error "E2END is set larger than the maximum possible EEPROM size"
-      #endif
-      ======================================================
-      Teensy3.x
-      #if defined(__MK20DX128__)      //Teensy 3.0
-      #define EEPROM_MAX  2048
-      #elif defined(__MK20DX256__)    //Teensy 3.1 and 3.2
-      #define EEPROM_MAX  2048
-      #elif defined(__MK64FX512__)    //Teensy 3.5
-      #define EEPROM_MAX  4096
-      #elif defined(__MK66FX1M0__)    //Teensy 3.6
-      #define EEPROM_MAX  4096
-      #elif defined(__MKL26Z64__)     //Teensy LC
-      #define EEPROM_MAX  255
-      #endif
-      ======================================================
-      Teensy 2.x
-      Teensy 2.0
-      #if defined(__AVR_ATmega32U4__)     //Teensy 2.0
-      #elif defined(__AVR_AT90USB162__)   //Teensy 1.0
-      #elif defined(__AVR_AT90USB646__)   //Teensy++ 1.0
-      #elif defined(__AVR_AT90USB1286__)  //Teensy++ 2.0
-    */
-
-#ifndef EEPROM_SIZE
-#define EEPROM_SIZE     512
-#else
-#if (EEPROM_SIZE > 4096)
-#warning EEPROM_SIZE must be <= 4096. Reset to 4096
-#undef EEPROM_SIZE
-#define EEPROM_SIZE     4096
-#endif
-#if (EEPROM_SIZE < CONFIG_DATA_SIZE)
-#warning EEPROM_SIZE must be > CONFIG_DATA_SIZE. Reset to 512
-#undef EEPROM_SIZE
-#define EEPROM_SIZE     512
-#endif
-#endif
-
-#ifndef EEPROM_START
-#define EEPROM_START     0
-#else
-#if (EEPROM_START + CONFIG_DATA_SIZE > EEPROM_SIZE)
-#error EPROM_START + CONFIG_DATA_SIZE > EEPROM_SIZE. Please adjust.
-#endif
-#endif
 
     int calcChecksum()
     {
@@ -737,8 +683,11 @@ class BlynkWifi
 
     bool getConfigData()
     {
-      EEPROM.get(EEPROM_START, Blynk8266_WM_config);
+      //EEPROM.get(EEPROM_START, Blynk8266_WM_config);
       hadConfigData = false;
+
+      Blynk_WF_Configuration* dataPointer = (Blynk_WF_Configuration* ) dueFlashStorage.readAddress(EEPROM_START);
+      memcpy(&Blynk8266_WM_config, dataPointer, sizeof(Blynk8266_WM_config));
 
       int calChecksum = calcChecksum();
 
@@ -751,7 +700,9 @@ class BlynkWifi
 
         //EEPROM.put(EEPROM_START, Blynk8266_WM_config);
 
-        BLYNK_LOG2(BLYNK_F("InitEEPROM,sz="), EEPROM.length());
+        //BLYNK_LOG2(BLYNK_F("Init new EEPROM, size = "), EEPROM.length());
+        BLYNK_LOG2(BLYNK_F("WriteData2Flash,sz="), sizeof(Blynk8266_WM_config));
+
         // doesn't have any configuration
         strcpy(Blynk8266_WM_config.header,           BLYNK_BOARD_TYPE);
         strcpy(Blynk8266_WM_config.wifi_ssid,        NO_CONFIG);
@@ -763,7 +714,8 @@ class BlynkWifi
         // Don't need
         Blynk8266_WM_config.checkSum = 0;
 
-        EEPROM.put(EEPROM_START, Blynk8266_WM_config);
+        //EEPROM.put(EEPROM_START, Blynk8266_WM_config);
+        dueFlashStorage.write(EEPROM_START, (byte *) &Blynk8266_WM_config, sizeof(Blynk8266_WM_config));
 
         return false;
       }
@@ -787,9 +739,11 @@ class BlynkWifi
     {
       int calChecksum = calcChecksum();
       Blynk8266_WM_config.checkSum = calChecksum;
-      BLYNK_LOG4(BLYNK_F("SaveEEPROM,sz="), EEPROM.length(), BLYNK_F(",CSum="), calChecksum);
+      //BLYNK_LOG4(BLYNK_F("SaveEEPROM,sz="), EEPROM.length(), BLYNK_F(",CSum = "), calChecksum);
+      BLYNK_LOG4(BLYNK_F("SaveData,sz="), sizeof(Blynk8266_WM_config), BLYNK_F(",CSum="), calChecksum);
 
-      EEPROM.put(EEPROM_START, Blynk8266_WM_config);
+      //EEPROM.put(EEPROM_START, Blynk8266_WM_config);
+      dueFlashStorage.write(EEPROM_START, (byte *) &Blynk8266_WM_config, sizeof(Blynk8266_WM_config));
     }
 
     bool connectToWifi(int timeout)
@@ -921,7 +875,8 @@ class BlynkWifi
 
         if (number_items_Updated == NUM_CONFIGURABLE_ITEMS)
         {
-          BLYNK_LOG1(BLYNK_F("h:UpdEEPROM"));
+          //BLYNK_LOG1(BLYNK_F("hR: Update EEPROM"));
+          BLYNK_LOG1(BLYNK_F("h:UpdFlash"));
 
           saveConfigData();
 
@@ -948,8 +903,8 @@ class BlynkWifi
         String randomNum = String(random(0xFFFFFF), HEX);
         randomNum.toUpperCase();
 
-        portal_ssid = "Teensy4_" + randomNum;
-        portal_pass = "MyTeensy4_" + randomNum;
+        portal_ssid = "DUE_" + randomNum;
+        portal_pass = "MyDUE_" + randomNum;
       }
 
       BLYNK_LOG6(BLYNK_F("stConf:SSID="), portal_ssid, BLYNK_F(",PW="), portal_pass, BLYNK_F(",IP="), portal_apIP);

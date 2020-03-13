@@ -1,6 +1,6 @@
 /****************************************************************************************************************************
-   Mega_ESP8266Shield.ino
-   For AVR Mega using ESP8266 WiFi Shield
+   SAM_DUE_ESP8266Shield.ino
+   For SAM DUE using ESP8266 WiFi Shield
 
    Blynk_Esp8266AT_WM is a library for the Mega, Teensy, SAM DUE and SAMD boards (https://github.com/khoih-prog/Blynk_Esp8266AT_WM)
    to enable easy configuration/reconfiguration and autoconnect/autoreconnect of WiFi/Blynk
@@ -30,32 +30,45 @@
 /* Comment this out to disable prints and save space */
 #define BLYNK_PRINT Serial
 
-#if !( defined(ARDUINO_AVR_MEGA) || defined(ARDUINO_AVR_MEGA2560) )
-#error This code is intended to run only on the Arduino Mega 1280/2560 boards ! Please check your Tools->Board setting.
+#if ( defined(ARDUINO_SAM_DUE) || defined(__SAM3X8E__) )
+  #if defined(ESP8266_AT_USE_SAM_DUE)
+  #undef ESP8266_AT_USE_SAM_DUE
+  #endif
+  #define ESP8266_AT_USE_SAM_DUE      true
+  #warning Use SAM_DUE architecture
 #endif
 
-// For Mega, use Serial1 or Serial3
-#define EspSerial Serial3
+#if ( defined(ESP8266) || defined(ESP32) || defined(ARDUINO_AVR_MEGA2560) || defined(ARDUINO_AVR_MEGA) || \
+      defined(CORE_TEENSY) || defined(CORE_TEENSY) || !(ESP8266_AT_USE_SAM_DUE) )
+#error This code is intended to run on the SAM DUE platform! Please check your Tools->Board setting.
+#endif
 
-#if defined(ARDUINO_AVR_MEGA2560)
-#define BOARD_TYPE      "AVR Mega2560"
-#else
-#define BOARD_TYPE      "AVR Mega"
+#if defined(ESP8266_AT_USE_SAM_DUE) 
+   // For SAM DUE
+  #define EspSerial Serial1
+  
+  #if defined(ARDUINO_SAM_DUE)
+    #define BOARD_TYPE      "SAM DUE"
+  #elif defined(__SAM3X8E__)
+    #define BOARD_TYPE      "SAM SAM3X8E"    
+  #else
+    #define BOARD_TYPE      "SAM Unknown"
+  #endif
 #endif
 
 #include <ESP8266_Lib.h>
 
 // Start location in EEPROM to store config data. Default 0
 // Config data Size currently is 128 bytes)
-#define EEPROM_START     0
+#define EEPROM_START     256
 
 #define USE_BLYNK_WM      true
 //#define USE_BLYNK_WM      false
 
 #if USE_BLYNK_WM
-#include <BlynkSimpleShieldEsp8266_WM.h>
+#include <BlynkSimpleShieldEsp8266_DUE_WM.h>
 #else
-#include <BlynkSimpleShieldEsp8266.h>
+#include <BlynkSimpleShieldEsp8266_DUE.h>
 
 #define USE_LOCAL_SERVER      true
 
@@ -129,13 +142,15 @@ void setup()
 
   // initialize serial for ESP module
   EspSerial.begin(ESP8266_BAUD);
-  Serial.println("\nStart Blynk_WM using ESP_AT_Shield on " + String(BOARD_TYPE));
+  Serial.println("\nStart Blynk WiFiManager using ESP8266_AT_Shield on " + String(BOARD_TYPE));
 
 #if USE_BLYNK_WM
-  //Blynk.setConfigPortalIP(IPAddress(192, 168, 120, 1));
+  Serial.println(F("Start Blynk_WM"));
+  Blynk.setConfigPortalIP(IPAddress(192, 168, 120, 1));
   //Blynk.setConfigPortal("Mega", "MyMega");
   Blynk.begin(wifi);
 #else
+  Serial.println(F("Start Blynk"));
   Blynk.begin(auth, wifi, ssid, pass, BlynkServer.c_str(), BLYNK_SERVER_HARDWARE_PORT);
 #endif
 }

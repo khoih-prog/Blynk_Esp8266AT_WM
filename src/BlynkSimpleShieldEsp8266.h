@@ -2,11 +2,13 @@
    BlynkSimpleShieldEsp8266.h
    For AVR boards using ESP8266 WiFi Shields
 
-   Blynk_Esp8266AT_WM is a library for the Mega, Teensy and SAMD boards (https://github.com/khoih-prog/Blynk_Esp8266AT_WM)
+   Blynk_Esp8266AT_WM is a library for the Mega, Teensy, SAM DUE and SAMD boards (https://github.com/khoih-prog/Blynk_Esp8266AT_WM)
+   to enable easy configuration/reconfiguration and autoconnect/autoreconnect of WiFi/Blynk
+
    Forked from Blynk library v0.6.1 https://github.com/blynkkk/blynk-library/releases
    Built by Khoi Hoang https://github.com/khoih-prog/Blynk_WM
    Licensed under MIT license
-   Version: 1.0.3
+   Version: 1.0.4
 
    Original Blynk Library author:
    @file       BlynkSimpleShieldEsp8266.h
@@ -22,6 +24,7 @@
     1.0.1   K Hoang      17/02/2019  Add checksum, fix bug
     1.0.2   K Hoang      22/02/2019  Add support to SAMD boards
     1.0.3   K Hoang      03/03/2019  Add support to STM32 boards, except STM32F0
+    1.0.4   K Hoang      13/03/2019  Add SAM DUE support. Enhance GUI. 
  *****************************************************************************************************************************/
 
 #ifndef BlynkSimpleShieldEsp8266_h
@@ -59,12 +62,19 @@ class BlynkTransportShieldEsp8266
       if (mux_id != BLYNK_ESP8266_MUX) {
         return;
       }
-#if (SIMPLE_SHIELD_ESP8266_DEBUG > 0)
-      BLYNK_LOG4("Got: ", len, ", Free: ", buffer.free());
+      
+      //KH
+#if (SIMPLE_SHIELD_ESP8266_DEBUG > 1)
+      BLYNK_LOG4(BLYNK_F("Got:"), len, BLYNK_F(", Free:"), buffer.free());
 #endif
+      //
 
-      if (buffer.free() < len) {
-        BLYNK_LOG1(BLYNK_F("Buffer overflow"));
+      if (buffer.free() < len) 
+      {
+        //KH
+#if (SIMPLE_SHIELD_ESP8266_DEBUG > 0)
+        BLYNK_LOG4(BLYNK_F("OVF,Got:"), len, BLYNK_F(", Free:"), buffer.free());
+#endif
         return;
       }
       while (len) {
@@ -111,8 +121,8 @@ class BlynkTransportShieldEsp8266
 
     size_t read(void* buf, size_t len) {
       millis_time_t start = BlynkMillis();
-#if (SIMPLE_SHIELD_ESP8266_DEBUG > 0)
-      BLYNK_LOG4("Waiting: ", len, " Buffer: ", buffer.size());
+#if (SIMPLE_SHIELD_ESP8266_DEBUG > 1)
+      BLYNK_LOG4(BLYNK_F("rd:len="), len, BLYNK_F(",Buf="), buffer.size());
 #endif
       while ((buffer.size() < len) && (BlynkMillis() - start < 1500)) {
         client->run();
@@ -132,8 +142,8 @@ class BlynkTransportShieldEsp8266
 
     int available() {
       client->run();
-#if (SIMPLE_SHIELD_ESP8266_DEBUG > 1)
-      BLYNK_LOG2("Still: ", buffer.size());
+#if (SIMPLE_SHIELD_ESP8266_DEBUG > 2)
+      BLYNK_LOG2(BLYNK_F("Still:"), buffer.size());
 #endif
       return buffer.size();
     }
@@ -179,45 +189,64 @@ class BlynkWifi
       , wifi(NULL)
     {}
 
-    bool connectWiFi(const char* ssid, const char* pass)
+    bool WiFiInit()
     {
-      //BlynkDelay(500);
-      BLYNK_LOG2(BLYNK_F("Connecting to "), ssid);
-      /*if (!wifi->restart()) {
-          BLYNK_LOG1(BLYNK_F("Failed to restart"));
-          return false;
-        }*/
-      if (!wifi->kick()) {
-        BLYNK_LOG1(BLYNK_F("ESP is not responding"));
+      if (!wifi->restart()) {
+        BLYNK_LOG1(BLYNK_F("Fail2Rst"));
+        return false;
+      }
+
+      if (!wifi->kick())
+      {
+        BLYNK_LOG1(BLYNK_F("ESP no respond"));
         //TODO: BLYNK_LOG_TROUBLE(BLYNK_F("esp8266-not-responding"));
         return false;
       }
-      if (!wifi->setEcho(0)) {
-        BLYNK_LOG1(BLYNK_F("Failed to disable Echo"));
+      if (!wifi->setEcho(0))
+      {
+        BLYNK_LOG1(BLYNK_F("FailEcho"));
         return false;
       }
+
       String ver = wifi->ESP8266::getVersion();
       BLYNK_LOG1(ver);
 
+      // KH
       BlynkDelay(500);
 
-      // KH
-      if (!wifi->enableMUX()) {
-        BLYNK_LOG1(BLYNK_F("Failed to enable MUX"));
+      if (!wifi->enableMUX())
+      {
+        BLYNK_LOG1(BLYNK_F("FailMUX"));
+        return false;
       }
 
-      if (!wifi->setOprToStation()) {
-        BLYNK_LOG1(BLYNK_F("Failed to set STA mode"));
+      if (!wifi->setOprToStation())
+      {
+        BLYNK_LOG1(BLYNK_F("FailSTA"));
         return false;
       }
-      if (wifi->joinAP(ssid, pass)) {
-        String my_ip = wifi->getLocalIP();
-        BLYNK_LOG1(my_ip);
-      } else {
-        BLYNK_LOG1(BLYNK_F("Failed to connect WiFi"));
+
+      return true;
+    }
+
+    bool connectWiFi(const char* ssid, const char* pass)
+    {
+      BLYNK_LOG2(BLYNK_F("Con2:"), ssid);
+
+      WiFiInit();
+
+      if (wifi->joinAP(ssid, pass))
+      {
+        getLocalIP();
+      }
+      else
+      {
+        BLYNK_LOG1(BLYNK_F("FailW"));
         return false;
       }
-      BLYNK_LOG1(BLYNK_F("Connected to WiFi"));
+
+      BLYNK_LOG1(BLYNK_F("WOK"));
+
       return true;
     }
 
@@ -244,8 +273,24 @@ class BlynkWifi
       while (this->connect() != true) {}
     }
 
+  String getLocalIP(void)
+    {
+      // Check to use getStationIp()
+#if 1
+      ipAddress = wifi->getStationIp();
+#else
+      ipAddress = wifi->getLocalIP().replace("+CIFSR:STAIP,\"", "");
+      ipAddress = ipAddress.replace("\"", "");
+
+#endif
+
+      BLYNK_LOG2(BLYNK_F("IP = "), ipAddress);
+      return ipAddress;
+    }
+
   private:
     ESP8266* wifi;
+    String ipAddress = "0.0.0.0";
 };
 
 static BlynkTransportShieldEsp8266 _blynkTransport;
