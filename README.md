@@ -55,17 +55,21 @@ In your code, to use WiFiManager Blynk features, replace
 1. `BlynkSimpleShieldEsp8266.h` with `BlynkSimpleShieldEsp8266_WM.h` for Mega boards.
 2. `BlynkSimpleShieldEsp8266.h` with `BlynkSimpleShieldEsp8266_Teensy_WM.h`  for Teensy boards.
 3. `BlynkSimpleShieldEsp8266.h` with `BlynkSimpleShieldEsp8266_SAMD_WM.h`  for SAMD boards.
-4. `BlynkSimpleShieldEsp8266.h` with `BlynkSimpleShieldEsp8266_STM32_WM.h`  for STM32 boards.
+4. `BlynkSimpleShieldEsp8266.h` with `BlynkSimpleShieldEsp8266_DUE_WM.h`  for SAM DUE boards.
+5. `BlynkSimpleShieldEsp8266.h` with `BlynkSimpleShieldEsp8266_STM32_WM.h`  for STM32 boards.
 
 to use Blynk only, with hardcoded Credentials, replace
 1. `BlynkSimpleShieldEsp8266.h` with `BlynkSimpleShieldEsp8266_Teensy.h`  for Teensy boards.
 2. `BlynkSimpleShieldEsp8266.h` with `BlynkSimpleShieldEsp8266_SAMD.h`  for SAMD boards.
-3. `BlynkSimpleShieldEsp8266.h` with `BlynkSimpleShieldEsp8266_STM32.h`  for STM32 boards.
-4. Keep the same`BlynkSimpleShieldEsp8266.h` for Mega boards
+3. `BlynkSimpleShieldEsp8266.h` with `BlynkSimpleShieldEsp8266_DUE.h`  for SAMD boards.
+4. `BlynkSimpleShieldEsp8266.h` with `BlynkSimpleShieldEsp8266_STM32.h`  for STM32 boards.
+5. Keep the same`BlynkSimpleShieldEsp8266.h` for Mega boards
 
 to use EEPROM ( 156 bytes for Mega, 180 bytes for Teensy from address EEPROM_START ) to save your configuration data.
 EEPROM_SIZE can be specified from 256 to 4096 bytes.
-For SAMD boards, data is stored in Flash using 256-byte block.
+For SAMD boards, data is stored in FlashStorage using 256-byte block.
+For SAM DUE boards, data is stored in DueFlashStorage.
+
 
 See examples 
 1. [Mega_ESP8266Shield](examples/Mega_ESP8266Shield)
