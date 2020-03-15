@@ -7,6 +7,7 @@
 1. Add support to SAM DUE
 2. Reduce html and code size for faster Config Portal response. 
 3. Enhance GUI.
+4. Config Portal AP SSID and Password will use 4 bytes of hardware unique macAddress, only for Teensy.
 
 ### New Version v1.0.3
 
@@ -362,6 +363,7 @@ void loop()
 1. Add support to SAM DUE
 2. Reduce html and code size for faster Config Portal response. 
 3. Enhance GUI.
+4. Config Portal AP SSID and Password will use 4 bytes of hardware unique macAddress, only for Teensy.
 
 ### New Version v1.0.3
 
