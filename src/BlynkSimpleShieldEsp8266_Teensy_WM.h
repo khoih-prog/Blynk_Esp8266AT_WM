@@ -935,6 +935,22 @@ class BlynkWifi
       }   // if (server)
     }
 
+    #if 0
+    uint8_t macTeensy[6];
+    
+    static void teensyMAC(uint8_t *mac)
+    {
+      uint32_t m1 = HW_OCOTP_MAC1;
+      uint32_t m2 = HW_OCOTP_MAC0;
+      mac[0] = m1 >> 8;
+      mac[1] = m1 >> 0;
+      mac[2] = m2 >> 24;
+      mac[3] = m2 >> 16;
+      mac[4] = m2 >> 8;
+      mac[5] = m2 >> 0;
+    } 
+    #endif
+    
     void startConfigurationMode()
     {
 #define CONFIG_TIMEOUT			60000L
@@ -945,11 +961,11 @@ class BlynkWifi
 
       if ( (portal_ssid == "") || portal_pass == "" )
       {
-        String randomNum = String(random(0xFFFFFF), HEX);
-        randomNum.toUpperCase();
-
-        portal_ssid = "Teensy4_" + randomNum;
-        portal_pass = "MyTeensy4_" + randomNum;
+        String hardwareID = String(HW_OCOTP_MAC0, HEX);
+        hardwareID.toUpperCase();
+        
+        portal_ssid = "ESP_AT_" + hardwareID;
+        portal_pass = "MyESP_AT_" + hardwareID;
       }
 
       BLYNK_LOG6(BLYNK_F("stConf:SSID="), portal_ssid, BLYNK_F(",PW="), portal_pass, BLYNK_F(",IP="), portal_apIP);
