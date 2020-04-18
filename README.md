@@ -1,6 +1,10 @@
 ## Blynk_Esp8266AT_WM
 
 [![arduino-library-badge](https://www.ardu-badge.com/badge/Blynk_Esp8266AT_WM.svg?)](https://www.ardu-badge.com/Blynk_Esp8266AT_WM)
+[![GitHub release](https://img.shields.io/github/release/khoih-prog/Blynk_Esp8266AT_WM.svg)](https://github.com/khoih-prog/Blynk_Esp8266AT_WM/releases)
+[![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/khoih-prog/Blynk_Esp8266AT_WM/blob/master/LICENSE)
+[![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](#Contributing)
+[![GitHub issues](https://img.shields.io/github/issues/khoih-prog/Blynk_Esp8266AT_WM.svg)](http://github.com/khoih-prog/Blynk_Esp8266AT_WM/issues)
 
 ### New Releases v1.0.4
 
