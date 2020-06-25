@@ -119,7 +119,7 @@ void setup()
   
   Blynk.begin(wifi);
 #else
-  SSerial.print(F("Start Blynk no WM with BlynkServer = "));
+  Serial.print(F("Start Blynk no WM with BlynkServer = "));
   Serial.print(BlynkServer);
   Serial.print(F(" and Token = "));
   Blynk.begin(auth, wifi, ssid, pass, BlynkServer.c_str(), BLYNK_SERVER_HARDWARE_PORT);
