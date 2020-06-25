@@ -483,7 +483,6 @@ class BlynkWifi
 
         config(esp8266, Blynk8266_WF_config.blynk_token, Blynk8266_WF_config.blynk_server, Blynk8266_WF_config.blynk_port);
 
-        //if (connectToWifi(TIMEOUT_CONNECT_WIFI))
         if (connectMultiWiFi(TIMEOUT_CONNECT_WIFI))
         {
           BLYNK_LOG1(BLYNK_F("b:WOK.TryB"));
@@ -620,11 +619,8 @@ class BlynkWifi
           }
           else
           {
-            BLYNK_LOG1(BLYNK_F("r:Blost.TryB"));
-            if (connect())
-            {
-              BLYNK_LOG1(BLYNK_F("r:BOK"));
-            }
+            // Force to reconnect WiFi, then Blynk
+            wifi_connected = false;  
           }
 
           //BLYNK_LOG1(BLYNK_F("run: Lost connection => configMode"));
@@ -1152,28 +1148,50 @@ class BlynkWifi
       for (int i = 0; i < NUM_WIFI_CREDENTIALS; i++)
       {
         currMillis = millis();
+        
+        BLYNK_LOG4(BLYNK_F("con2WF:SSID="), Blynk8266_WF_config.WiFi_Creds[i].wifi_ssid,
+                  BLYNK_F(",PW="), Blynk8266_WF_config.WiFi_Creds[i].wifi_pw);
                
         while ( !wifi_connected && ( 0 < timeout ) && ( (millis() - currMillis) < (unsigned long) timeout )  )
         {
 #if ( BLYNK_WM_DEBUG > 2)        
           BLYNK_LOG2(BLYNK_F("con2WF:spentMsec="), millis() - currMillis);
 #endif
-
-          BLYNK_LOG4(BLYNK_F("con2WF:SSID="), Blynk8266_WF_config.WiFi_Creds[i].wifi_ssid,
-                    BLYNK_F(",PW="), Blynk8266_WF_config.WiFi_Creds[i].wifi_pw);
-          
-          if (connectWiFi(Blynk8266_WF_config.WiFi_Creds[i].wifi_ssid, Blynk8266_WF_config.WiFi_Creds[i].wifi_pw))
+               
+          // Need restart WiFi at beginning of each cycle
+          if (i == 0)
           {
-            wifi_connected = true;
-            // To exit for loop
-            i = NUM_WIFI_CREDENTIALS;
-            break;
+            if (connectWiFi(Blynk8266_WF_config.WiFi_Creds[i].wifi_ssid, Blynk8266_WF_config.WiFi_Creds[i].wifi_pw))
+            {
+              wifi_connected = true;
+              // To exit for loop
+              i = NUM_WIFI_CREDENTIALS;
+              break;
+            }
+            else
+            {
+              delay(sleep_time);
+              timeout -= sleep_time;
+            }
           }
           else
-          {
-            delay(sleep_time);
-            timeout -= sleep_time;
-          }
+          {         
+            if (wifi->joinAP(Blynk8266_WF_config.WiFi_Creds[i].wifi_ssid, Blynk8266_WF_config.WiFi_Creds[i].wifi_pw))
+            {
+              BLYNK_LOG1(BLYNK_F("WOK"));
+              displayWiFiData();
+              wifi_connected = true;
+              
+              // To exit for loop
+              i = NUM_WIFI_CREDENTIALS;
+              break;
+            }
+            else
+            {
+              delay(sleep_time);
+              timeout -= sleep_time;
+            }
+          }  
         }
       }       
 

@@ -82,6 +82,8 @@ With version `v1.0.0` or later, you now can configure:
 The best and easiest way is to use `Arduino Library Manager`. Search for `Blynk_Esp8266AT_WM`, then select / install the latest version.
 You can also use this link [![arduino-library-badge](https://www.ardu-badge.com/badge/Blynk_Esp8266AT_WM.svg?)](https://www.ardu-badge.com/Blynk_Esp8266AT_WM) for more detailed instructions.
 
+Then copy [BlynkDetectDevice.h](https://github.com/khoih-prog/Blynk_Esp8266AT_WM/blob/master/src/Blynk/BlynkDetectDevice.h) to folder ~/Arduino/libraries/Blynk/src/Blynk to overwrite the origonal file `BlynkDetectDevice.h`.
+
 ### Manual Install
 
 Another way to install is to:
@@ -90,6 +92,8 @@ Another way to install is to:
 2. Download the latest release `Blynk_Esp8266AT_WM-master.zip`.
 3. Extract the zip file to `Blynk_Esp8266AT_WM-master` directory 
 4. Copy whole `Blynk_Esp8266AT_WM-master/src` folder to Arduino libraries' directory such as `~/Arduino/libraries/`.
+
+Then copy [BlynkDetectDevice.h](https://github.com/khoih-prog/Blynk_Esp8266AT_WM/blob/master/src/Blynk/BlynkDetectDevice.h) to folder ~/Arduino/libraries/Blynk/src/Blynk to overwrite the origonal file `BlynkDetectDevice.h`.
 
 ### How to use
 
@@ -858,7 +862,7 @@ SetFlag write = 0xd0d01234
    / _ )/ /_ _____  / /__
   / _  / / // / _ \/  '_/
  /____/_/\_, /_//_/_/\_\
-        /___/ v0.6.1 on Arduino
+        /___/ v0.6.1 on NRF52840_ITSYBITSY_EXPRESS
 
 [8568] ConMultiWifi
 [8568] con2WF:SSID=HueNet1,PW=****
