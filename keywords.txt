@@ -13,6 +13,14 @@ WidgetMap	KEYWORD1
 WidgetTable	KEYWORD1
 BlynkParam	KEYWORD1
 BlynkParamAllocated	KEYWORD1
+BlynkTransportShieldEsp8266 KEYWORD1
+BlynkWifi KEYWORD1
+
+#########################
+MenuItem  KEYWORD1
+WiFi_Credentials  KEYWORD1
+Blynk_WF_Configuration  KEYWORD1
+
 
 #######################################
 # Methods and Functions (KEYWORD2)
@@ -31,6 +39,9 @@ syncAll	KEYWORD2
 syncVirtual	KEYWORD2
 setProperty	KEYWORD2
 logEvent	KEYWORD2
+
+###############
+IPAddressToString KEYWORD2
 loadConfigData  KEYWORD2
 saveConfigData  KEYWORD2
 getConfigData KEYWORD2
@@ -39,18 +50,22 @@ handleRequest KEYWORD2
 startConfigurationMode  KEYWORD2
 setHostname KEYWORD2
 setConfigPortalIP KEYWORD2
+setConfigPortalChannel  KEYWORD2
 setConfigPortal KEYWORD2
 setSTAStaticIPConfig  KEYWORD2
+getWiFiSSID KEYWORD2
+getWiFiPW KEYWORD2
 getServerName KEYWORD2
 getToken  KEYWORD2
-getBlynkBTToken KEYWORD2
-getBlynkBLEToken  KEYWORD2
 getBoardName  KEYWORD2
 getHWPort KEYWORD2
 getFullConfigData KEYWORD2
+getLocalIP  KEYWORD2
 clearConfigData KEYWORD2
+isConfigDataValid
 resetFunc KEYWORD2
 
+################
 
 # Handler helpers
 BLYNK_READ	KEYWORD2

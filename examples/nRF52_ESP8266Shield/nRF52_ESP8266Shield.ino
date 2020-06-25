@@ -1,6 +1,6 @@
 /****************************************************************************************************************************
-   SAMD_ESP8266Shield.ino
-   For SAMD using ESP8266 WiFi Shield
+   nRF52_ESP8266Shield.ino
+   For nRF52 boards using ESP8266 WiFi Shield
 
    Blynk_Esp8266AT_WM is a library for the Mega, Teensy, SAM DUE and SAMD boards (https://github.com/khoih-prog/Blynk_Esp8266AT_WM)
    to enable easy configuration/reconfiguration and autoconnect/autoreconnect of WiFi/Blynk
@@ -84,9 +84,9 @@ void check_status()
 {
   static unsigned long checkstatus_timeout = 0;
 
-#define STATUS_CHECK_INTERVAL     20000L
+#define STATUS_CHECK_INTERVAL     15000L
 
-  // Send status report every STATUS_REPORT_INTERVAL (20) seconds: we don't need to send updates frequently if there is no status change.
+  // Send status report every STATUS_REPORT_INTERVAL (60) seconds: we don't need to send updates frequently if there is no status change.
   if ((millis() > checkstatus_timeout) || (checkstatus_timeout == 0))
   {
     // report status to Blynk
@@ -98,15 +98,15 @@ void check_status()
 
 void setup()
 {
-  // Debug console
+  // Debug console 
   Serial.begin(115200);
   while (!Serial);
   
-  Serial.println("\nStart SAMD_ESP8266Shield on " + String(BOARD_TYPE));
+  Serial.println("\nStart nRF52_ESP8266Shield on " + String(BOARD_TYPE));
 
   // initialize serial for ESP module
   EspSerial.begin(ESP8266_BAUD);
-
+  
 #if USE_BLYNK_WM
   Serial.println(F("Start Blynk_ESP8266AT_WM"));
 
@@ -114,16 +114,14 @@ void setup()
   Blynk.setConfigPortalIP(IPAddress(192, 168, 120, 1));
   // Personalized portal_ssid and password
   Blynk.setConfigPortal(portal_ssid, portal_password);
-  //Blynk.setConfigPortal("SAMD_WM", "MySAMD_PW");
+  //Blynk.setConfigPortal("nRF52_WM", "MynRF52_PW");
   Blynk.setConfigPortalChannel(0);
   
   Blynk.begin(wifi);
 #else
-  Serial.print(F("Start Blynk no WM with BlynkServer = "));
+  SSerial.print(F("Start Blynk no WM with BlynkServer = "));
   Serial.print(BlynkServer);
   Serial.print(F(" and Token = "));
-  Serial.println(auth);
-
   Blynk.begin(auth, wifi, ssid, pass, BlynkServer.c_str(), BLYNK_SERVER_HARDWARE_PORT);
 #endif
 }

@@ -1,5 +1,5 @@
 /****************************************************************************************************************************
-   BlynkSimpleShieldEsp8266_STM32.h
+   BlynkSimpleShieldEsp8266_nRF52.h
    For ESP8266 AT-command shields
 
    Blynk_Esp8266AT_WM is a library for the Mega, Teensy, SAM DUE and SAMD boards (https://github.com/khoih-prog/Blynk_Esp8266AT_WM)
@@ -29,18 +29,21 @@
                                      WPA2 SSID PW to 63 chars. Permit special chars such as !,@,#,$,%,^,&,* into data fields.
  *****************************************************************************************************************************/
 
-#ifndef BlynkSimpleShieldEsp8266_STM32_h
-#define BlynkSimpleShieldEsp8266_STM32_h
+#ifndef BlynkSimpleShieldEsp8266_nRF52_h
+#define BlynkSimpleShieldEsp8266_nRF52_h
 
-#if ( defined(STM32F0) || defined(STM32F1) || defined(STM32F2) || defined(STM32F3)  ||defined(STM32F4) || defined(STM32F7) )
-#if defined(BLYNK_ESP8266_AT_USE_STM32)
-#undef BLYNK_ESP8266_AT_USE_STM32
+#if ( defined(NRF52840_FEATHER) || defined(NRF52832_FEATHER) || defined(NRF52_SERIES) || defined(ARDUINO_NRF52_ADAFRUIT) || \
+      defined(NRF52840_FEATHER_SENSE) || defined(NRF52840_ITSYBITSY) || defined(NRF52840_CIRCUITPLAY) || defined(NRF52840_CLUE) || \
+      defined(NRF52840_METRO) || defined(NRF52840_PCA10056) || defined(PARTICLE_XENON) || defined(NINA_B302_ublox) || defined(NINA_B112_ublox) )
+#if defined(BLYNK_ESP8266_AT_USE_nRF528XX)
+#undef BLYNK_ESP8266_AT_USE_nRF528XX
 #endif
-#define BLYNK_ESP8266_AT_USE_STM32      true
+#define BLYNK_ESP8266_AT_USE_nRF528XX      true
+#warning Use nFR52 architecture from Blynk_Esp8266AT_WM
 #endif
 
-#if ( defined(ESP8266) || defined(ESP32) || defined(ARDUINO_AVR_MEGA) || defined(ARDUINO_AVR_MEGA2560) || defined(CORE_TEENSY) || !(BLYNK_ESP8266_AT_USE_STM32) )
-#error This code is intended to run on STM32 platform! Please check your Tools->Board setting.
+#if ( defined(ESP8266) || defined(ESP32) || defined(ARDUINO_AVR_MEGA2560) || defined(ARDUINO_AVR_MEGA) || !(BLYNK_ESP8266_AT_USE_nRF528XX) )
+#error This code is intended to run on the nRF52 platform! Please check your Tools->Board setting.
 #endif
 
 #ifndef BLYNK_INFO_CONNECTION
@@ -74,7 +77,7 @@ class BlynkTransportShieldEsp8266
 
       //KH
 #if (SIMPLE_SHIELD_ESP8266_DEBUG > 1)
-      BLYNK_LOG4("Got:", len, ", Free:", buffer.free());
+      BLYNK_LOG4("Got: ", len, ", Free: ", buffer.free());
 #endif
       //
 
@@ -96,11 +99,6 @@ class BlynkTransportShieldEsp8266
           len--;
         }
       }
-      //KH
-#if (SIMPLE_SHIELD_ESP8266_DEBUG > 1)
-      BLYNK_LOG2(BLYNK_F("onData Buffer len"), len );
-#endif
-      //
     }
 
   public:
@@ -144,7 +142,7 @@ class BlynkTransportShieldEsp8266
       //Check to see if all data are read or not
 
 #if (SIMPLE_SHIELD_ESP8266_DEBUG > 1)
-      BLYNK_LOG4("rd:len=", len, ",Buf=", buffer.size());
+      BLYNK_LOG4(BLYNK_F("rd:len="), len, BLYNK_F(",Buf="), buffer.size());
 #endif
 
       while ((buffer.size() < len) && (BlynkMillis() - start < 1500))
@@ -153,6 +151,7 @@ class BlynkTransportShieldEsp8266
         // then call onData() to get len bytes of data to buffer => BlynkProtocol::ProcessInput()
         client->run();
       }
+
       //All data got in FIFO buffer, copy to destination buf and return len
       return buffer.get((uint8_t*)buf, len);
     }
@@ -181,42 +180,15 @@ class BlynkTransportShieldEsp8266
     ESP8266* client;
     bool status;
     //KH
-#if BLYNK_ESP8266_AT_USE_STM32
-#if defined(STM32F0)
-    // For STM32 F0
-    BlynkFifo<uint8_t, 512> buffer;
-#error Board STM32F0 not supported
-#elif defined(STM32F1)
-    // For STM32 F1
-    BlynkFifo<uint8_t, 512> buffer;
-#warning Board STM32F1 uses 512bytes FIFO buffer
-#elif defined(STM32F2)
-    // For STM32 F2
-    BlynkFifo<uint8_t, 512> buffer;
-#warning Board STM32F2 uses 512bytes FIFO buffer
-#elif defined(STM32F3)
-    // For STM32 F3
-    BlynkFifo<uint8_t, 1024> buffer;
-#warning Board STM32F3 uses 1K FIFO buffer
-#elif defined(STM32F4)
-    // For STM32 F4
-    BlynkFifo<uint8_t, 2048> buffer;
-#warning Board STM32F4 uses 2K FIFO buffer
-#elif defined(STM32F7)
-    // For STM32 F7
+#if (BLYNK_ESP8266_AT_USE_nRF528XX)
+    // For all nRF52
     BlynkFifo<uint8_t, 4096> buffer;
-#warning Board STM32F7 uses 4K FIFO buffer
+#warning Board nRF52 uses 4k FIFO buffer
 #else
-    // For STM32 Unknow
-    BlynkFifo<uint8_t, 512> buffer;
-#warning Board STM32 unknown uses 512bytes FIFO buffer
-#endif
-#else
-    // For other AVR Mega
+    // For other unknown nRF52
     //BlynkFifo<uint8_t,256> buffer;
-    // For MeGa 2560 or 1280
     BlynkFifo<uint8_t, 512> buffer;
-#warning Not STM32 board => uses 512bytes FIFO buffer
+#warning Not known nRF52 board => uses 512bytes FIFO buffer
 #endif
 
     const char* domain;
@@ -342,4 +314,4 @@ BlynkWifi Blynk(_blynkTransport);
 
 #include <BlynkWidgets.h>
 
-#endif
+#endif    //BlynkSimpleShieldEsp8266_nRF52_h

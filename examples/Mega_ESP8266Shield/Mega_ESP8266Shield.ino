@@ -76,7 +76,7 @@ char pass[] = "****";
 
 #endif
 
-// Your Megay <-> ESP8266 baud rate:
+// Your Mega <-> ESP8266 baud rate:
 #define ESP8266_BAUD 115200
 
 ESP8266 wifi(&EspSerial);
@@ -125,12 +125,13 @@ void setup()
 {
   // Debug console
   Serial.begin(115200);
-  delay(1000);
+  while (!Serial);
+
+  Serial.println("\nStart Mega_ESP8266Shield on " + String(BOARD_TYPE));
 
   // initialize serial for ESP module
   EspSerial.begin(ESP8266_BAUD);
-  Serial.println("\nStart Blynk_WM using ESP_AT_Shield on " + String(BOARD_TYPE));
-
+  
 #if USE_BLYNK_WM
   //Blynk.setConfigPortalIP(IPAddress(192, 168, 120, 1));
   //Blynk.setConfigPortal("Mega", "MyMega");
