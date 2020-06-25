@@ -58,7 +58,7 @@ With version `v1.0.0` or later, you now can configure:
  7. [`ESP8266_AT_WebServer library v1.0.6 or later`](https://github.com/khoih-prog/ESP8266_AT_WebServer). To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/ESP8266_AT_WebServer.svg?)](https://www.ardu-badge.com/ESP8266_AT_WebServer)
  8. [`FlashStorage_SAMD library v1.0.0`](https://github.com/khoih-prog/FlashStorage_SAMD) for SAMD21 boards (ZERO, MKR, NANO_33_IOT, M0, M0 Pro, AdaFruit CIRCUITPLAYGROUND_EXPRESS, etc.) and SAMD51 boards (Itsy-Bitsy M4, Metro M4, Grand Central M4, Feather M4 Express, etc.)
  9. [`DueFlashStorage library`](https://github.com/sebnil/DueFlashStorage) for SAM DUE
-10. [`Ai-Thinker AT Firmare v1.5.4`](https://www.electrodragon.com/w/File:At_firmware_bin1.54.zip) for ESP8266-AT shields
+10. [`Ai-Thinker AT Firmare v1.5.4`](AT_Firmwares/At_firmware_bin1.54.zip)  for ESP8266-AT shields
 11. [`Adafruit's LittleFS/InternalFS`](www.adafruit.com) for nRF52
 12. [`DoubleResetDetector_Generic v1.0.2 or later`](https://github.com/khoih-prog/DoubleResetDetector_Generic). To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/DoubleResetDetector_Generic.svg?)](https://www.ardu-badge.com/DoubleResetDetector_Generic)
 
@@ -66,7 +66,7 @@ With version `v1.0.0` or later, you now can configure:
 ### Important Notes
 
 1. Tested OK with for ESP8266-AT shields:
-  - [`Ai-Thinker AT Firmare v1.5.4`](https://www.electrodragon.com/w/File:At_firmware_bin1.54.zip) 
+  - [`Ai-Thinker AT Firmare v1.5.4`](AT_Firmwares/At_firmware_bin1.54.zip) 
   
 2. ***Don't use*** [`AT Firmare v1.7.4.0`](https://github.com/espressif/ESP8266_NONOS_SDK/tree/master/bin/at) for ESP8266-AT shields. System will hangs while connecting to Blynk. Will search and fix bugs in Blynk's BlynkESP8266_Lib later.
 
