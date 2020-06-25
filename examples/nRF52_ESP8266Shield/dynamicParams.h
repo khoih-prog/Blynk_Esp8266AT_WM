@@ -46,7 +46,7 @@
 #if USE_DYNAMIC_PARAMETERS
 
 #define MAX_MQTT_SERVER_LEN      34
-char MQTT_Server  [MAX_MQTT_SERVER_LEN + 1]   = "default-mqtt-server";
+char MQTT_Server  [MAX_MQTT_SERVER_LEN + 1]   = "mqtt-server";
 
 #define MAX_MQTT_PORT_LEN        6
 char MQTT_Port   [MAX_MQTT_PORT_LEN + 1]  = "1883";
