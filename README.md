@@ -58,7 +58,7 @@ With version `v1.0.0` or later, you now can configure:
  7. [`ESP8266_AT_WebServer library v1.0.6 or later`](https://github.com/khoih-prog/ESP8266_AT_WebServer). To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/ESP8266_AT_WebServer.svg?)](https://www.ardu-badge.com/ESP8266_AT_WebServer)
  8. [`FlashStorage_SAMD library v1.0.0`](https://github.com/khoih-prog/FlashStorage_SAMD) for SAMD21 boards (ZERO, MKR, NANO_33_IOT, M0, M0 Pro, AdaFruit CIRCUITPLAYGROUND_EXPRESS, etc.) and SAMD51 boards (Itsy-Bitsy M4, Metro M4, Grand Central M4, Feather M4 Express, etc.)
  9. [`DueFlashStorage library`](https://github.com/sebnil/DueFlashStorage) for SAM DUE
-10. [`Ai-Thinker AT Firmare v1.5.4`](AT_Firmwares/At_firmware_bin1.54.zip)  for ESP8266-AT shields
+10. [`Ai-Thinker AT Firmware v1.5.4`](AT_Firmwares/At_firmware_bin1.54.zip) or [`AT Firmware v1.7.4.0`](AT_Firmwares/AT_Firmware_bin_1.7.4.0.zip) for ESP8266-AT shields.
 11. [`Adafruit's LittleFS/InternalFS`](www.adafruit.com) for nRF52
 12. [`DoubleResetDetector_Generic v1.0.2 or later`](https://github.com/khoih-prog/DoubleResetDetector_Generic). To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/DoubleResetDetector_Generic.svg?)](https://www.ardu-badge.com/DoubleResetDetector_Generic)
 
@@ -66,12 +66,30 @@ With version `v1.0.0` or later, you now can configure:
 ### Important Notes
 
 1. Tested OK with for ESP8266-AT shields:
-  - [`Ai-Thinker AT Firmare v1.5.4`](AT_Firmwares/At_firmware_bin1.54.zip) 
+  - [`Ai-Thinker AT Firmware v1.5.4`](AT_Firmwares/At_firmware_bin1.54.zip)
+  - [`AT Firmware v1.7.4.0`](AT_Firmwares/AT_Firmware_bin_1.7.4.0.zip) 
   
-2. ***Don't use*** [`AT Firmare v1.7.4.0`](https://github.com/espressif/ESP8266_NONOS_SDK/tree/master/bin/at) for ESP8266-AT shields. System will hangs while connecting to Blynk. Will search and fix bugs in Blynk's BlynkESP8266_Lib later.
+2. Upload [`AT Firmware v1.7.4.0`](AT_Firmwares/AT_Firmware_bin_1.7.4.0.zip) bin files to correct locations as follows:
+
+```
+# BOOT MODE
+
+### Flash size 8Mbit: 512KB+512KB
+    boot_v1.2+.bin              0x00000
+    user1.1024.new.2.bin        0x01000
+    esp_init_data_default.bin   0xfc000
+    blank.bin                   0x7e000 & 0xfe000
+
+
+### Flash size 16Mbit-C1: 1024KB+1024KB
+    boot_v1.2+.bin              0x00000
+    user1.2048.new.5.bin        0x01000
+    esp_init_data_default.bin   0x1fc000
+    blank.bin                   0xfe000 & 0x1fe000
+```
 
 3. Test before using different AT-Firmware Version at your own risks. Just use any simple Blynk sketch to verify if the AT-firmware is OK.
-4. Compatible AT-Firmare version will be updated.
+4. Compatible AT-Firmare version will be updated. Check for and download Firmwares from [AT_Firmwares](AT_Firmwares) all supported AT Firmwares.
 5. Support to ESP32-AT-command shields will be added later with new library replacing Blynk's BlynkESP8266_Lib.
 
 ---
