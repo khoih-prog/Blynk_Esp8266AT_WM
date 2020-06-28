@@ -59,6 +59,7 @@ With version `v1.0.0` or later, you now can configure:
  8. [`FlashStorage_SAMD library v1.0.0`](https://github.com/khoih-prog/FlashStorage_SAMD) for SAMD21 boards (ZERO, MKR, NANO_33_IOT, M0, M0 Pro, AdaFruit CIRCUITPLAYGROUND_EXPRESS, etc.) and SAMD51 boards (Itsy-Bitsy M4, Metro M4, Grand Central M4, Feather M4 Express, etc.)
  9. [`DueFlashStorage library`](https://github.com/sebnil/DueFlashStorage) for SAM DUE
 10. [`Ai-Thinker AT Firmware v1.5.4`](AT_Firmwares/At_firmware_bin1.54.zip) or [`AT Firmware v1.7.4.0`](AT_Firmwares/AT_Firmware_bin_1.7.4.0.zip) for ESP8266-AT shields.
+11. [`AT version:2.1.0.0-dev`](AT_Firmwares/AT version_2.1.0.0-dev.zip) for ESP32-AT shields.
 11. [`Adafruit's LittleFS/InternalFS`](https://www.adafruit.com) for nRF52
 12. [`DoubleResetDetector_Generic v1.0.2 or later`](https://github.com/khoih-prog/DoubleResetDetector_Generic). To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/DoubleResetDetector_Generic.svg?)](https://www.ardu-badge.com/DoubleResetDetector_Generic)
 
@@ -69,7 +70,17 @@ With version `v1.0.0` or later, you now can configure:
   - [`Ai-Thinker AT Firmware v1.5.4`](AT_Firmwares/At_firmware_bin1.54.zip)
   - [`AT Firmware v1.7.4.0`](AT_Firmwares/AT_Firmware_bin_1.7.4.0.zip) 
   
-2. Upload [`AT Firmware v1.7.4.0`](AT_Firmwares/AT_Firmware_bin_1.7.4.0.zip) bin files to correct locations as follows:
+  
+2. Tested OK with for ESP32-AT shields:
+  - [`AT version:2.1.0.0-dev`](AT_Firmwares/AT version_2.1.0.0-dev.zip)
+    AT version:2.1.0.0-dev(4f6b92c - Jun 10 2020 10:36:54)
+    SDK version:v4.0.1-193-ge7ac221b4
+    compile time(b85a8df):Jun 18 2020 14:00:59
+    Bin version:2.0.0(WROOM-32)
+
+    See instructions at [AT Command Core](https://github.com/espressif/esp-at) and [ESP_AT_Get_Started](https://github.com/espressif/esp-at/blob/master/docs/en/get-started/ESP_AT_Get_Started.md)
+  
+3. Upload [`AT Firmware v1.7.4.0`](AT_Firmwares/AT_Firmware_bin_1.7.4.0.zip) bin files to correct locations as follows:
 
 ```
 # BOOT MODE
