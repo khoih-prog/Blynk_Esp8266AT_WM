@@ -69,7 +69,7 @@ With version `v1.0.0` or later, you now can configure:
 11. [`AT version_2.1.0.0_dev`](AT_Firmwares/AT_version_2.1.0.0_dev.zip) for ESP32-AT shields.
 12. [`Adafruit's LittleFS/InternalFS`](https://www.adafruit.com) for nRF52
 13. [`DoubleResetDetector_Generic v1.0.2 or later`](https://github.com/khoih-prog/DoubleResetDetector_Generic). To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/DoubleResetDetector_Generic.svg?)](https://www.ardu-badge.com/DoubleResetDetector_Generic)
-14. [ESP_AT_Lib](https://github.com/khoih-prog/ESP_AT_Lib) for ESP8266/ESP32-AT shields
+14. [`ESP_AT_Lib`](https://github.com/khoih-prog/ESP_AT_Lib) for ESP8266/ESP32-AT shields
 
 
 ### Important Notes
@@ -112,7 +112,7 @@ With version `v1.0.0` or later, you now can configure:
 
 3. Test before using different AT-Firmware Version at your own risks. Just use any simple Blynk sketch to verify if the AT-firmware is OK.
 4. Compatible AT-Firmare version will be updated. Check for and download Firmwares from [AT_Firmwares](AT_Firmwares) all supported AT Firmwares.
-5. Support to ESP32-AT-command shields will be added by using new library [ESP_AT_Lib](https://github.com/khoih-prog/ESP_AT_Lib) to replace [Blynk's BlynkESP8266_Lib](https://github.com/blynkkk/blynk-library/releases/Blynk_Release_v0.6.1.zip).
+5. Support to ESP32-AT-command shields has been added to permit using new library [ESP_AT_Lib](https://github.com/khoih-prog/ESP_AT_Lib) to replace [Blynk's BlynkESP8266_Lib](https://github.com/blynkkk/blynk-library/releases/Blynk_Release_v0.6.1.zip). The same [ESP_AT_Lib](https://github.com/khoih-prog/ESP_AT_Lib) can also be use for ESP8266-AT shields.
 
 ---
 
@@ -133,7 +133,25 @@ Another way to install is to:
 3. Extract the zip file to `Blynk_Esp8266AT_WM-master` directory 
 4. Copy whole `Blynk_Esp8266AT_WM-master/src` folder to Arduino libraries' directory such as `~/Arduino/libraries/`.
 
-Then copy [BlynkDetectDevice.h](https://github.com/khoih-prog/Blynk_Esp8266AT_WM/blob/master/src/Blynk/BlynkDetectDevice.h) to folder ~/Arduino/libraries/Blynk/src/Blynk to overwrite the origonal file `BlynkDetectDevice.h`.
+Then copy [BlynkDetectDevice.h](https://github.com/khoih-prog/Blynk_Esp8266AT_WM/blob/master/src/Blynk/BlynkDetectDevice.h) to folder `~/Arduino/libraries/Blynk/src/Blynk` to overwrite the original file `BlynkDetectDevice.h`. By doing this, the correct board type can be displayed correctly along with Blynk logo as follows:
+
+```
+    ___  __          __
+   / _ )/ /_ _____  / /__
+  / _  / / // / _ \/  '_/
+ /____/_/\_, /_//_/_/\_\
+        /___/ v0.6.1 on NRF52840_ITSYBITSY_EXPRESS
+```
+
+not just unknown Arduino board type:
+
+```
+    ___  __          __
+   / _ )/ /_ _____  / /__
+  / _  / / // / _ \/  '_/
+ /____/_/\_, /_//_/_/\_\
+        /___/ v0.6.1 on Arduino
+```
 
 ### How to use
 
@@ -349,15 +367,7 @@ uint16_t NUM_MENU_ITEMS = 0;
 
 ```
 
-
-See examples 
-
-1. [Mega_ESP8266Shield](examples/Mega_ESP8266Shield)
-2. [nRF52_ESP8266Shield](examples/nRF52_ESP8266Shield)
-3. [SAMD_ESP8266Shield](examples/SAMD_ESP8266Shield)
-4. [SAM_DUE_ESP8266Shield](examples/SAM_DUE_ESP8266Shield)
-5. [STM32_ESP8266Shield](examples/STM32_ESP8266Shield)
-
+- To configure some features relating to WiFi auto(re)connect
 
 ```
 // Force some params in Blynk, only valid for library version 1.0.0 and later
