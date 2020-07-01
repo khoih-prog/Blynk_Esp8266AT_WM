@@ -8,42 +8,35 @@
    Forked from Blynk library v0.6.1 https://github.com/blynkkk/blynk-library/releases
    Built by Khoi Hoang https://github.com/khoih-prog/Blynk_WM
    Licensed under MIT license
-   Version: 1.0.4
-
-   Original Blynk Library author:
-   @file       BlynkSimpleShieldEsp8266.h
-   @author     Volodymyr Shymanskyy
-   @license    This project is released under the MIT License (MIT)
-   @copyright  Copyright (c) 2015 Volodymyr Shymanskyy
-   @date       Jun 2015
-   @brief
+   Version: 1.0.6
 
    Version Modified By   Date        Comments
    ------- -----------  ----------   -----------
     1.0.0   K Hoang      16/02/2020  Initial coding
-    1.0.1   K Hoang      17/02/2019  Add checksum, fix bug
-    1.0.2   K Hoang      22/02/2019  Add support to SAMD boards
-    1.0.3   K Hoang      03/03/2019  Add support to STM32 boards, except STM32F0
-    1.0.4   K Hoang      13/03/2019  Add SAM DUE support. Enhance GUI.
+    1.0.1   K Hoang      17/02/2020  Add checksum, fix bug
+    1.0.2   K Hoang      22/02/2020  Add support to SAMD boards
+    1.0.3   K Hoang      03/03/2020  Add support to STM32 boards, except STM32F0
+    1.0.4   K Hoang      13/03/2020  Add SAM DUE support. Enhance GUI.
+    1.0.5   K Hoang      23/06/2020  Add Adafruit SAMD21/SAMD51 and nRF52 support, DRD, MultiWiFi features.
+                                     WPA2 SSID PW to 63 chars. Permit special chars such as !,@,#,$,%,^,&,* into data fields.
+    1.0.6   K Hoang      27/06/2020  Add ESP32-AT support and use ESP_AT_Lib. Enhance MultiWiFi connection logic. 
  *****************************************************************************************************************************/
-
-/*  Important notes:
-    1) Tested OK with SAMD, Mega
+/****************************************************************************************************************************
+    Important notes:
+    1) Tested OK with SAMD, Mega, nRF52, SAM DUE
 
     a) ESP8266-AT version:1.1.0.0(May 11 2016 18:09:56)
        SDK version:1.5.4(baaeaebb)
        Ai-Thinker Technology Co. Ltd.
        Jun 13 2016 11:29:20
+    b) ESP8266-AT version:1.7.4.0(May 11 2020 19:13:04)
+       SDK version:3.0.4(9532ceb)
+       compile time:May 27 2020 10:12:22
+       Bin version(Wroom 02):1.7.4     
 
     2) These versions don't work on SAMD,  but work on Mega (hanging when connect to Blynk, WiFi OK)
        To find bug and fix in Blynk ESP8266_Lib or Blynk library
-
-    a) ESP8266-AT version:1.7.4.0(May 11 2020 19:13:04)
-       SDK version:3.0.4(9532ceb)
-       compile time:May 27 2020 10:12:22
-       Bin version(Wroom 02):1.7.4
-
-*/
+ *****************************************************************************************************************************/
 
 #include "defines.h"
 

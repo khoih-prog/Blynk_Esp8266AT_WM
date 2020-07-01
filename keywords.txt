@@ -42,13 +42,6 @@ logEvent	KEYWORD2
 
 ###############
 IPAddressToString KEYWORD2
-loadConfigData  KEYWORD2
-saveConfigData  KEYWORD2
-getConfigData KEYWORD2
-connectToWifi KEYWORD2
-handleRequest KEYWORD2
-startConfigurationMode  KEYWORD2
-setHostname KEYWORD2
 setConfigPortalIP KEYWORD2
 setConfigPortalChannel  KEYWORD2
 setConfigPortal KEYWORD2
@@ -113,6 +106,17 @@ BLYNK_MAX_READBYTES	KEYWORD2
 #######################################
 # Literals (LITERAL1)
 #######################################
+
+# Constant
+ESP_AT_HTML_HEAD  LITERAL1
+ESP_AT_FLDSET_START LITERAL1
+ESP_AT_FLDSET_END LITERAL1
+ESP_AT_HTML_PARAM LITERAL1
+ESP_AT_HTML_BUTTON  LITERAL1
+ESP_AT_HTML_SCRIPT  LITERAL1
+ESP_AT_HTML_SCRIPT_ITEM LITERAL1
+ESP_AT_HTML_SCRIPT_END  LITERAL1
+ESP_AT_HTML_END LITERAL1
 
 # Virtual pins
 V0	LITERAL1

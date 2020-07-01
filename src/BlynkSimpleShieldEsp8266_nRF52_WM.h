@@ -8,7 +8,7 @@
    Forked from Blynk library v0.6.1 https://github.com/blynkkk/blynk-library/releases
    Built by Khoi Hoang https://github.com/khoih-prog/Blynk_WM
    Licensed under MIT license
-   Version: 1.0.5
+   Version: 1.0.6
 
    Original Blynk Library author:
    @file       BlynkSimpleShieldEsp8266.h
@@ -21,12 +21,13 @@
    Version Modified By   Date        Comments
    ------- -----------  ----------   -----------
     1.0.0   K Hoang      16/02/2020  Initial coding
-    1.0.1   K Hoang      17/02/2019  Add checksum, fix bug
-    1.0.2   K Hoang      22/02/2019  Add support to SAMD boards
-    1.0.3   K Hoang      03/03/2019  Add support to STM32 boards, except STM32F0
-    1.0.4   K Hoang      13/03/2019  Add SAM DUE support. Enhance GUI. 
-    1.0.5   K Hoang      23/06/2019  Add Adafruit SAMD21/SAMD51 and nRF52 support, DRD, MultiWiFi features.
+    1.0.1   K Hoang      17/02/2020  Add checksum, fix bug
+    1.0.2   K Hoang      22/02/2020  Add support to SAMD boards
+    1.0.3   K Hoang      03/03/2020  Add support to STM32 boards, except STM32F0
+    1.0.4   K Hoang      13/03/2020  Add SAM DUE support. Enhance GUI.
+    1.0.5   K Hoang      23/06/2020  Add Adafruit SAMD21/SAMD51 and nRF52 support, DRD, MultiWiFi features.
                                      WPA2 SSID PW to 63 chars. Permit special chars such as !,@,#,$,%,^,&,* into data fields.
+    1.0.6   K Hoang      27/06/2020  Add ESP32-AT support and use ESP_AT_Lib. Enhance MultiWiFi connection logic.
  *****************************************************************************************************************************/
 
 #ifndef BlynkSimpleShieldEsp8266_nRF52_WM_h
@@ -60,9 +61,14 @@
 #include <BlynkApiArduino.h>
 #include <Blynk/BlynkProtocol.h>
 #include <utility/BlynkFifo.h>
-#include <ESP8266_Lib.h>
 
-//#include <ESP8266WebServer.h>
+// From v1.0.6 to support ESP32-AT
+#if USE_ESP_AT_LIB
+  #include <ESP_AT_Lib.h>
+#else
+  #include <ESP8266_Lib.h>
+#endif
+
 #include <ESP8266_AT_WebServer.h>
 
 //Use LittleFS for nRF52
@@ -344,22 +350,30 @@ class BlynkWifi
 
     bool WiFiInit()
     {
-      if (!wifi->restart()) {
+#if USE_ESP32_AT
+      //wifi->restart();
+      wifi->restore();
+      wifi->kick();
+      wifi->setEcho(0);
+#else
+      if (!wifi->restart()) 
+      {
         BLYNK_LOG1(BLYNK_F("Fail2Rst"));
         return false;
-      }
-
+      }  
       if (!wifi->kick())
       {
         BLYNK_LOG1(BLYNK_F("ESP no respond"));
         //TODO: BLYNK_LOG_TROUBLE(BLYNK_F("esp8266-not-responding"));
         return false;
       }
+      
       if (!wifi->setEcho(0))
       {
         BLYNK_LOG1(BLYNK_F("FailEcho"));
         return false;
       }
+#endif
 
       String ver = wifi->ESP8266::getVersion();
       BLYNK_LOG1(ver);
@@ -448,7 +462,7 @@ class BlynkWifi
 
     void begin(ESP8266& esp8266/*, const char *iHostname = ""*/)
     {
-#define TIMEOUT_CONNECT_WIFI			30000
+#define RETRY_TIMES_CONNECT_WIFI			3
 
       // Enforce NUM_MENU_ITEMS <= 3
       // Due to notorious 2K buffer limitation of ESO8266-AT shield, the NUM_MENU_ITEMS is limited to max 3
@@ -484,8 +498,7 @@ class BlynkWifi
 
         config(esp8266, Blynk8266_WF_config.blynk_token, Blynk8266_WF_config.blynk_server, Blynk8266_WF_config.blynk_port);
 
-        //if (connectToWifi(TIMEOUT_CONNECT_WIFI))
-        if (connectMultiWiFi(TIMEOUT_CONNECT_WIFI))
+        if (connectMultiWiFi(RETRY_TIMES_CONNECT_WIFI))
         {
           BLYNK_LOG1(BLYNK_F("b:WOK.TryB"));
 
@@ -514,25 +527,26 @@ class BlynkWifi
       }
       else
       {
-        BLYNK_LOG1(BLYNK_F("b:DRD or Nodat.Stay"));
+        BLYNK_LOG2(BLYNK_F("b:Stay in CfgPortal:"), noConfigPortal ? BLYNK_F("No CfgDat") : BLYNK_F("DRD"));
+        
         // failed to connect to Blynk server, will start configuration mode
         hadConfigData = false;
         startConfigurationMode();
       }
     }
 
-#ifndef TIMEOUT_RECONNECT_WIFI
-#define TIMEOUT_RECONNECT_WIFI   10000L
+#ifndef RETRY_TIMES_RECONNECT_WIFI
+#define RETRY_TIMES_RECONNECT_WIFI   2
 #else
-    // Force range of user-defined TIMEOUT_RECONNECT_WIFI between 10-60s
-#if (TIMEOUT_RECONNECT_WIFI < 10000L)
-#warning TIMEOUT_RECONNECT_WIFI too low. Reseting to 10000
-#undef TIMEOUT_RECONNECT_WIFI
-#define TIMEOUT_RECONNECT_WIFI   10000L
-#elif (TIMEOUT_RECONNECT_WIFI > 60000L)
-#warning TIMEOUT_RECONNECT_WIFI too high. Reseting to 60000
-#undef TIMEOUT_RECONNECT_WIFI
-#define TIMEOUT_RECONNECT_WIFI   60000L
+    // Force range of user-defined RETRY_TIMES_RECONNECT_WIFI between 2-5 times
+#if (RETRY_TIMES_RECONNECT_WIFI < 2)
+#warning RETRY_TIMES_RECONNECT_WIFI too low. Reseting to 2
+#undef RETRY_TIMES_RECONNECT_WIFI
+#define RETRY_TIMES_RECONNECT_WIFI   2
+#elif (RETRY_TIMES_RECONNECT_WIFI > 5)
+#warning RETRY_TIMES_RECONNECT_WIFI too high. Reseting to 5
+#undef RETRY_TIMES_RECONNECT_WIFI
+#define RETRY_TIMES_RECONNECT_WIFI   5
 #endif
 #endif
 
@@ -573,7 +587,7 @@ class BlynkWifi
       //// New DRD ////
  
       // Lost connection in running. Give chance to reconfig.
-      if ( !wifi_connected /*WiFi.status() != WL_CONNECTED*/ || !connected() )
+      if ( !wifi_connected || !connected() )
       {
         // If configTimeout but user hasn't connected to configWeb => try to reconnect WiFi / Blynk.
         // But if user has connected to configWeb, stay there until done, then reset hardware
@@ -605,11 +619,11 @@ class BlynkWifi
 #endif
 
           // Not in config mode, try reconnecting before forcing to config mode
-          if ( !wifi_connected /*WiFi.status() != WL_CONNECTED*/ )
+          if ( !wifi_connected )
           {
             BLYNK_LOG1(BLYNK_F("r:Wlost.ReconW+B"));
 
-            if (connectMultiWiFi(TIMEOUT_RECONNECT_WIFI))
+            if (connectMultiWiFi(RETRY_TIMES_RECONNECT_WIFI))
             {
               BLYNK_LOG1(BLYNK_F("r:WOK.TryB"));
 
@@ -648,7 +662,7 @@ class BlynkWifi
     }
     
     #define MIN_WIFI_CHANNEL      1
-    #define MAX_WIFI_CHANNEL      13
+    #define MAX_WIFI_CHANNEL      12    // Channel 13 is flaky, because of bad number 13 ;-)
 
     int setConfigPortalChannel(int channel = 1)
     {
@@ -766,7 +780,7 @@ class BlynkWifi
       indexNextLine = ipAddress.indexOf("\n");
       ipAddress = ipAddress.substring(0, indexNextLine);
 
-#if ( BLYNK_WM_DEBUG > 2)
+#if ( BLYNK_WM_DEBUG > 3)
       BLYNK_LOG2(BLYNK_F("getLocalIP: IP = "), ipAddress);
 #endif     
       return ipAddress;
@@ -886,7 +900,6 @@ class BlynkWifi
         BLYNK_LOG1(BLYNK_F("failed"));
 
         // Trying open redundant config file
-       //file(CREDENTIALS_FILENAME_BACKUP, FILE_O_READ);
         file.open(CREDENTIALS_FILENAME_BACKUP, FILE_O_READ);
         BLYNK_LOG1(BLYNK_F("LoadBkUpCredFile "));
 
@@ -923,7 +936,7 @@ class BlynkWifi
 #if ( BLYNK_WM_DEBUG > 2)             
         else
         {
-          BLYNK_LOG2(BLYNK_F("ChkCrR: Buffer allocated, sz="), maxBufferLength + 1);
+          BLYNK_LOG2(BLYNK_F("ChkCrR: Buffer allocated, Sz="), maxBufferLength + 1);
         }  
 #endif          
       }
@@ -1209,11 +1222,27 @@ class BlynkWifi
       
       saveDynamicData();
     }  
+    
+    void loadAndSaveDefaultConfigData(void)
+    {
+      // Load Default Config Data from Sketch
+      memcpy(&Blynk8266_WF_config, &defaultConfig, sizeof(Blynk8266_WF_config));
+      strcpy(Blynk8266_WF_config.header, BLYNK_BOARD_TYPE);
+      
+      // Including config and dynamic data, and assume valid
+      saveConfigData();
+      
+#if ( BLYNK_WM_DEBUG > 2)      
+      BLYNK_LOG1(BLYNK_F("======= Start Loaded Config Data ======="));
+      displayConfigData(Blynk8266_WF_config);
+#endif      
+    }
 
     // Return false if init new EEPROM or SPIFFS. No more need trying to connect. Go directly to config mode
     bool getConfigData()
     {
-      bool dynamicDataValid;   
+      bool dynamicDataValid;
+      int calChecksum;   
       
       hadConfigData = false;
       
@@ -1223,44 +1252,63 @@ class BlynkWifi
         BLYNK_LOG1(F("InternalFS failed"));
         return false;
       }
-      
+
+      // Use new LOAD_DEFAULT_CONFIG_DATA logic
       if (LOAD_DEFAULT_CONFIG_DATA)
-      {
-        // Load default dynamicData, if checkSum OK => valid data => load
-        // otherwise, use default in sketch and just assume it's OK
-        if (checkDynamicData())
+      {     
+        // Load Config Data from Sketch
+        loadAndSaveDefaultConfigData();
+        
+        // Don't need Config Portal anymore
+        return true; 
+      }
+      else
+      {   
+        // Load stored config data from EEPROM
+        loadConfigData();
+        
+        // Load stored default data from EEPROM
+       //dynamicDataValid = loadDynamicData();
+        dynamicDataValid = checkDynamicData();
+        
+        // Verify ChkSum        
+        calChecksum = calcChecksum();
+
+        BLYNK_LOG4(BLYNK_F("CCSum=0x"), String(calChecksum, HEX),
+                   BLYNK_F(",RCSum=0x"), String(Blynk8266_WF_config.checkSum, HEX));
+                   
+        if (dynamicDataValid)
         {
-          BLYNK_LOG1(BLYNK_F("Load valid Stored Dynamic Data"));
           loadDynamicData();
+          
+#if ( BLYNK_WM_DEBUG > 2)      
+          BLYNK_LOG1(BLYNK_F("Valid Stored Dynamic Data"));
+#endif          
+          BLYNK_LOG1(BLYNK_F("======= Start Stored Config Data ======="));
+          displayConfigData(Blynk8266_WF_config);
+          
+          // Don't need Config Portal anymore
+          return true;
         }
         else
         {
-          BLYNK_LOG1(BLYNK_F("Ignore invalid Stored Dynamic Data"));
-        }
+          // Invalid Stored config data => Config Portal
+          BLYNK_LOG1(BLYNK_F("Invalid Stored Dynamic Data. Load default from Sketch"));
           
-        dynamicDataValid = true;
-      }
-      else
-      {           
-        dynamicDataValid = loadDynamicData();  
+          // Load Default Config Data from Sketch, better than just "blank"
+          loadAndSaveDefaultConfigData();
+                           
+          // Need Config Portal here as data can be just dummy
+          // Even if you don't open CP, you're OK on next boot if your default config data is valid 
+          return false;
+        }      
       }   
-      
-      // if config file exists, load
-      loadConfigData();
-         
-      BLYNK_LOG1(F("======= Start Stored Config Data ======="));
-      displayConfigData(Blynk8266_WF_config);    
-
-      int calChecksum = calcChecksum();
-
-      BLYNK_LOG4(BLYNK_F("CCSum=0x"), String(calChecksum, HEX),
-                 BLYNK_F(",RCSum=0x"), String(Blynk8266_WF_config.checkSum, HEX));     
 
       if ( (strncmp(Blynk8266_WF_config.header, BLYNK_BOARD_TYPE, strlen(BLYNK_BOARD_TYPE)) != 0) ||
            (calChecksum != Blynk8266_WF_config.checkSum) || !dynamicDataValid )
       {
         // Including Credentials CSum
-        BLYNK_LOG2(BLYNK_F("InitCfgFile,sz="), totalDataSize);
+        BLYNK_LOG2(BLYNK_F("InitCfgFile,Sz="), totalDataSize);
 
         // doesn't have any configuration        
         if (LOAD_DEFAULT_CONFIG_DATA)
@@ -1327,11 +1375,17 @@ class BlynkWifi
       return true;
     }
 
-    bool connectMultiWiFi(int timeout)
+    // New connection logic for ESP32-AT from v1.0.6
+    bool connectMultiWiFi(int retry_time)
     {
-      int sleep_time = 250;
+      int sleep_time  = 250;
+      int index       = 0;
       
-      unsigned long currMillis;
+      // Using to force to use connectWiFi() which resets the ESP. Need  only once after the boot
+      // After that, only need joinAP() for faster as resetting the ESP is not necessary
+      static bool firstTimeConnect = true;
+                 
+      static int lastConnectedIndex = 255;
 
       BLYNK_LOG1(BLYNK_F("ConMultiWifi"));
 
@@ -1340,56 +1394,75 @@ class BlynkWifi
         BLYNK_LOG1(BLYNK_F("UseStatIP"));
         wifi->setStationIp(IPAddressToString(static_IP), IPAddressToString(static_GW), IPAddressToString(static_SN));
       }
-      
-      for (int i = 0; i < NUM_WIFI_CREDENTIALS; i++)
+    
+      if (lastConnectedIndex != 255)
       {
-        currMillis = millis();
-        
-        BLYNK_LOG4(BLYNK_F("con2WF:SSID="), Blynk8266_WF_config.WiFi_Creds[i].wifi_ssid,
-                  BLYNK_F(",PW="), Blynk8266_WF_config.WiFi_Creds[i].wifi_pw);
-               
-        while ( !wifi_connected && ( 0 < timeout ) && ( (millis() - currMillis) < (unsigned long) timeout )  )
-        {
-#if ( BLYNK_WM_DEBUG > 2)        
-          BLYNK_LOG2(BLYNK_F("con2WF:spentMsec="), millis() - currMillis);
+        index = (lastConnectedIndex + 1) % NUM_WIFI_CREDENTIALS;
+#if ( BLYNK_WM_DEBUG > 2)                         
+        BLYNK_LOG4(BLYNK_F("Using index="), index, BLYNK_F(", lastConnectedIndex="), lastConnectedIndex);
 #endif
-               
-          // Need restart WiFi at beginning of each cycle
-          if (i == 0)
-          {
-            if (connectWiFi(Blynk8266_WF_config.WiFi_Creds[i].wifi_ssid, Blynk8266_WF_config.WiFi_Creds[i].wifi_pw))
-            {
-              wifi_connected = true;
-              // To exit for loop
-              i = NUM_WIFI_CREDENTIALS;
-              break;
-            }
-            else
-            {
-              delay(sleep_time);
-              timeout -= sleep_time;
-            }
-          }
-          else
-          {         
-            if (wifi->joinAP(Blynk8266_WF_config.WiFi_Creds[i].wifi_ssid, Blynk8266_WF_config.WiFi_Creds[i].wifi_pw))
-            {
-              BLYNK_LOG1(BLYNK_F("WOK"));
-              displayWiFiData();
-              wifi_connected = true;
-              
-              // To exit for loop
-              i = NUM_WIFI_CREDENTIALS;
-              break;
-            }
-            else
-            {
-              delay(sleep_time);
-              timeout -= sleep_time;
-            }
-          }  
+      }
+      else
+      {
+#if USE_ESP32_AT
+        // Fix ESP32-AT multiWiFi auto(re)connection when lost
+        // Need only once after reboot
+        wifi->restore();
+#endif
+      }
+      
+      BLYNK_LOG4(BLYNK_F("con2WF:SSID="), Blynk8266_WF_config.WiFi_Creds[index].wifi_ssid,
+                BLYNK_F(",PW="), Blynk8266_WF_config.WiFi_Creds[index].wifi_pw);
+             
+      while ( !wifi_connected && ( 0 < retry_time ) )
+      {
+#if ( BLYNK_WM_DEBUG > 2)        
+        BLYNK_LOG2(BLYNK_F("Remaining retry_time="), retry_time);
+#endif
+
+#if USE_ESP32_AT
+        // ESP32-AT requires restart everytime !!!
+        wifi_connected = connectWiFi(Blynk8266_WF_config.WiFi_Creds[index].wifi_ssid,
+                                        Blynk8266_WF_config.WiFi_Creds[index].wifi_pw);
+#else
+        if (firstTimeConnect)
+        {
+          wifi_connected = connectWiFi(Blynk8266_WF_config.WiFi_Creds[index].wifi_ssid,
+                                        Blynk8266_WF_config.WiFi_Creds[index].wifi_pw);
         }
-      }       
+        else
+        {
+          wifi_connected = wifi->joinAP(Blynk8266_WF_config.WiFi_Creds[index].wifi_ssid, 
+                                        Blynk8266_WF_config.WiFi_Creds[index].wifi_pw);
+        }
+#endif
+             
+        // Need restart WiFi at beginning of each cycle 
+        if (wifi_connected)
+        {
+          firstTimeConnect = false;
+          
+          lastConnectedIndex = index;     
+          
+#if ( BLYNK_WM_DEBUG > 2)                         
+          BLYNK_LOG2(BLYNK_F("WOK, lastConnectedIndex="), lastConnectedIndex);
+#endif
+          
+          break;
+        }
+        else
+        {
+          delay(sleep_time);
+          retry_time--;
+        }         
+      }
+
+#if ( BLYNK_WM_DEBUG > 2)             
+      if (retry_time <= 0)
+      {      
+        BLYNK_LOG4(BLYNK_F("Failed using index="), index, BLYNK_F(", retry_time="), retry_time);             
+      }  
+#endif        
 
       if (wifi_connected)
       {
@@ -1398,7 +1471,9 @@ class BlynkWifi
       }
       else
       {
-        BLYNK_LOG1(BLYNK_F("con2WF:failed"));
+        BLYNK_LOG1(BLYNK_F("con2WF:failed"));  
+        // Can't connect, so try another index next time. Faking this index is OK and lost
+        lastConnectedIndex = index;  
       }
 
       return wifi_connected;  
@@ -1482,12 +1557,11 @@ class BlynkWifi
           
           // Check if HTML size is larger than 2K, warn that WebServer won't work
           // because of notorious 2K buffer limitation of ESP8266-AT. 
-          // Use conservative value 2000 instead of 2048
           uint16_t HTML_page_size = result.length();
           
           BLYNK_LOG2(BLYNK_F("h:HTML page size:"), HTML_page_size);
           
-          if (HTML_page_size > 2000)
+          if (HTML_page_size > 2048)
           {
             BLYNK_LOG1(BLYNK_F("h:HTML page larger than 2K. Config Portal not work. Reduce dynamic params"));
           }   
@@ -1638,7 +1712,11 @@ class BlynkWifi
 #define CONFIG_TIMEOUT			60000L
 
       // initialize ESP module
-      WiFi.init(wifi->getUart());
+#if USE_ESP32_AT
+          wifi->restore();
+#endif
+      
+      WiFi.init(wifi->getUart());      
       WiFi.configAP(portal_apIP);
 
       if ( (portal_ssid == "") || portal_pass == "" )

@@ -1,8 +1,8 @@
 {
   "name": "Blynk_Esp8266AT_WM",
-  "version": "1.0.5",
-  "description": "Simple WiFiManager for Blynk and Mega, SAM DUE, SAMD21, SAMD51, nRF52, STM32, etc. boards running ESP8266 AT shields, configuration data saved in EEPROM, SAMD EEPROM-emulated FlashStorage, SAM-DUE DueFlashStorage or nRF52 LittleFS",
-  "keywords": "sensors, control, device, smartphone, mobile, app, web, cloud, communication, protocol, iot, m2m, wifi, ble, bluetooth, ethernet, usb, serial, gsm, gprs, 3g, data, esp8266, http",
+  "version": "1.0.6",
+  "description": "Simple WiFiManager for Blynk and Mega, SAM DUE, SAMD21, SAMD51, nRF52, STM32, etc. boards running ESP8266/ESP32 AT shields, configuration data saved in EEPROM, SAMD EEPROM-emulated FlashStorage, SAM-DUE DueFlashStorage or nRF52 LittleFS",
+  "keywords": "sensors, control, device, smartphone, mobile, app, web, cloud, communication, protocol, iot, m2m, wifi, ble, bluetooth, ethernet, usb, serial, gsm, gprs, 3g, data, esp8266, esp32, http",
   "authors":
   {
     "name":  "Khoi Hoang",

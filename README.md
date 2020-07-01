@@ -10,10 +10,17 @@
 
 New recent features:
 
-- ***MultiWiFi*** feature for configuring/auto(re)connecting ***ESP8266-AT*** shields to the available MultiWiFi APs at runtime.
+- ***MultiWiFi*** feature for configuring/auto(re)connecting ***ESP8266/ESP32-AT*** shields to the available MultiWiFi APs at runtime.
 - ***DoubleDetectDetector*** feature to force Config Portal when double reset is detected within predetermined time, default 10s.
 - Configurable ***Config Portal Title*** to be either BoardName or default undistinguishable names.
 - Examples are redesigned to separate Credentials / Defines / Dynamic Params / Code so that you can change Credentials / Dynamic Params quickly for each device
+
+### New Releases v1.0.6
+
+1. Add support Add ESP32-AT
+2. Use new [ESP_AT_Lib](https://github.com/khoih-prog/ESP_AT_Lib) to support ESP8266/ESP32-AT
+3. Enhance MultiWiFi connection logic.
+4. New logic for `USE_DEFAULT_CONFIG_DATA` to autoload Config / Dynamic Data in developing stage.
 
 ### Major Releases v1.0.5
 
@@ -55,13 +62,14 @@ With version `v1.0.0` or later, you now can configure:
  4. [`Arduino SAM DUE core 1.6.12 or later`](https://www.arduino.cc/en/Guide/ArduinoDue) for SAM DUE ARM Cortex-M3 boards
  5. [`Arduino SAMD core 1.8.5 or later`](https://www.arduino.cc/en/Guide/ArduinoM0) for SAMD ARM Cortex-M0+ boards
  6. [`Adafruit SAMD core 1.5.11 or later`](https://www.adafruit.com/) for SAMD ARM Cortex-M0+ and M4 boards (Nano 33 IoT, etc.)
- 7. [`ESP8266_AT_WebServer library v1.0.6 or later`](https://github.com/khoih-prog/ESP8266_AT_WebServer). To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/ESP8266_AT_WebServer.svg?)](https://www.ardu-badge.com/ESP8266_AT_WebServer)
+ 7. [`ESP8266_AT_WebServer library v1.0.8 or later`](https://github.com/khoih-prog/ESP8266_AT_WebServer). To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/ESP8266_AT_WebServer.svg?)](https://www.ardu-badge.com/ESP8266_AT_WebServer)
  8. [`FlashStorage_SAMD library v1.0.0`](https://github.com/khoih-prog/FlashStorage_SAMD) for SAMD21 boards (ZERO, MKR, NANO_33_IOT, M0, M0 Pro, AdaFruit CIRCUITPLAYGROUND_EXPRESS, etc.) and SAMD51 boards (Itsy-Bitsy M4, Metro M4, Grand Central M4, Feather M4 Express, etc.)
  9. [`DueFlashStorage library`](https://github.com/sebnil/DueFlashStorage) for SAM DUE
 10. [`Ai-Thinker AT Firmware v1.5.4`](AT_Firmwares/At_firmware_bin1.54.zip) or [`AT Firmware v1.7.4.0`](AT_Firmwares/AT_Firmware_bin_1.7.4.0.zip) for ESP8266-AT shields.
 11. [`AT version_2.1.0.0_dev`](AT_Firmwares/AT_version_2.1.0.0_dev.zip) for ESP32-AT shields.
-11. [`Adafruit's LittleFS/InternalFS`](https://www.adafruit.com) for nRF52
-12. [`DoubleResetDetector_Generic v1.0.2 or later`](https://github.com/khoih-prog/DoubleResetDetector_Generic). To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/DoubleResetDetector_Generic.svg?)](https://www.ardu-badge.com/DoubleResetDetector_Generic)
+12. [`Adafruit's LittleFS/InternalFS`](https://www.adafruit.com) for nRF52
+13. [`DoubleResetDetector_Generic v1.0.2 or later`](https://github.com/khoih-prog/DoubleResetDetector_Generic). To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/DoubleResetDetector_Generic.svg?)](https://www.ardu-badge.com/DoubleResetDetector_Generic)
+14. [ESP_AT_Lib](https://github.com/khoih-prog/ESP_AT_Lib) for ESP8266/ESP32-AT shields
 
 
 ### Important Notes
@@ -114,7 +122,7 @@ With version `v1.0.0` or later, you now can configure:
 The best and easiest way is to use `Arduino Library Manager`. Search for `Blynk_Esp8266AT_WM`, then select / install the latest version.
 You can also use this link [![arduino-library-badge](https://www.ardu-badge.com/badge/Blynk_Esp8266AT_WM.svg?)](https://www.ardu-badge.com/Blynk_Esp8266AT_WM) for more detailed instructions.
 
-Then copy [BlynkDetectDevice.h](https://github.com/khoih-prog/Blynk_Esp8266AT_WM/blob/master/src/Blynk/BlynkDetectDevice.h) to folder ~/Arduino/libraries/Blynk/src/Blynk to overwrite the origonal file `BlynkDetectDevice.h`.
+Then copy [BlynkDetectDevice.h](https://github.com/khoih-prog/Blynk_Esp8266AT_WM/blob/master/src/Blynk/BlynkDetectDevice.h) to folder ~/Arduino/libraries/Blynk/src/Blynk to overwrite the original file `BlynkDetectDevice.h`.
 
 ### Manual Install
 
@@ -152,12 +160,84 @@ to use Blynk only, with hardcoded Credentials, replace
 
 ```cpp
 
-// Select depending on board
+/* Comment this out to disable prints and save space */
+#define BLYNK_PRINT                   Serial
+
+// Debug level, 0-3
+#define BLYNK_WM_DEBUG                3
+
+#define USE_NEW_WEBSERVER_VERSION     true  //false
+#define _ESP_AT_LOGLEVEL_             0
+#define _ESP_AT_LIB_LOGLEVEL_         0
+
+/* Comment this out to disable prints and save space */
+#define DRD_GENERIC_DEBUG         true
+
+/* Comment this out to disable prints and save space */
+#define ESP_AT_DEBUG_OUTPUT       Serial
+//#define ESP_AT_LIB_DEBUG_OUTPUT   Serial
+
+#define ESP_AT_DEBUG              true
+#define ESP_AT_LIB_DEBUG          true
+
+// Uncomment to use ESP32-AT commands
+//#define USE_ESP32_AT      true
+
+// USE_ESP_AT_LIB == true to use new ESP_AT_Lib, instead of ESP8266_Lib
+// For ESP32-AT, must use ESP_AT_Lib
+#if (defined(USE_ESP32_AT) && USE_ESP32_AT )
+#define USE_ESP_AT_LIB    true
+#else
+#define USE_ESP_AT_LIB    true
+//#define USE_ESP_AT_LIB    false
+#endif
+
+#if ( defined(NRF52840_FEATHER) || defined(NRF52832_FEATHER) || defined(NRF52_SERIES) || defined(ARDUINO_NRF52_ADAFRUIT) || \
+      defined(NRF52840_FEATHER_SENSE) || defined(NRF52840_ITSYBITSY) || defined(NRF52840_CIRCUITPLAY) || defined(NRF52840_CLUE) || \
+      defined(NRF52840_METRO) || defined(NRF52840_PCA10056) || defined(PARTICLE_XENON) || defined(NINA_B302_ublox) || defined(NINA_B112_ublox) )
+#if defined(ESP8266_AT_USE_NRF528XX)
+#undef ESP8266_AT_USE_NRF528XX
+#endif
+#define ESP8266_AT_USE_NRF528XX      true
+#else
+#error This code is intended to run only on the nRF52 boards ! Please check your Tools->Board setting.
+#endif
+
+#if (ESP8266_AT_USE_NRF528XX)
+
+#if defined(NRF52840_FEATHER)
+#define BOARD_TYPE      "NRF52840_FEATHER_EXPRESS"
+#elif defined(NRF52832_FEATHER)
+#define BOARD_TYPE      "NRF52832_FEATHER"
+#elif defined(NRF52840_FEATHER_SENSE)
+#define BOARD_TYPE      "NRF52840_FEATHER_SENSE"
+#elif defined(NRF52840_ITSYBITSY)
+#define BOARD_TYPE      "NRF52840_ITSYBITSY_EXPRESS"
+#elif defined(NRF52840_CIRCUITPLAY)
+#define BOARD_TYPE      "NRF52840_CIRCUIT_PLAYGROUND"
+#elif defined(NRF52840_CLUE)
+#define BOARD_TYPE      "NRF52840_CLUE"
+#elif defined(NRF52840_METRO)
+#define BOARD_TYPE      "NRF52840_METRO_EXPRESS"
+#elif defined(NRF52840_PCA10056)
+#define BOARD_TYPE      "NORDIC_NRF52840DK"
+#elif defined(NINA_B302_ublox)
+#define BOARD_TYPE      "NINA_B302_ublox"
+#elif defined(NINA_B112_ublox)
+#define BOARD_TYPE      "NINA_B112_ublox"
+#elif defined(PARTICLE_XENON)
+#define BOARD_TYPE      "PARTICLE_XENON"
+#elif defined(MDBT50Q_RX)
+#define BOARD_TYPE      "RAYTAC_MDBT50Q_RX"
+#elif defined(ARDUINO_NRF52_ADAFRUIT)
+#define BOARD_TYPE      "ARDUINO_NRF52_ADAFRUIT"
+#else
+#define BOARD_TYPE      "nRF52 Unknown"
+#endif
+
 #define EspSerial Serial1
 
 #endif    //ESP8266_AT_USE_NRF528XX
-
-#include <ESP8266_Lib.h>
 
 #define USE_BLYNK_WM      true
 //#define USE_BLYNK_WM      false
@@ -168,8 +248,8 @@ to use Blynk only, with hardcoded Credentials, replace
 #include <BlynkSimpleShieldEsp8266_nRF52.h>
 
 #if defined(BLYNK_INFO_DEVICE)
-  #undef BLYNK_INFO_DEVICE
-#endif  
+#undef BLYNK_INFO_DEVICE
+#endif
 #define BLYNK_INFO_DEVICE       BOARD_TYPE
 
 #define USE_LOCAL_SERVER      true
@@ -199,6 +279,7 @@ String portal_password  = "CfgPrtl-PW";
 
 // Your nRF52 <-> ESP8266 baud rate:
 #define ESP8266_BAUD 115200
+
 ```
 
 ### How to add dynamic parameters from sketch
@@ -280,7 +361,7 @@ See examples
 
 ```
 // Force some params in Blynk, only valid for library version 1.0.0 and later
-#define TIMEOUT_RECONNECT_WIFI                    10000L
+#define RETRY_TIMES_RECONNECT_WIFI                3
 #define RESET_IF_CONFIG_TIMEOUT                   true
 #define CONFIG_TIMEOUT_RETRYTIMES_BEFORE_RESET    5
 
@@ -293,6 +374,13 @@ Then replace `Blynk.begin(...)` with :
 in your code. Keep `Blynk.run()` intact.
 
 That's it.
+
+Also see examples: 
+ 1. [Mega_ESP8266Shield](examples/Mega_ESP8266Shield)
+ 2. [nRF52_ESP8266Shield](examples/nRF52_ESP8266Shield)
+ 3. [SAMD_ESP8266Shield](examples/SAMD_ESP8266Shield) 
+ 4. [SAM_DUE_ESP8266Shield](examples/SAM_DUE_ESP8266Shield) 
+ 5. [STM32_ESP8266Shield](examples/STM32_ESP8266Shield)
 
 ---
 
@@ -324,12 +412,18 @@ Then click `Save`. After you restarted, you will see your built-in LED turned OF
 
 See this example and modify as necessary
 
-1. To load [Default Credentials](examples/nRF52_ESP8266Shield/Credentials.h)
+1. To load [Default Credentials](examples/nRF52_ESP8266Shield/Credentials.h) in development stage to avoid repeatedly input Config Data in running.
+
 ```
+// Use LOAD_DEFAULT_CONFIG_DATA = true in development stage to avoid repeatedly input config data
+// Default Config Data will override Data input from Config Portal (CP)
+// Use LOAD_DEFAULT_CONFIG_DATA = false in normal operation, and use dummy value here
+// Data input from Config Portal (CP) will override Default Config Data
 bool LOAD_DEFAULT_CONFIG_DATA = true;
 ```
 
-2. To use system default to load "blank" when there is no valid Credentials
+2. To use system default to load "blank" when there is no valid stored Credentials. Valid stored Credentials will be loaded to use in running or for Config Portal. This is used for normal operation mode.
+
 ```
 bool LOAD_DEFAULT_CONFIG_DATA = false;
 ```
@@ -372,22 +466,40 @@ typedef struct Configuration
 
 #if TO_LOAD_DEFAULT_CONFIG_DATA
 
-bool LOAD_DEFAULT_CONFIG_DATA = true;
+// Use LOAD_DEFAULT_CONFIG_DATA = true in development stage to avoid repeatedly input config data
+// Default Config Data will override Data input from Config Portal (CP)
+// Use LOAD_DEFAULT_CONFIG_DATA = false in normal operation, and use dummy value here
+// Data input from Config Portal (CP) will override Default Config Data
+bool LOAD_DEFAULT_CONFIG_DATA = false;   //true;
 
 Blynk_WF_Configuration defaultConfig =
 {
   //char header[16], dummy, not used
-  "nRF52_ESP_AT",
+  "DUE_ESP_AT",
   // WiFi_Credentials  WiFi_Creds  [NUM_WIFI_CREDENTIALS];
   // WiFi_Credentials.wifi_ssid and WiFi_Credentials.wifi_pw
+
+#if 1
+  "realSSID",  "realPass",
+  "realSSID1",  "realPass1",
+  // Blynk_Creds : blynk_server and blynk_token
+  "realServer.duckdns.org",     "realToken",
+#else
   "SSID1",  "password1",
   "SSID2",  "password2",
   // Blynk_Creds : blynk_server and blynk_token
   "account.ddns.net",     "token",
+#endif
+  
   //int  blynk_port;
   8080,
+
+#if 1 //!USE_ESP32_AT
+  // No BoardName for ESP32-AT
   //char board_name     [24];
-  "nRF52-ESP_AT",
+  "DUE-ESP_AT",
+#endif
+  
   // terminate the list
   //int  checkSum, dummy, not used
   0
@@ -405,6 +517,7 @@ Blynk_WF_Configuration defaultConfig;
 /////////// End Default Config Data /////////////
 
 ```
+---
 
 ## Example [nRF52_ESP8266Shield](examples/nRF52_ESP8266Shield)
 
@@ -485,7 +598,7 @@ void setup()
   
   Blynk.begin(wifi);
 #else
-  SSerial.print(F("Start Blynk no WM with BlynkServer = "));
+  Serial.print(F("Start Blynk no WM with BlynkServer = "));
   Serial.print(BlynkServer);
   Serial.print(F(" and Token = "));
   Blynk.begin(auth, wifi, ssid, pass, BlynkServer.c_str(), BLYNK_SERVER_HARDWARE_PORT);
@@ -542,21 +655,33 @@ void loop()
 #define BLYNK_PRINT                   Serial
 
 // Debug level, 0-3
-#define BLYNK_WM_DEBUG                0
+#define BLYNK_WM_DEBUG                3
 
 #define USE_NEW_WEBSERVER_VERSION     true  //false
 #define _ESP_AT_LOGLEVEL_             0
+#define _ESP_AT_LIB_LOGLEVEL_         0
 
 /* Comment this out to disable prints and save space */
 #define DRD_GENERIC_DEBUG         true
 
 /* Comment this out to disable prints and save space */
-#define ESP_AT_DEBUG_OUTPUT Serial
+#define ESP_AT_DEBUG_OUTPUT       Serial
+//#define ESP_AT_LIB_DEBUG_OUTPUT   Serial
 
-#define ESP_AT_DEBUG    true
+#define ESP_AT_DEBUG              true
+#define ESP_AT_LIB_DEBUG          true
 
 // Uncomment to use ESP32-AT commands
 //#define USE_ESP32_AT      true
+
+// USE_ESP_AT_LIB == true to use new ESP_AT_Lib, instead of ESP8266_Lib
+// For ESP32-AT, must use ESP_AT_Lib
+#if (defined(USE_ESP32_AT) && USE_ESP32_AT )
+#define USE_ESP_AT_LIB    true
+#else
+#define USE_ESP_AT_LIB    true
+//#define USE_ESP_AT_LIB    false
+#endif
 
 #if ( defined(NRF52840_FEATHER) || defined(NRF52832_FEATHER) || defined(NRF52_SERIES) || defined(ARDUINO_NRF52_ADAFRUIT) || \
       defined(NRF52840_FEATHER_SENSE) || defined(NRF52840_ITSYBITSY) || defined(NRF52840_CIRCUITPLAY) || defined(NRF52840_CLUE) || \
@@ -605,8 +730,6 @@ void loop()
 
 #endif    //ESP8266_AT_USE_NRF528XX
 
-#include <ESP8266_Lib.h>
-
 #define USE_BLYNK_WM      true
 //#define USE_BLYNK_WM      false
 
@@ -616,8 +739,8 @@ void loop()
 #include <BlynkSimpleShieldEsp8266_nRF52.h>
 
 #if defined(BLYNK_INFO_DEVICE)
-  #undef BLYNK_INFO_DEVICE
-#endif  
+#undef BLYNK_INFO_DEVICE
+#endif
 #define BLYNK_INFO_DEVICE       BOARD_TYPE
 
 #define USE_LOCAL_SERVER      true
@@ -649,7 +772,6 @@ String portal_password  = "CfgPrtl-PW";
 #define ESP8266_BAUD 115200
 
 #endif      //defines_h
-
 ```
 
 3. File [Credentials.h](examples/nRF52_ESP8266Shield/Credentials.h)
@@ -695,18 +817,28 @@ typedef struct Configuration
 
 #if TO_LOAD_DEFAULT_CONFIG_DATA
 
-bool LOAD_DEFAULT_CONFIG_DATA = true;
+// Use LOAD_DEFAULT_CONFIG_DATA = true in development stage to avoid repeatedly input config data
+// Default Config Data will override Data input from Config Portal (CP)
+// Use LOAD_DEFAULT_CONFIG_DATA = false in normal operation, and use dummy value here
+// Data input from Config Portal (CP) will override Default Config Data
+bool LOAD_DEFAULT_CONFIG_DATA = false;    //true;
 
 Blynk_WF_Configuration defaultConfig =
 {
   //char header[16], dummy, not used
   "nRF52_ESP_AT",
   // WiFi_Credentials  WiFi_Creds  [NUM_WIFI_CREDENTIALS];
-  // WiFi_Credentials.wifi_ssid and WiFi_Credentials.wifi_pw
+#if 1
+  "realSSID",  "realPass",
+  "realSSID1",  "realPass1",
+  // Blynk_Creds : blynk_server and blynk_token
+  "realServer.duckdns.org",     "realToken",
+#else
   "SSID1",  "password1",
   "SSID2",  "password2",
   // Blynk_Creds : blynk_server and blynk_token
   "account.ddns.net",     "token",
+#endif
   //int  blynk_port;
   8080,
   //char board_name     [24];
@@ -760,7 +892,7 @@ Blynk_WF_Configuration defaultConfig;
 #if USE_DYNAMIC_PARAMETERS
 
 #define MAX_MQTT_SERVER_LEN      34
-char MQTT_Server  [MAX_MQTT_SERVER_LEN + 1]   = "default-mqtt-server";
+char MQTT_Server  [MAX_MQTT_SERVER_LEN + 1]   = "mqtt-server";
 
 #define MAX_MQTT_PORT_LEN        6
 char MQTT_Port   [MAX_MQTT_PORT_LEN + 1]  = "1883";
@@ -793,7 +925,8 @@ uint16_t NUM_MENU_ITEMS = 0;
 #endif      //dynamicParams_h
 ```
 ---
-The following is the sample terminal output when running example [nRF52_ESP8266Shield](examples/nRF52_ESP8266Shield)
+
+The following is the sample terminal output when running example [nRF52_ESP8266Shield](examples/nRF52_ESP8266Shield) using ***NRF52840_ITSYBITSY_EXPRESS with  ESP8266-AT shield***
 
 1. No Config Data or DRD  => Config Portal
 
@@ -928,8 +1061,158 @@ BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB BBB
 BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB BBBBBBB
 
 ```
+---
 
-This `Blynk.begin()` is not a blocking call, so you can use it for critical functions requiring in loop(). 
+The following is the sample terminal output when running example [SAM_DUE_ESP8266Shield](examples/SAM_DUE_ESP8266Shield) using ***SAM-DUE with ESP32-AT shield***. The ESP32-AT firmware is AT version:2.1.0.0-dev / SDK version:v4.0.1-193-ge7ac221b4.
+
+```
+Start SAM_DUE_ESP8266Shield on SAM DUE
+Start Blynk_ESP8266AT_WM
+[4395] AT version:2.1.0.0-dev(4f6b92c - Jun 10 2020 10:36:54)
+SDK version:v4.0.1-193-ge7ac221b4
+compile time(b85a8df):Jun 18 2020 14:00:59
+Bin version:2.0.0(WROOM-32)
+Flag read = 0xd0d04321
+No doubleResetDetected
+SetFlag write = 0xd0d01234
+[5952] ======= Start Default Config Data =======
+[5952] Hdr=DUE_ESP_AT,SSID=HueNet1,PW=****
+[5952] SSID1=HueNet2,PW1=****
+[5954] Svr=account.duckdns.org,Prt=8080,Tok=****
+[5961] BName=DUE-ESP_AT
+[5963] Simulate EEPROM, sz:1024
+[5966] ChkCrR:CrCCsum=0x0,CrRCsum=0x0
+[5969] CCSum=0x0,RCSum=0x0
+[5972] CrCCsum=0,CrRCsum=0,TotalDataSz=312
+[5975] Valid Stored Dynamic Data
+[5978] ======= Start Stored Config Data =======
+[5982] Hdr=SHD_ESP8266,SSID=HueNet1,PW=****
+[5987] SSID1=HueNet2,PW1=****
+[5990] Svr=account.duckdns.org,Prt=8080,Tok=****
+[5996] BName=DUE-ESP_AT
+[5998] 
+    ___  __          __
+   / _ )/ /_ _____  / /__
+  / _  / / // / _ \/  '_/
+ /____/_/\_, /_//_/_/\_\
+        /___/ v0.6.1 on Arduino Due
+
+[6011] ConMultiWifi
+[6284] con2WF:SSID=HueNet1,PW=****
+[6284] Remaining retry_time=3
+[6284] Con2:HueNet1
+[10345] AT version:2.1.0.0-dev(4f6b92c - Jun 10 2020 10:36:54)
+SDK version:v4.0.1-193-ge7ac221b4
+compile time(b85a8df):Jun 18 2020 14:00:59
+Bin version:2.0.0(WROOM-32)
+[10909] Mac=30:ae:a4:1c:48:b8
+[15673] IP=192.168.2.97
+[15692] WOK
+[15692] WOK, lastConnectedIndex=0
+[15692] con2WF:OK
+[15692] IP=192.168.2.97
+[15711] b:WOK.TryB
+[25939] Ready (ping: 32ms).
+[26144] b:WBOK
+Stop doubleResetDetecting
+ClearFlag write = 0xd0d04321
+BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB
+```
+
+---
+
+The following is the sample terminal output when running example [SAMD_ESP8266Shield](examples/SAMD_ESP8266Shield) using ***ADAFRUIT_ITSYBITSY_M4_EXPRESS with  ESP8266-AT shield*** when simulating the lost and reconnection of WiFi APs.
+
+```
+Start SAMD_ESP8266Shield on SAMD51 ADAFRUIT_ITSYBITSY_M4_EXPRESS
+Start Blynk_ESP8266AT_WM
+[8112] AT version:1.7.4.0(May 11 2020 19:13:04)
+SDK version:3.0.4(9532ceb)
+compile time:May 27 2020 10:12:17
+Bin version(Wroom 02):1.7.4
+OK
+Flag read = 0xffffffff
+No doubleResetDetected
+SetFlag write = 0xd0d01234
+[9639] ======= Start Default Config Data =======
+[9639] Hdr=SAMD_ESP_AT,SSID=HueNet1,PW=****
+[9639] SSID1=HueNet2,PW1=****
+[9639] Svr=account.duckdns.org,Prt=8080,Tok=****
+[9640] BName=SAMD-ESP_AT
+[9640] i=0,id=mqtt,data=default-mqtt-server
+[9640] i=1,id=mqpt,data=1883
+[9640] SaveEEPROM,Sz=1024,DataSz=0,WCSum=0x23ce
+[9641] pdata=default-mqtt-server,len=34
+[9641] pdata=1883,len=6
+[9643] CrCCSum=2160
+[9643] ======= Start Loaded Config Data =======
+[9643] Hdr=SHD_ESP8266,SSID=HueNet1,PW=****
+[9644] SSID1=HueNet2,PW1=****
+[9644] Svr=account.duckdns.org,Prt=8080,Tok=****
+[9644] BName=SAMD-ESP_AT
+[9644] i=0,id=mqtt,data=default-mqtt-server
+[9644] i=1,id=mqpt,data=1883
+[9645] 
+    ___  __          __
+   / _ )/ /_ _____  / /__
+  / _  / / // / _ \/  '_/
+ /____/_/\_, /_//_/_/\_\
+        /___/ v0.6.1 on ADAFRUIT_ITSYBITSY_M4_EXPRESS
+
+[9645] ConMultiWifi
+[9645] con2WF:SSID=HueNet1,PW=****
+[9645] Remaining retry_time=3
+[9646] Con2:HueNet1
+[16218] AT version:1.7.4.0(May 11 2020 19:13:04)
+SDK version:3.0.4(9532ceb)
+compile time:May 27 2020 10:12:17
+Bin version(Wroom 02):1.7.4
+OK
+[16757] Mac=68:c6:3a:a4:6a:15
+[22773] IP=192.168.2.89
+[22790] WOK
+[22790] WOK, lastConnectedIndex=0      <=== connected to primary WiFi SSID
+[22790] con2WF:OK
+[22791] IP=192.168.2.89
+[22808] b:WOK.TryB
+[32975] Ready (ping: 14ms).
+[33211] b:WBOK
+Stop doubleResetDetecting
+ClearFlag write = 0xd0d04321
+Your stored Credentials :
+MQTT Server = default-mqtt-server
+Port = 1883
+BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB
+[63257] r:Wlost.ReconW+B                <=== lost primary WiFi SSID
+[63257] ConMultiWifi
+[63257] Using index=1, lastConnectedIndex=0
+[63257] con2WF:SSID=HueNet2,PW=****
+[63257] Remaining retry_time=2
+[69162] WOK, lastConnectedIndex=1      <=== connected to secondary WiFi SSID
+[69162] con2WF:OK
+[69162] IP=192.168.2.89
+[69179] r:WOK.TryB
+[79276] Ready (ping: 15ms).
+[79509] r:W+BOK
+F
+[104521] r:Wlost.ReconW+B             <=== lost secondary WiFi SSID
+[104521] ConMultiWifi
+[104521] Using index=0, lastConnectedIndex=1
+[104521] con2WF:SSID=HueNet1,PW=****
+[104521] Remaining retry_time=2
+[114781] Remaining retry_time=1
+[115394] WOK, lastConnectedIndex=0      <=== connected to primary WiFi SSID
+[115395] con2WF:OK
+[115395] IP=192.168.2.89
+[115412] r:WOK.TryB
+[125505] Ready (ping: 19ms).
+[125717] r:W+BOK
+BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB
+```
+
+---
+
+This library's `Blynk.begin()` is not a blocking call, so you can use it for critical functions requiring in loop(). 
 Anyway, this is better for projects using Blynk just for GUI (graphical user interface).
 
 In operation, if WiFi or Blynk connection is lost, `Blynk.run()` will try reconnecting automatically. Therefore, `Blynk.run()` must be called in the `loop()` function. Don't use:
@@ -982,6 +1265,13 @@ Sometimes, the library will only work if you update the `ESP8266 AT shield` core
 
 ---
 
+### New Releases v1.0.6
+
+1. Add support Add ESP32-AT
+2. Use new [ESP_AT_Lib](https://github.com/khoih-prog/ESP_AT_Lib) to support ESP8266/ESP32-AT
+3. Enhance MultiWiFi connection logic.
+4. New logic for `USE_DEFAULT_CONFIG_DATA` to autoload Config / Dynamic Data in developing stage.
+
 ### Major Releases v1.0.5
 
 1. Add support to ***nRF52 (AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B30_ublox, NINA_B112_ublox, etc.)**. Dynamic custom parameters to be saved ***automatically in LittleFS***.
@@ -1010,7 +1300,7 @@ Sometimes, the library will only work if you update the `ESP8266 AT shield` core
 
 ### Release v1.0.1
 
-1. Add ESP8266_AT_WebServer dependency for autoinstall via Library Manager
+1. Add ESP8266_AT_WebServer dependency for auto-install via Library Manager
 2. Add prerequisite to README.md
 3. Add checksum, fix bug
 
@@ -1028,9 +1318,8 @@ Sometimes, the library will only work if you update the `ESP8266 AT shield` core
 
 ## TO DO
 
-1. Same features for more boards ESP8266 AT-command WiFi shields.
+1. Same features for more boards using ESP8266 AT-command WiFi shields.
 2. To fix the ***EEPROM not working*** in some STM32 boards
-3. Add support to ESP32-AT shields.
 
 ## DONE
 
@@ -1040,6 +1329,12 @@ Sometimes, the library will only work if you update the `ESP8266 AT shield` core
  4. If the config data not entered completely (SSID, password, Server and Blynk token), entering config portal
  5. Add configurable Config Portal IP, SSID and Password
  6. Add configurable Static IP, GW, Subnet Mask and 2 DNS Servers' IP Addresses.
+ 7. Add support to nRF52, SAMD21/SAMD51, STM32F, SAM-DUE
+ 8. Add support to ESP32-AT shields.
+ 9. Add MultiWiFi features with auto(re)connect
+10. Add DRD
+11. Add Dynamic Parameters
+12. Add Default Config Data
 
 ---
 
