@@ -17,7 +17,7 @@ New recent features:
 
 ### New Releases v1.0.6
 
-1. Add support Add ESP32-AT
+1. Add support to ESP32-AT
 2. Use new [ESP_AT_Lib](https://github.com/khoih-prog/ESP_AT_Lib) to support ESP8266/ESP32-AT
 3. Enhance MultiWiFi connection logic.
 4. New logic for `USE_DEFAULT_CONFIG_DATA` to autoload Config / Dynamic Data in developing stage.
