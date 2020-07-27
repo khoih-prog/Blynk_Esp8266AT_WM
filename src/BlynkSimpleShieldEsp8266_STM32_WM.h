@@ -8,7 +8,7 @@
    Forked from Blynk library v0.6.1 https://github.com/blynkkk/blynk-library/releases
    Built by Khoi Hoang https://github.com/khoih-prog/Blynk_WM
    Licensed under MIT license
-   Version: 1.0.6
+   Version: 1.0.7
 
    Original Blynk Library author:
    @file       BlynkSimpleShieldEsp8266.h
@@ -28,12 +28,15 @@
     1.0.5   K Hoang      23/06/2020  Add Adafruit SAMD21/SAMD51 and nRF52 support, DRD, MultiWiFi features.
                                      WPA2 SSID PW to 63 chars. Permit special chars such as !,@,#,$,%,^,&,* into data fields.
     1.0.6   K Hoang      27/06/2020  Add ESP32-AT support and use ESP_AT_Lib. Enhance MultiWiFi connection logic.
+    1.0.7   K Hoang      27/07/2020  Add support to all STM32F/L/H/G/WB/MP1 and Seeeduino SAMD21/SAMD51 boards. 
  *****************************************************************************************************************************/
 
 #ifndef BlynkSimpleShieldEsp8266_STM32_WM_h
 #define BlynkSimpleShieldEsp8266_STM32_WM_h
 
-#if ( defined(STM32F0) || defined(STM32F1) || defined(STM32F2) || defined(STM32F3)  ||defined(STM32F4) || defined(STM32F7) )
+#if ( defined(STM32F0) || defined(STM32F1) || defined(STM32F2) || defined(STM32F3)  ||defined(STM32F4) || defined(STM32F7) || \
+       defined(STM32L0) || defined(STM32L1) || defined(STM32L4) || defined(STM32H7)  ||defined(STM32G0) || defined(STM32G4) || \
+       defined(STM32WB) || defined(STM32MP1) )
 #if defined(BLYNK_ESP8266_AT_USE_STM32)
 #undef BLYNK_ESP8266_AT_USE_STM32
 #endif
@@ -317,41 +320,75 @@ class BlynkTransportShieldEsp8266
 
     //KH
 #if BLYNK_ESP8266_AT_USE_STM32
-#if defined(STM32F0)
+  #if defined(STM32F0)
     // For STM32 F0
     BlynkFifo<uint8_t, 512> buffer;
-#error Board STM32F0 not supported
-#elif defined(STM32F1)
+    #error Board STM32F0 not supported
+  #elif defined(STM32F1)
     // For STM32 F1
-    BlynkFifo<uint8_t, 512> buffer;
-#warning Board STM32F1 uses 512bytes FIFO buffer
-#elif defined(STM32F2)
+    BlynkFifo<uint8_t, 1024> buffer;
+    #warning Board STM32F1 uses 1K FIFO buffer
+  #elif defined(STM32F2)
     // For STM32 F2
-    BlynkFifo<uint8_t, 512> buffer;
-#warning Board STM32F2 uses 512bytes FIFO buffer
-#elif defined(STM32F3)
+    BlynkFifo<uint8_t, 1024> buffer;
+    #warning Board STM32F2 uses 1K FIFO buffer
+  #elif defined(STM32F3)
     // For STM32 F3
     BlynkFifo<uint8_t, 1024> buffer;
-#warning Board STM32F3 uses 1K FIFO buffer
-#elif defined(STM32F4)
+    #warning Board STM32F3 uses 1K FIFO buffer
+  #elif defined(STM32F4)
     // For STM32 F4
-    BlynkFifo<uint8_t, 4096> buffer;
-#warning Board STM32F4 uses 4K FIFO buffer
-#elif defined(STM32F7)
+    BlynkFifo<uint8_t, 2048> buffer;
+    #warning Board STM32F4 uses 2K FIFO buffer
+  #elif defined(STM32F7)
     // For STM32 F7
     BlynkFifo<uint8_t, 4096> buffer;
-#warning Board STM32F7 uses 4K FIFO buffer
-#else
+    #warning Board STM32F7 uses 4K FIFO buffer
+  #elif defined(STM32L0)
+    // For STM32 L0
+    BlynkFifo<uint8_t, 1024> buffer;
+    #warning Board STM32L0 uses 1K FIFO buffer
+  #elif defined(STM32L1)
+    // For STM32 L1
+    BlynkFifo<uint8_t, 1024> buffer;
+    #warning Board STM32L1 uses 1K FIFO buffer
+  #elif defined(STM32L4)
+    // For STM32 L4
+    BlynkFifo<uint8_t, 2048> buffer;
+    #warning Board STM32L4 uses 2K FIFO buffer
+  #elif defined(STM32H7)
+    // For STM32 H7
+    BlynkFifo<uint8_t, 4096> buffer;
+    #warning Board STM32H7 uses 4K FIFO buffer
+  #elif defined(STM32G0)
+    // For STM32 G0
+    BlynkFifo<uint8_t, 1024> buffer;
+    #warning Board STM32G0 uses 1K FIFO buffer
+  #elif defined(STM32G4)
+    // For STM32 G4
+    BlynkFifo<uint8_t, 2048> buffer;
+    #warning Board STM32G4 uses 2K FIFO buffer
+  #elif defined(STM32WB)
+    // For STM32WB
+    BlynkFifo<uint8_t, 1024> buffer;
+    #warning Board STM32WB uses 1K FIFO buffer
+  #elif defined(STM32MP1)
+    // For STM32MP1
+    BlynkFifo<uint8_t, 1024> buffer;
+    #warning Board STM32MP1 uses 1K FIFO buffer
+
+  #else
     // For STM32 Unknow
     BlynkFifo<uint8_t, 512> buffer;
-#warning Board STM32 unknown uses 512bytes FIFO buffer
-#endif
+    #warning Board STM32 unknown uses 512bytes FIFO buffer
+  #endif
+
 #else
-    // For other AVR Mega
-    //BlynkFifo<uint8_t,256> buffer;
-    // For MeGa 2560 or 1280
-    BlynkFifo<uint8_t, 512> buffer;
-#warning Not STM32 board => uses 512bytes FIFO buffer
+  // For other AVR Mega
+  //BlynkFifo<uint8_t,256> buffer;
+  // For MeGa 2560 or 1280
+  BlynkFifo<uint8_t, 512> buffer;
+  #warning Not STM32 board => uses 512bytes FIFO buffer
 #endif
 
     const char* domain;
@@ -1201,9 +1238,12 @@ class BlynkWifi
       Blynk8266_WF_config.checkSum = calChecksum;
       
       BLYNK_LOG6(BLYNK_F("SaveEEPROM,Sz="), EEPROM.length(), BLYNK_F(",DataSz="), totalDataSize, BLYNK_F(",WCSum=0x"), String(calChecksum, HEX));
-
-      EEPROM.put(CONFIG_EEPROM_START, Blynk8266_WF_config);
-      EEPROM_putDynamicData();
+      
+      if (totalDataSize)
+      {
+        EEPROM.put(CONFIG_EEPROM_START, Blynk8266_WF_config);
+        EEPROM_putDynamicData();
+      }
     }
 
     // New connection logic for ESP32-AT from v1.0.6

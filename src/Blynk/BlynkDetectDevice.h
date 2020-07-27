@@ -8,7 +8,7 @@
    Forked from Blynk library v0.6.1 https://github.com/blynkkk/blynk-library/releases
    Built by Khoi Hoang https://github.com/khoih-prog/Blynk_WM
    Licensed under MIT license
-   Version: 1.0.6
+   Version: 1.0.7
 
    Original Blynk Library author:
    @file       BlynkSimpleShieldEsp8266.h
@@ -28,6 +28,7 @@
     1.0.5   K Hoang      23/06/2020  Add Adafruit SAMD21/SAMD51 and nRF52 support, DRD, MultiWiFi features.
                                      WPA2 SSID PW to 63 chars. Permit special chars such as !,@,#,$,%,^,&,* into data fields.
     1.0.6   K Hoang      27/06/2020  Add ESP32-AT support and use ESP_AT_Lib. Enhance MultiWiFi connection logic.
+    1.0.7   K Hoang      27/07/2020  Add support to all STM32F/L/H/G/WB/MP1 and Seeeduino SAMD21/SAMD51 boards. 
  *****************************************************************************************************************************/
 
 #ifndef BlynkDetectDevice_h
@@ -314,7 +315,7 @@
       || defined(ARDUINO_SAMD_NANO_33_IOT) || defined(ARDUINO_SAMD_MKRFox1200) || defined(ARDUINO_SAMD_MKRWAN1300) || defined(ARDUINO_SAMD_MKRWAN1310) \
       || defined(ARDUINO_SAMD_MKRGSM1400) || defined(ARDUINO_SAMD_MKRNB1500) || defined(ARDUINO_SAMD_MKRVIDOR4000) || defined(__SAMD21G18A__) \
       || defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS) || defined(__SAMD21E18A__) || defined(__SAMD51__) || defined(__SAMD51J20A__) || defined(__SAMD51J19A__) \
-      || defined(__SAMD51G19A__) || defined(__SAMD21G18A__) )
+      || defined(__SAMD51G19A__) || defined(__SAMD51P19A__) || defined(__SAMD21G18A__) )
 
 #define BLYNK_USE_128_VPINS
 
@@ -323,7 +324,7 @@
 #endif
 #define BLYNK_BUFFERS_SIZE 4096
 
-#if defined(ARDUINO_SAMD_ZERO)
+#if ( defined(ARDUINO_SAMD_ZERO) && !defined(SEEED_XIAO_M0) && !defined(SEEEDUINO_ZERO) )
   #define BLYNK_INFO_DEVICE  "Arduino Zero"
   #elif defined(ARDUINO_SAMD_MKR1000)
   #define BLYNK_INFO_DEVICE  "MKR1000"
@@ -390,6 +391,22 @@
   #define BLYNK_INFO_DEVICE      "ADAFRUIT_MONSTER_M4SK_EXPRESS"
   #elif defined(ADAFRUIT_HALLOWING_M4_EXPRESS)
   #define BLYNK_INFO_DEVICE      "ADAFRUIT_HALLOWING_M4_EXPRESS"
+  #elif defined(SEEED_WIO_TERMINAL)
+  #define BLYNK_INFO_DEVICE      "SAMD SEEED_WIO_TERMINAL"
+  #elif defined(SEEED_FEMTO_M0)
+  #define BLYNK_INFO_DEVICE      "SAMD SEEED_FEMTO_M0"
+  #elif defined(SEEED_XIAO_M0)
+  #define BLYNK_INFO_DEVICE      "SAMD SEEED_XIAO_M0"
+  #elif defined(Wio_Lite_MG126)
+  #define BLYNK_INFO_DEVICE      "SAMD SEEED Wio_Lite_MG126"
+  #elif defined(WIO_GPS_BOARD)
+  #define BLYNK_INFO_DEVICE      "SAMD SEEED WIO_GPS_BOARD"
+  #elif defined(SEEEDUINO_ZERO)
+  #define BLYNK_INFO_DEVICE      "SAMD SEEEDUINO_ZERO"
+  #elif defined(SEEEDUINO_LORAWAN)
+  #define BLYNK_INFO_DEVICE      "SAMD SEEEDUINO_LORAWAN"
+  #elif defined(SEEED_GROVE_UI_WIRELESS)
+  #define BLYNK_INFO_DEVICE      "SAMD SEEED_GROVE_UI_WIRELESS"
   #elif defined(__SAMD21E18A__)
   #define BLYNK_INFO_DEVICE      "SAMD21E18A"
   #elif defined(__SAMD21G18A__)
@@ -455,6 +472,255 @@
 #elif defined(ARDUINO_ARCH_ESP32)
 #define BLYNK_INFO_DEVICE  "ESP32"
 
+// KH, Arduino_Core_STM32
+/////////////////////////
+#elif defined(STM32F0)
+  #define BLYNK_INFO_DEVICE  "STM32F0"
+  #define BLYNK_NO_YIELD
+#elif defined(STM32F1)
+  #define BLYNK_INFO_DEVICE  "STM32F1"
+  #define BLYNK_NO_YIELD
+#elif defined(STM32F2)
+  #define BLYNK_INFO_DEVICE  "STM32F2"
+  #define BLYNK_NO_YIELD
+#elif defined(STM32F3)
+  #define BLYNK_INFO_DEVICE  "STM32F3"
+  #define BLYNK_NO_YIELD
+#elif defined(STM32F4)
+
+  #if defined(ARDUINO_NUCLEO_F429ZI)
+    #define BLYNK_INFO_DEVICE  "STM32 NUCLEO_F429ZI"
+  #elif defined(ARDUINO_NUCLEO_F401RE)
+    #define BLYNK_INFO_DEVICE  "STM32 NUCLEO_F401RE"
+  #elif defined(ARDUINO_NUCLEO_F411RE)
+    #define BLYNK_INFO_DEVICE  "STM32 NUCLEO_F411RE"
+  #elif defined(ARDUINO_NUCLEO_F446RE)
+    #define BLYNK_INFO_DEVICE  "STM32 NUCLEO_F446RE"
+  #elif defined(ARDUINO_DISCO_F407VG)
+    #define BLYNK_INFO_DEVICE  "STM32 DISCO_F407VG"   
+  #elif defined(ARDUINO_DISCO_F413ZH)
+    #define BLYNK_INFO_DEVICE  "STM32 DISCO_F413ZH"  
+  #elif defined(ARDUINO_BLACK_F407VE)
+    #define BLYNK_INFO_DEVICE  "STM32 BLACK_F407VE"   
+  #elif defined(ARDUINO_BLACK_F407VG)
+    #define BLYNK_INFO_DEVICE  "STM32 BLACK_F407VG"
+  #elif defined(ARDUINO_BLACK_F407ZE)
+    #define BLYNK_INFO_DEVICE  "STM32 BLACK_F407ZE"
+  #elif defined(ARDUINO_BLACK_F407ZG)
+    #define BLYNK_INFO_DEVICE  "STM32 BLACK_F407ZG"
+  #elif defined(ARDUINO_BLUE_F407VE_Mini)
+    #define BLYNK_INFO_DEVICE  "STM32 BLUE_F407VE_Mini"   
+  #elif defined(ARDUINO_DIYMORE_F407VGT)
+    #define BLYNK_INFO_DEVICE  "STM32 DIYMORE_F407VGT"  
+  #elif defined(ARDUINO_FK407M1)
+    #define BLYNK_INFO_DEVICE  "STM32F407VET FK407M1"  
+  #elif defined(ARDUINO_BLACKPILL_F401CC)
+    #define BLYNK_INFO_DEVICE  "STM32 BLACKPILL_F401CC"
+  #elif defined(ARDUINO_BLACKPILL_F411CE)
+    #define BLYNK_INFO_DEVICE  "STM32 BLACKPILL_F411CE"
+  #elif defined(ARDUINO_CoreBoard_F401RC)
+    #define BLYNK_INFO_DEVICE  "STM32 CoreBoard_F401RC"
+  #elif defined(ARDUINO_FEATHER_F405)
+    #define BLYNK_INFO_DEVICE  "STM32 Adafruit_FEATHER_F405"   
+  #elif defined(ARDUINO_THUNDERPACK_F411)
+    #define BLYNK_INFO_DEVICE  "STM32 THUNDERPACK_F411"  
+  #elif defined(ARDUINO_GENERIC_F446RE)
+    #define BLYNK_INFO_DEVICE  "STM32 GENERIC_F446RE"
+  #elif defined(ARDUINO_GENERIC_F446RC)
+    #define BLYNK_INFO_DEVICE  "STM32 GENERIC_F446RC"
+  #elif defined(ARDUINO_GENERIC_F423RH)
+    #define BLYNK_INFO_DEVICE  "STM32 GENERIC_F423RH"
+  #elif defined(ARDUINO_GENERIC_F423CH)
+    #define BLYNK_INFO_DEVICE  "STM32 GENERIC_F423CH"
+  #elif defined(ARDUINO_GENERIC_F417VG)
+    #define BLYNK_INFO_DEVICE  "STM32 GENERIC_F417VG"   
+  #elif defined(ARDUINO_GENERIC_F417VE)
+    #define BLYNK_INFO_DEVICE  "STM32 GENERIC_F417VE"  
+  #elif defined(ARDUINO_GENERIC_F415RG)
+    #define BLYNK_INFO_DEVICE  "STM32 GENERIC_F415RG"  
+  #elif defined(ARDUINO_GENERIC_F413RH)
+    #define BLYNK_INFO_DEVICE  "STM32 GENERIC_F413RH"
+  #elif defined(ARDUINO_GENERIC_F413RG)
+    #define BLYNK_INFO_DEVICE  "STM32 GENERIC_F413RG"
+  #elif defined(ARDUINO_GENERIC_F413CH)
+    #define BLYNK_INFO_DEVICE  "STM32 GENERIC_F413CH"
+  #elif defined(ARDUINO_GENERIC_F413CG)
+    #define BLYNK_INFO_DEVICE  "STM32 GENERIC_F413CG"   
+  #elif defined(ARDUINO_GENERIC_F412RG)
+    #define BLYNK_INFO_DEVICE  "STM32 GENERIC_F412RG"  
+  #elif defined(ARDUINO_GENERIC_F412RE)
+    #define BLYNK_INFO_DEVICE  "STM32 GENERIC_F412RE"
+  #elif defined(ARDUINO_GENERIC_F412CG)
+    #define BLYNK_INFO_DEVICE  "STM32 GENERIC_F412CG"
+  #elif defined(ARDUINO_GENERIC_F412CE)
+    #define BLYNK_INFO_DEVICE  "STM32 GENERIC_F412CE"
+  #elif defined(ARDUINO_GENERIC_F411RE)
+    #define BLYNK_INFO_DEVICE  "STM32 GENERIC_F411RE"
+  #elif defined(ARDUINO_GENERIC_F411RC)
+    #define BLYNK_INFO_DEVICE  "STM32 GENERIC_F411RC"   
+  #elif defined(ARDUINO_GENERIC_F411CE)
+    #define BLYNK_INFO_DEVICE  "STM32 GENERIC_F411CE"  
+  #elif defined(ARDUINO_GENERIC_F411CC)
+    #define BLYNK_INFO_DEVICE  "STM32 GENERIC_F411CC" 
+  #elif defined(ARDUINO_GENERIC_F410RB)
+    #define BLYNK_INFO_DEVICE  "STM32 GENERIC_F410RB"
+  #elif defined(ARDUINO_GENERIC_F410R8)
+    #define BLYNK_INFO_DEVICE  "STM32 GENERIC_F410R8"
+  #elif defined(ARDUINO_GENERIC_F410CB)
+    #define BLYNK_INFO_DEVICE  "STM32 GENERIC_F410CB"
+  #elif defined(ARDUINO_GENERIC_F410C8)
+    #define BLYNK_INFO_DEVICE  "STM32 GENERIC_F410C8"   
+  #elif defined(ARDUINO_GENERIC_F407VG)
+    #define BLYNK_INFO_DEVICE  "STM32 GENERIC_F407VG"  
+  #elif defined(ARDUINO_GENERIC_F407VE)
+    #define BLYNK_INFO_DEVICE  "STM32 GENERIC_F407VE"
+  #elif defined(ARDUINO_GENERIC_F405RG)
+    #define BLYNK_INFO_DEVICE  "STM32 GENERIC_F405RG"
+  #elif defined(ARDUINO_GENERIC_F401RE)
+    #define BLYNK_INFO_DEVICE  "STM32 GENERIC_F401RE"
+  #elif defined(ARDUINO_GENERIC_F401RD)
+    #define BLYNK_INFO_DEVICE  "STM32 GENERIC_F401RD"
+  #elif defined(ARDUINO_GENERIC_F401RC)
+    #define BLYNK_INFO_DEVICE  "STM32 GENERIC_F401RC"   
+  #elif defined(ARDUINO_GENERIC_F401RB)
+    #define BLYNK_INFO_DEVICE  "STM32 GENERIC_F401RB"  
+  #elif defined(ARDUINO_GENERIC_F401CE)
+    #define BLYNK_INFO_DEVICE  "STM32 GENERIC_F401CE"
+  #elif defined(ARDUINO_GENERIC_F401CD)
+    #define BLYNK_INFO_DEVICE  "STM32 GENERIC_F401CD"
+  #elif defined(ARDUINO_GENERIC_F401CC)
+    #define BLYNK_INFO_DEVICE  "STM32 GENERIC_F401CC"
+  #elif defined(ARDUINO_GENERIC_F401CB)
+    #define BLYNK_INFO_DEVICE  "STM32 GENERIC_F401CB"  
+  #elif defined(ARDUINO_ARMED_V1)
+    #define BLYNK_INFO_DEVICE  "STM32 ARMED_V1"   
+  #elif defined(ARDUINO_RUMBA32_F446VE)
+    #define BLYNK_INFO_DEVICE  "STM32 RUMBA32_F446VE"  
+  #elif defined(ARDUINO_ST3DP001_EVAL)
+    #define BLYNK_INFO_DEVICE  "STM32 ST3DP001_EVAL"   
+  #elif defined(ARDUINO_PRNTR_F407_V1)
+    #define BLYNK_INFO_DEVICE  "STM32 PRNTR_F407_V1"   
+  #elif defined(ARDUINO_PRNTR_V2)
+    #define BLYNK_INFO_DEVICE  "STM32 PRNTR_V2"  
+  #elif defined(ARDUINO_VAKE403)
+    #define BLYNK_INFO_DEVICE  "STM32 VAKE403"
+  #elif defined(ARDUINO_FYSETC_S6)
+    #define BLYNK_INFO_DEVICE  "STM32 FYSETC_S6"   
+  #elif defined(ARDUINO_PYBSTICK26_LITE)
+    #define BLYNK_INFO_DEVICE  "STM32 PYBSTICK26_LITE"  
+  #elif defined(ARDUINO_PYBSTICK26_STD)
+    #define BLYNK_INFO_DEVICE  "STM32 PYBSTICK26_STD"
+  #elif defined(ARDUINO_PYBSTICK26_PRO)
+    #define BLYNK_INFO_DEVICE  "STM32 PYBSTICK26_PRO"        
+  #else  
+    #define BLYNK_INFO_DEVICE  "STM32F4"    
+  #endif
+
+  #define BLYNK_USE_128_VPINS
+  #define BLYNK_BUFFERS_SIZE 1024
+  #define BLYNK_NO_YIELD
+  
+#elif defined(STM32F7)
+
+  #if defined(ARDUINO_NUCLEO_F767ZI)
+    #define BLYNK_INFO_DEVICE  "STM32 NUCLEO_F767ZI"
+  #elif defined(ARDUINO_NUCLEO_F746ZG)
+    #define BLYNK_INFO_DEVICE  "STM32 NUCLEO_F746ZG"
+  #elif defined(ARDUINO_NUCLEO_F756ZG)
+    #define BLYNK_INFO_DEVICE  "STM32 NUCLEO_F756ZG"
+  #elif defined(ARDUINO_NUCLEO_F743ZI)
+    #define BLYNK_INFO_DEVICE  "STM32 NUCLEO_F743ZI"
+  #elif defined(ARDUINO_NUCLEO_F743ZI2)
+    #define BLYNK_INFO_DEVICE  "STM32 NUCLEO_F743ZI2"   
+  #elif defined(ARDUINO_DISCO_F746NG)
+    #define BLYNK_INFO_DEVICE  "STM32 DISCO_F746NG"  
+  #elif defined(ARDUINO_REMRAM_V1)
+    #define BLYNK_INFO_DEVICE  "STM32 REMRAM_V1"
+  #else  
+    #define BLYNK_INFO_DEVICE  "STM32F7"    
+  #endif
+  
+  #define BLYNK_USE_128_VPINS
+  #define BLYNK_BUFFERS_SIZE 4096
+  #define BLYNK_NO_YIELD
+
+#elif defined(STM32L0)
+
+  #if defined(ARDUINO_NUCLEO_L053R8)
+    #define BLYNK_INFO_DEVICE  "STM32 NUCLEO_L053R8"
+  #elif defined(ARDUINO_NUCLEO_L073RZ)
+    #define BLYNK_INFO_DEVICE  "STM32 NUCLEO_L073RZ"  
+  #elif defined(ARDUINO_NUCLEO_L031K6)
+    #define BLYNK_INFO_DEVICE  "STM32 NUCLEO_L031K6"  
+  #elif defined(ARDUINO_DISCO_L072CZ_LRWAN1)
+    #define BLYNK_INFO_DEVICE  "STM32 DISCO_L072CZ_LRWAN1"  
+  #elif defined(ARDUINO_RHF76_052)
+    #define BLYNK_INFO_DEVICE  "STM32 RHF76_052"  
+  #elif defined(ARDUINO_THUNDERPACK_L072)
+    #define BLYNK_INFO_DEVICE  "STM32 THUNDERPACK_L072"    
+  #else  
+    #define BLYNK_INFO_DEVICE  "STM32L0"
+  #endif 
+    
+  #define BLYNK_USE_128_VPINS
+  #define BLYNK_BUFFERS_SIZE 1024
+  #define BLYNK_NO_YIELD
+  
+#elif defined(STM32L1)
+
+    #define BLYNK_INFO_DEVICE  "STM32L1"
+    
+  #define BLYNK_USE_128_VPINS
+  #define BLYNK_BUFFERS_SIZE 1024
+  #define BLYNK_NO_YIELD
+  
+#elif defined(STM32L4)
+
+    #define BLYNK_INFO_DEVICE  "STM32L4"
+    
+  #define BLYNK_USE_128_VPINS
+  #define BLYNK_BUFFERS_SIZE 1024
+  #define BLYNK_NO_YIELD
+#elif defined(STM32H7)
+
+    #define BLYNK_INFO_DEVICE  "STM32H7"
+  #define BLYNK_USE_128_VPINS
+  #define BLYNK_BUFFERS_SIZE 1024
+  #define BLYNK_NO_YIELD
+  
+#elif defined(STM32G0)
+
+    #define BLYNK_INFO_DEVICE  "STM32G0"
+    #define BLYNK_USE_128_VPINS
+#define BLYNK_BUFFERS_SIZE 1024
+#define BLYNK_NO_YIELD
+#elif defined(STM32G4)
+
+    #define BLYNK_INFO_DEVICE  "STM32G4"
+    
+  #define BLYNK_USE_128_VPINS
+  #define BLYNK_BUFFERS_SIZE 1024
+  #define BLYNK_NO_YIELD
+#elif defined(STM32WB)
+
+    #define BLYNK_INFO_DEVICE  "STM32WB"
+    
+  #define BLYNK_USE_128_VPINS
+  #define BLYNK_BUFFERS_SIZE 1024
+  #define BLYNK_NO_YIELD
+  
+#elif defined(STM32MP1)
+
+    #define BLYNK_INFO_DEVICE  "STM32MP1"
+    
+  #define BLYNK_USE_128_VPINS
+  #define BLYNK_BUFFERS_SIZE 1024
+  #define BLYNK_NO_YIELD
+
+
+
+////////////////////////////
+
 /* STM32 */
 #elif defined(ARDUINO_ARCH_STM32F1)
 #define BLYNK_INFO_DEVICE  "STM32F1"
@@ -468,31 +734,6 @@
 #define BLYNK_BUFFERS_SIZE 1024
 #define BLYNK_NO_YIELD
 
-// KH, Arduino_Core_STM32
-/////////////////////////
-#elif defined(STM32F0)
-#define BLYNK_INFO_DEVICE  "STM32F0"
-#define BLYNK_NO_YIELD
-#elif defined(STM32F1)
-#define BLYNK_INFO_DEVICE  "STM32F1"
-#define BLYNK_NO_YIELD
-#elif defined(STM32F2)
-#define BLYNK_INFO_DEVICE  "STM32F2"
-#define BLYNK_NO_YIELD
-#elif defined(STM32F3)
-#define BLYNK_INFO_DEVICE  "STM32F3"
-#define BLYNK_NO_YIELD
-#elif defined(STM32F4)
-#define BLYNK_INFO_DEVICE  "STM32F4"
-#define BLYNK_USE_128_VPINS
-#define BLYNK_BUFFERS_SIZE 1024
-#define BLYNK_NO_YIELD
-#elif defined(STM32F7)
-#define BLYNK_INFO_DEVICE  "STM32F7"
-#define BLYNK_USE_128_VPINS
-#define BLYNK_BUFFERS_SIZE 4096
-#define BLYNK_NO_YIELD
-////////////////////////////
 
 /* Digistump */
 #elif defined(ARDUINO_ESP8266_OAK)

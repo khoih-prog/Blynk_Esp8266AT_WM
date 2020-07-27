@@ -8,7 +8,7 @@
    Forked from Blynk library v0.6.1 https://github.com/blynkkk/blynk-library/releases
    Built by Khoi Hoang https://github.com/khoih-prog/Blynk_WM
    Licensed under MIT license
-   Version: 1.0.6
+   Version: 1.0.7
 
    Version Modified By   Date        Comments
    ------- -----------  ----------   -----------
@@ -19,7 +19,8 @@
     1.0.4   K Hoang      13/03/2020  Add SAM DUE support. Enhance GUI.
     1.0.5   K Hoang      23/06/2020  Add Adafruit SAMD21/SAMD51 and nRF52 support, DRD, MultiWiFi features.
                                      WPA2 SSID PW to 63 chars. Permit special chars such as !,@,#,$,%,^,&,* into data fields.
-    1.0.6   K Hoang      27/06/2020  Add ESP32-AT support and use ESP_AT_Lib. Enhance MultiWiFi connection logic. 
+    1.0.6   K Hoang      27/06/2020  Add ESP32-AT support and use ESP_AT_Lib. Enhance MultiWiFi connection logic.
+    1.0.7   K Hoang      27/07/2020  Add support to all STM32F/L/H/G/WB/MP1 and Seeeduino SAMD21/SAMD51 boards.
  *****************************************************************************************************************************/
 /****************************************************************************************************************************
     Important notes:
@@ -93,7 +94,7 @@ void setup()
   Serial.begin(115200);
   while (!Serial);
   
-  Serial.println("\nStart STM32_ESP8266Shield on " + String(BOARD_TYPE));
+  Serial.println("\nStart STM32_ESP8266Shield on " + String(BOARD_NAME));
 
   // initialize serial for ESP module
   EspSerial.begin(ESP8266_BAUD);
@@ -102,7 +103,7 @@ void setup()
   Serial.println(F("Start Blynk_ESP8266AT_WM"));
 
   // Optional to change default AP IP(192.168.4.1) and channel(10)
-  Blynk.setConfigPortalIP(IPAddress(192, 168, 120, 1));
+  Blynk.setConfigPortalIP(IPAddress(192, 168, 132, 1));
   // Personalized portal_ssid and password
   Blynk.setConfigPortal(portal_ssid, portal_password);
   //Blynk.setConfigPortal("STM32_WM", "MySTM32_PW");
@@ -113,6 +114,7 @@ void setup()
   Serial.print(F("Start Blynk no WM with BlynkServer = "));
   Serial.print(BlynkServer);
   Serial.print(F(" and Token = "));
+  Serial.println(auth);
   Blynk.begin(auth, wifi, ssid, pass, BlynkServer.c_str(), BLYNK_SERVER_HARDWARE_PORT);
 #endif
 }

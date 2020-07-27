@@ -15,6 +15,13 @@ New recent features:
 - Configurable ***Config Portal Title*** to be either BoardName or default undistinguishable names.
 - Examples are redesigned to separate Credentials / Defines / Dynamic Params / Code so that you can change Credentials / Dynamic Params quickly for each device
 
+
+### New Releases v1.0.7
+
+1. Add support to all STM32F/L/H/G/WB/MP1 (Nucleo-144 NUCLEO_F767ZI, Nucleo-64 NUCLEO_L053R8, etc.)
+2. Add support to Seeeduino SAMD21/SAMD51 boards (SEEED_WIO_TERMINAL, SEEED_FEMTO_M0, SEEED_XIAO_M0, Wio_Lite_MG126, WIO_GPS_BOARD, SEEEDUINO_ZERO, SEEEDUINO_LORAWAN, SEEED_GROVE_UI_WIRELESS, etc.)
+3. Sync with latest [ESP8266_AT_WebServer Library v1.0.12](https://github.com/khoih-prog/ESP8266_AT_WebServer/releases/tag/v1.0.12)
+
 ### New Releases v1.0.6
 
 1. Add support to ESP32-AT
@@ -24,7 +31,7 @@ New recent features:
 
 ### Major Releases v1.0.5
 
-1. Add support to ***nRF52 (AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B30_ublox, NINA_B112_ublox, etc.)***. Dynamic custom parameters to be saved ***automatically in LittleFS***.
+1. Add support to ***nRF52 (AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B302_ublox, NINA_B112_ublox, etc.)***. Dynamic custom parameters to be saved ***automatically in LittleFS***.
 2. Add support to ***Adafruit SAMD21/SAM51 (Itsy-Bitsy M0/M4, Metro M0/M4, Grand Central M4, Feather M0/M4 Express, etc.)***. Dynamic custom parameters to be saved ***automatically in FlashStorage***.
 3. Add ***MultiWiFi*** features for WiFi
 4. Add ***DoubleResetDetector*** (DRD) feature.
@@ -55,22 +62,28 @@ With version `v1.0.0` or later, you now can configure:
 1. `Config Portal Static IP address, Name and Password.`
 2. `Static IP address, Gateway, Subnet Mask and 2 DNS Servers IP addresses.`
 
-## Prerequisite
- 1. [`Arduino IDE 1.8.12 or later` for Arduino](https://www.arduino.cc/en/Main/Software)
- 2. [`Arduino Core for STM32 v1.8.0 or later`](https://github.com/khoih-prog/Arduino_Core_STM32) for STM32 boards
- 3. [`Adafruit nRF52 v0.20.1 or later`](www.adafruit.com) for nRF52 boards such as Adafruit NRF52840_FEATHER, NRF52832_FEATHER, NRF52840_FEATHER_SENSE, NRF52840_ITSYBITSY, NRF52840_CIRCUITPLAY, NRF52840_CLUE, NRF52840_METRO, NRF52840_PCA10056, PARTICLE_XENON, ***NINA_B302_ublox***, etc.
- 4. [`Arduino SAM DUE core 1.6.12 or later`](https://www.arduino.cc/en/Guide/ArduinoDue) for SAM DUE ARM Cortex-M3 boards
- 5. [`Arduino SAMD core 1.8.5 or later`](https://www.arduino.cc/en/Guide/ArduinoM0) for SAMD ARM Cortex-M0+ boards
- 6. [`Adafruit SAMD core 1.5.11 or later`](https://www.adafruit.com/) for SAMD ARM Cortex-M0+ and M4 boards (Nano 33 IoT, etc.)
- 7. [`ESP8266_AT_WebServer library v1.0.8 or later`](https://github.com/khoih-prog/ESP8266_AT_WebServer). To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/ESP8266_AT_WebServer.svg?)](https://www.ardu-badge.com/ESP8266_AT_WebServer)
- 8. [`FlashStorage_SAMD library v1.0.0`](https://github.com/khoih-prog/FlashStorage_SAMD) for SAMD21 boards (ZERO, MKR, NANO_33_IOT, M0, M0 Pro, AdaFruit CIRCUITPLAYGROUND_EXPRESS, etc.) and SAMD51 boards (Itsy-Bitsy M4, Metro M4, Grand Central M4, Feather M4 Express, etc.)
- 9. [`DueFlashStorage library`](https://github.com/sebnil/DueFlashStorage) for SAM DUE
-10. [`Ai-Thinker AT Firmware v1.5.4`](AT_Firmwares/At_firmware_bin1.54.zip) or [`AT Firmware v1.7.4.0`](AT_Firmwares/AT_Firmware_bin_1.7.4.0.zip) for ESP8266-AT shields.
-11. [`AT version_2.1.0.0_dev`](AT_Firmwares/AT_version_2.1.0.0_dev.zip) for ESP32-AT shields.
-12. [`Adafruit's LittleFS/InternalFS`](https://www.adafruit.com) for nRF52
-13. [`DoubleResetDetector_Generic v1.0.2 or later`](https://github.com/khoih-prog/DoubleResetDetector_Generic). To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/DoubleResetDetector_Generic.svg?)](https://www.ardu-badge.com/DoubleResetDetector_Generic)
-14. [`ESP_AT_Lib`](https://github.com/khoih-prog/ESP_AT_Lib) for ESP8266/ESP32-AT shields
+---
 
+## Prerequisite
+ 1. [`Arduino IDE 1.8.12+` for Arduino](https://www.arduino.cc/en/Main/Software)
+ 2. `Arduino AVR core 1.8.2+` for Arduino (Use Arduino Board Manager) for AVR boards
+ 3. [`Arduino Core for STM32 v1.9.0+`](https://github.com/khoih-prog/Arduino_Core_STM32) for STM32 boards (Nucleo-144 NUCLEO_F767ZI, Nucleo-64 NUCLEO_L053R8, etc.)
+ 4. [`Teensy core 1.53+`](https://www.pjrc.com/teensy/td_download.html) for Teensy (4.1, 4.0, 3.6, 3.5, 3,2, 3.1, 3.0, LC) boards
+ 5. [`Arduino SAM DUE core 1.6.12+`](https://www.arduino.cc/en/Guide/ArduinoDue) for SAM DUE ARM Cortex-M3 boards
+ 6. [`Arduino SAMD core 1.8.6+`](https://www.arduino.cc/en/Guide/ArduinoM0) for SAMD ARM Cortex-M0+ boards  (Nano 33 IoT, etc.).
+ 7. [`Adafruit SAMD core 1.6.0+`](https://www.adafruit.com/)  for SAMD ARM Cortex-M0+ and M4 boards (Itsy-Bitsy M4, etc.)
+ 8. [`Adafruit nRF52 v0.20.5+`](www.adafruit.com) for nRF52 boards such as AdaFruit Feather nRF52840 Express, NINA_B302_ublox, NINA_B112_ublox, etc.
+ 9. [`Seeeduino SAMD core 1.7.7+`](https://www.seeedstudio.com/) for SAMD21/SAMD51 boards (XIAO M0, Wio Terminal, etc.) 
+10. [`ESP8266_AT_WebServer library v1.0.12+`](https://github.com/khoih-prog/ESP8266_AT_WebServer). To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/ESP8266_AT_WebServer.svg?)](https://www.ardu-badge.com/ESP8266_AT_WebServer)
+11. [`FlashStorage_SAMD library v1.0.0+`](https://github.com/khoih-prog/FlashStorage_SAMD) for SAMD21 boards (ZERO, MKR, NANO_33_IOT, M0, M0 Pro, AdaFruit CIRCUITPLAYGROUND_EXPRESS, Seeeduino XIAO M0, etc.) and SAMD51 boards (Itsy-Bitsy M4, Metro M4, Grand Central M4, Feather M4 Express, Seeeduino Wio Terminal, etc.)
+12. [`DueFlashStorage library v1.0+`](https://github.com/sebnil/DueFlashStorage) for SAM DUE
+13. [`Ai-Thinker AT Firmware v1.5.4`](AT_Firmwares/At_firmware_bin1.54.zip) or [`AT Firmware v1.7.4.0`](AT_Firmwares/AT_Firmware_bin_1.7.4.0.zip) for ESP8266-AT shields.
+14. [`AT version_2.1.0.0_dev`](AT_Firmwares/AT_version_2.1.0.0_dev.zip) for ESP32-AT shields.
+15. [`Adafruit's LittleFS/InternalFS`](https://www.adafruit.com) for nRF52
+16. [`DoubleResetDetector_Generic v1.0.2+`](https://github.com/khoih-prog/DoubleResetDetector_Generic). To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/DoubleResetDetector_Generic.svg?)](https://www.ardu-badge.com/DoubleResetDetector_Generic)
+17. [`ESP_AT_Lib v1.0.0+`](https://github.com/khoih-prog/ESP_AT_Lib) for ESP8266/ESP32-AT shields. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/ESP_AT_Lib.svg?)](https://www.ardu-badge.com/ESP_AT_Lib)
+
+---
 
 ### Important Notes
 
@@ -152,6 +165,106 @@ not just unknown Arduino board type:
  /____/_/\_, /_//_/_/\_\
         /___/ v0.6.1 on Arduino
 ```
+
+### VS Code & PlatformIO:
+1. Install [VS Code](https://code.visualstudio.com/)
+2. Install [PlatformIO](https://platformio.org/platformio-ide)
+3. Install **Blynk_Esp8266AT_WM** library by using [Library Manager](https://docs.platformio.org/en/latest/librarymanager/). Search for ***Blynk_Esp8266AT_WM*** in [Platform.io Author's Libraries](https://platformio.org/lib/search?query=author:%22Khoi%20Hoang%22)
+4. Use included [platformio.ini](examples/platformio/platformio.ini) file from examples to ensure that all dependent libraries will installed automatically.
+
+---
+
+### Remember to use Packages' Patches from [ESP8266_AT_WebServer](https://github.com/khoih-prog/ESP8266_AT_WebServer)
+
+ 1. ***To be able to compile, run and automatically detect and display BOARD_NAME on nRF52840/nRF52832 boards***, you have to copy the whole [nRF52 0.20.5](https://github.com/khoih-prog/ESP8266_AT_WebServer/tree/master/Packages_Patches/adafruit/hardware/nrf52/0.20.5) directory into Adafruit nRF52 directory (~/.arduino15/packages/adafruit/hardware/nrf52/0.20.5). 
+
+Supposing the Adafruit nRF52 version is 0.20.5. These files must be copied into the directory:
+- `~/.arduino15/packages/adafruit/hardware/nrf52/0.20.5/platform.txt`
+- `~/.arduino15/packages/adafruit/hardware/nrf52/0.20.5/boards.txt`
+- `~/.arduino15/packages/adafruit/hardware/nrf52/0.20.5/variants/NINA_B302_ublox/variant.h`
+- `~/.arduino15/packages/adafruit/hardware/nrf52/0.20.5/variants/NINA_B302_ublox/variant.cpp`
+- `~/.arduino15/packages/adafruit/hardware/nrf52/0.20.5/variants/NINA_B112_ublox/variant.h`
+- `~/.arduino15/packages/adafruit/hardware/nrf52/0.20.5/variants/NINA_B112_ublox/variant.cpp`
+
+Whenever a new version is installed, remember to copy these files into the new version directory. For example, new version is x.yy.z
+These files must be copied into the directory:
+
+- `~/.arduino15/packages/adafruit/hardware/nrf52/x.yy.z/platform.txt`
+- `~/.arduino15/packages/adafruit/hardware/nrf52/x.yy.z/boards.txt`
+- `~/.arduino15/packages/adafruit/hardware/nrf52/x.yy.z/variants/NINA_B302_ublox/variant.h`
+- `~/.arduino15/packages/adafruit/hardware/nrf52/x.yy.z/variants/NINA_B302_ublox/variant.cpp`
+- `~/.arduino15/packages/adafruit/hardware/nrf52/x.yy.z/variants/NINA_B112_ublox/variant.h`
+- `~/.arduino15/packages/adafruit/hardware/nrf52/x.yy.z/variants/NINA_B112_ublox/variant.cpp`
+
+ 2. ***To be able to compile and run on Teensy boards***, you have to copy the file [Teensy boards.txt](https://github.com/khoih-prog/ESP8266_AT_WebServer/blob/master/Packages_Patches/hardware/teensy/avr/boards.txt) into Teensy hardware directory (./arduino-1.8.12/hardware/teensy/avr/boards.txt). 
+
+Supposing the Arduino version is 1.8.12. This file must be copied into the directory:
+
+- `./arduino-1.8.12/hardware/teensy/avr/boards.txt`
+
+Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
+This file must be copied into the directory:
+
+- `./arduino-x.yy.zz/hardware/teensy/avr/boards.txt`
+
+ 3. ***To be able to compile and run on SAM DUE boards***, you have to copy the whole [SAM DUE](https://github.com/khoih-prog/ESP8266_AT_WebServer/tree/master/Packages_Patches/arduino/hardware/sam/1.6.12) directory into Arduino sam directory (~/.arduino15/packages/arduino/hardware/sam/1.6.12). 
+
+Supposing the Arduino SAM core version is 1.6.12. This file must be copied into the directory:
+
+- `~/.arduino15/packages/arduino/hardware/sam/1.6.12/platform.txt`
+
+Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
+This file must be copied into the directory:
+
+- `~/.arduino15/packages/arduino/hardware/sam/x.yy.zz/platform.txt`
+
+ 4. ***To be able to automatically detect and display BOARD_NAME on Arduino SAMD (Nano-33-IoT, etc) boards***, you have to copy the file [Arduino SAMD platform.txt](https://github.com/khoih-prog/ESP8266_AT_WebServer/tree/master/Packages_Patches/arduino/hardware/samd/1.8.6) into Arduino samd directory (~/.arduino15/packages/arduino/hardware/samd/1.8.6). 
+
+Supposing the Arduino SAMD core version is 1.8.6. This file must be copied into the directory:
+
+- `~/.arduino15/packages/arduino/hardware/samd/1.8.6/platform.txt`
+
+Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
+This file must be copied into the directory:
+
+- `~/.arduino15/packages/arduino/hardware/samd/x.yy.zz/platform.txt`
+
+ 5. ***To be able to automatically detect and display BOARD_NAME on Adafruit SAMD (Itsy-Bitsy M4, etc) boards***, you have to copy the file [Adafruit SAMD platform.txt](https://github.com/khoih-prog/ESP8266_AT_WebServer/tree/master/Packages_Patches/adafruit/hardware/samd/1.6.0) into Adafruit samd directory (~/.arduino15/packages/adafruit/hardware/samd/1.6.0). 
+
+Supposing the Adafruit SAMD core version is 1.6.0. This file must be copied into the directory:
+
+- `~/.arduino15/packages/adafruit/hardware/samd/1.6.0/platform.txt`
+
+Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
+This file must be copied into the directory:
+
+- `~/.arduino15/packages/adafruit/hardware/samd/x.yy.zz/platform.txt`
+
+ 6. ***To be able to automatically detect and display BOARD_NAME on Seeeduino SAMD (XIAO M0, Wio Terminal, etc) boards***, you have to copy the file [Seeeduino SAMD platform.txt](https://github.com/khoih-prog/ESP8266_AT_WebServer/tree/master/Packages_Patches/Seeeduino/hardware/samd/1.7.7) into Adafruit samd directory (~/.arduino15/packages/Seeeduino/hardware/samd/1.7.7). 
+
+Supposing the Seeeduino SAMD core version is 1.7.7. This file must be copied into the directory:
+
+- `~/.arduino15/packages/Seeeduino/hardware/samd/1.7.7/platform.txt`
+
+Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
+This file must be copied into the directory:
+
+- `~/.arduino15/packages/Seeeduino/hardware/samd/x.yy.zz/platform.txt`
+
+7. ***To use Serial1 on some STM32 boards without Serial1 definition (Nucleo-144 NUCLEO_F767ZI, Nucleo-64 NUCLEO_L053R8, etc.) boards***, you have to copy the files [STM32 variant.h](https://github.com/khoih-prog/ESP8266_AT_WebServer/tree/master/Packages_Patches/STM32/hardware/stm32/1.9.0) into STM32 stm32 directory (~/.arduino15/packages/STM32/hardware/stm32/1.9.0). You have to modify the files corresponding to your boards, this is just an illustration how to do.
+
+Supposing the STM32 stm32 core version is 1.9.0. These files must be copied into the directory:
+
+- `~/.arduino15/packages/STM32/hardware/stm32/1.9.0/variants/NUCLEO_F767ZI/variant.h` for Nucleo-144 NUCLEO_F767ZI.
+- `~/.arduino15/packages/STM32/hardware/stm32/1.9.0/variants/NUCLEO_L053R8/variant.h` for Nucleo-64 NUCLEO_L053R8.
+
+Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz,
+theses files must be copied into the corresponding directory:
+
+- `~/.arduino15/packages/STM32/hardware/stm32/x.yy.zz/variants/NUCLEO_F767ZI/variant.h`
+- `~/.arduino15/packages/STM32/hardware/stm32/x.yy.zz/variants/NUCLEO_L053R8/variant.h`
+
+---
 
 ### How to use
 
@@ -256,6 +369,10 @@ to use Blynk only, with hardcoded Credentials, replace
 #define EspSerial Serial1
 
 #endif    //ESP8266_AT_USE_NRF528XX
+
+#ifndef BOARD_NAME
+  #define BOARD_NAME    BOARD_TYPE
+#endif
 
 #define USE_BLYNK_WM      true
 //#define USE_BLYNK_WM      false
@@ -385,7 +502,36 @@ in your code. Keep `Blynk.run()` intact.
 
 That's it.
 
-Also see examples: 
+---
+
+***This library's `Blynk.begin()` is not a blocking call, so you can use it for critical functions requiring in loop().***
+Anyway, this is better for projects using Blynk just for GUI (graphical user interface).
+
+In operation, if WiFi or Blynk connection is lost, `Blynk.run()` will try reconnecting automatically. Therefore, `Blynk.run()` must be called in the `loop()` function. Don't use:
+
+```cpp
+void loop()
+{
+  if (Blynk.connected())
+     Blynk.run();
+     
+  ...
+}
+```
+just
+
+```cpp
+void loop()
+{
+  Blynk.run();
+  ...
+}
+```
+
+---
+
+## Examples
+
  1. [Mega_ESP8266Shield](examples/Mega_ESP8266Shield)
  2. [nRF52_ESP8266Shield](examples/nRF52_ESP8266Shield)
  3. [SAMD_ESP8266Shield](examples/SAMD_ESP8266Shield) 
@@ -536,6 +682,23 @@ Please take a look at other examples, as well.
 1. File [nRF52_ESP8266Shield.ino](examples/nRF52_ESP8266Shield/nRF52_ESP8266Shield.ino)
 
 ```
+/****************************************************************************************************************************
+    Important notes:
+    1) Tested OK with SAMD, Mega, nRF52, SAM DUE
+
+    a) ESP8266-AT version:1.1.0.0(May 11 2016 18:09:56)
+       SDK version:1.5.4(baaeaebb)
+       Ai-Thinker Technology Co. Ltd.
+       Jun 13 2016 11:29:20
+    b) ESP8266-AT version:1.7.4.0(May 11 2020 19:13:04)
+       SDK version:3.0.4(9532ceb)
+       compile time:May 27 2020 10:12:22
+       Bin version(Wroom 02):1.7.4
+
+    2) These versions don't work on SAMD,  but work on Mega (hanging when connect to Blynk, WiFi OK)
+       To find bug and fix in Blynk ESP8266_Lib or Blynk library
+ *****************************************************************************************************************************/
+ 
 #include "defines.h"
 
 #if USE_BLYNK_WM
@@ -591,7 +754,7 @@ void setup()
   Serial.begin(115200);
   while (!Serial);
   
-  Serial.println("\nStart nRF52_ESP8266Shield on " + String(BOARD_TYPE));
+  Serial.println("\nStart nRF52_ESP8266Shield on " + String(BOARD_NAME));
 
   // initialize serial for ESP module
   EspSerial.begin(ESP8266_BAUD);
@@ -600,7 +763,7 @@ void setup()
   Serial.println(F("Start Blynk_ESP8266AT_WM"));
 
   // Optional to change default AP IP(192.168.4.1) and channel(10)
-  Blynk.setConfigPortalIP(IPAddress(192, 168, 120, 1));
+  Blynk.setConfigPortalIP(IPAddress(192, 168, 152, 1));
   // Personalized portal_ssid and password
   Blynk.setConfigPortal(portal_ssid, portal_password);
   //Blynk.setConfigPortal("nRF52_WM", "MynRF52_PW");
@@ -739,6 +902,10 @@ void loop()
 #define EspSerial Serial1
 
 #endif    //ESP8266_AT_USE_NRF528XX
+
+#ifndef BOARD_NAME
+  #define BOARD_NAME    BOARD_TYPE
+#endif
 
 #define USE_BLYNK_WM      true
 //#define USE_BLYNK_WM      false
@@ -1222,31 +1389,79 @@ BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB BBB
 
 ---
 
-This library's `Blynk.begin()` is not a blocking call, so you can use it for critical functions requiring in loop(). 
-Anyway, this is better for projects using Blynk just for GUI (graphical user interface).
+The following is the sample terminal output when running example [STM32_ESP8266Shield](examples/STM32_ESP8266Shield) using ***STM32 Nucleo-144 NUCLEO_F767ZI with ESP8266-AT shield***.
 
-In operation, if WiFi or Blynk connection is lost, `Blynk.run()` will try reconnecting automatically. Therefore, `Blynk.run()` must be called in the `loop()` function. Don't use:
-
-```cpp
-void loop()
-{
-  if (Blynk.connected())
-     Blynk.run();
-     
-  ...
-}
 ```
-just
+Start STM32_ESP8266Shield on NUCLEO_F767ZI
+Start Blynk_ESP8266AT_WM
+[6566] AT version:1.1.0.0(May 11 2016 18:09:56)
+SDK version:1.5.4(baaeaebb)
+Ai-Thinker Technology Co. Ltd.
+Jun 13 2016 11:29:20
+OK
 
-```cpp
-void loop()
-{
-  Blynk.run();
-  ...
-}
+EEPROM size = 16384, start = 0
+Flag read = 0xffffffff
+No doubleResetDetected
+SetFlag write = 0xd0d01234
+[11998] ======= Start Default Config Data =======
+[12000] Hdr=STM32_ESP_AT,SSID=HueNet1,PW=password
+[12004] SSID1=HueNet,PW1=password
+[12007] Svr=account.duckdns.org,Prt=8080,Tok=new_token
+[12014] BName=STM32_ESP_AT
+[12017] i=0,id=mqtt,data=default-mqtt-server
+[12021] i=1,id=mqpt,data=1883
+[12023] SaveEEPROM,Sz=16384,DataSz=0,WCSum=0x2360
+[12028] ======= Start Loaded Config Data =======
+[12032] Hdr=SHD_ESP8266,SSID=HueNet1,PW=password
+[12037] SSID1=HueNet,PW1=password
+[12040] Svr=account.duckdns.org,Prt=8080,Tok=new_token
+[12047] BName=STM32_ESP_AT
+[12049] i=0,id=mqtt,data=default-mqtt-server
+[12053] i=1,id=mqpt,data=1883
+[12056] 
+    ___  __          __
+   / _ )/ /_ _____  / /__
+  / _  / / // / _ \/  '_/
+ /____/_/\_, /_//_/_/\_\
+        /___/ v0.6.1 on STM32 NUCLEO_F767ZI
+
+[12069] ConMultiWifi
+[12071] con2WF:SSID=HueNet1,PW=password
+[12075] Remaining retry_time=3
+[12078] Con2:HueNet1
+[18645] AT version:1.1.0.0(May 11 2016 18:09:56)
+SDK version:1.5.4(baaeaebb)
+Ai-Thinker Technology Co. Ltd.
+Jun 13 2016 11:29:20
+OK
+[19189] Mac=68:c6:3a:a4:6a:97
+[24253] IP=192.168.2.85
+
+
+[24270] WOK
+[24270] WOK, lastConnectedIndex=0
+[24270] con2WF:OK
+[24272] IP=192.168.2.85
+
+
+[24290] b:WOK.TryB
+[34457] Ready (ping: 12ms).
+[34633] b:WBOK
+Stop doubleResetDetecting
+ClearFlag write = 0xd0d04321
+B
+Your stored Credentials :
+MQTT Server = default-mqtt-server
+Port = 1883
+BBBBBBBBB BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB BBBBBBBBBB
+
 ```
+
+---
 
 #### Debug
+
 Debug is enabled by default on Serial. To disable, add at the beginning of sketch
 
 ```cpp
@@ -1275,6 +1490,12 @@ Sometimes, the library will only work if you update the `ESP8266 AT shield` core
 
 ---
 
+### New Releases v1.0.7
+
+1. Add support to all STM32F/L/H/G/WB/MP1 (Nucleo-144 NUCLEO_F767ZI, Nucleo-64 NUCLEO_L053R8, etc.)
+2. Add support to Seeeduino SAMD21/SAMD51 boards (SEEED_WIO_TERMINAL, SEEED_FEMTO_M0, SEEED_XIAO_M0, Wio_Lite_MG126, WIO_GPS_BOARD, SEEEDUINO_ZERO, SEEEDUINO_LORAWAN, SEEED_GROVE_UI_WIRELESS, etc.)
+3. Sync with latest [ESP8266_AT_WebServer Library v1.0.12](https://github.com/khoih-prog/ESP8266_AT_WebServer/releases/tag/v1.0.12)
+
 ### New Releases v1.0.6
 
 1. Add support Add ESP32-AT
@@ -1284,7 +1505,7 @@ Sometimes, the library will only work if you update the `ESP8266 AT shield` core
 
 ### Major Releases v1.0.5
 
-1. Add support to ***nRF52 (AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B30_ublox, NINA_B112_ublox, etc.)***. Dynamic custom parameters to be saved ***automatically in LittleFS***.
+1. Add support to ***nRF52 (AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B302_ublox, NINA_B112_ublox, etc.)***. Dynamic custom parameters to be saved ***automatically in LittleFS***.
 2. Add support to ***Adafruit SAMD21/SAM51 (Itsy-Bitsy M0/M4, Metro M0/M4, Grand Central M4, Feather M0/M4 Express, etc.)***. Dynamic custom parameters to be saved ***automatically in FlashStorage***.
 3. Add ***MultiWiFi*** features for WiFi
 4. Add ***DoubleResetDetector*** (DRD) feature.
@@ -1345,20 +1566,29 @@ Sometimes, the library will only work if you update the `ESP8266 AT shield` core
 10. Add DRD
 11. Add Dynamic Parameters
 12. Add Default Config Data
+13. Add support to all STM32F/L/H/G/WB/MP1 boards
 
 ---
 
-### Contributions and thanks
+### Contributions and Thanks
 
 1. Thanks to good work of [Miguel Alexandre Wisintainer](https://github.com/tcpipchip) for initiating, inspriring, working with, developing, debugging and testing. Without that, support to nRF52, especially ***NINA_B302_ublox, NINA_B112_ublox running as nRF52840 / nRF52832***, has never been started and finished.
 
-## Contributing
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/tcpipchip"><img src="https://github.com/tcpipchip.png" width="100px;" alt="tcpipchip"/><br /><sub><b>⭐️ tcpipchip</b></sub></a><br /></td>
+  </tr> 
+</table>
+
+### Contributing
 
 If you want to contribute to this project:
 - Report bugs and errors
 - Ask for enhancements
 - Create issues and pull requests
 - Tell other people about this library
+
+---
 
 ## Copyright
 

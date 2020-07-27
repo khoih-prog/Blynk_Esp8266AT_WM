@@ -8,7 +8,7 @@
    Forked from Blynk library v0.6.1 https://github.com/blynkkk/blynk-library/releases
    Built by Khoi Hoang https://github.com/khoih-prog/Blynk_WM
    Licensed under MIT license
-   Version: 1.0.6
+   Version: 1.0.7
 
    Original Blynk Library author:
    @file       BlynkSimpleShieldEsp8266.h
@@ -28,6 +28,7 @@
     1.0.5   K Hoang      23/06/2020  Add Adafruit SAMD21/SAMD51 and nRF52 support, DRD, MultiWiFi features.
                                      WPA2 SSID PW to 63 chars. Permit special chars such as !,@,#,$,%,^,&,* into data fields.
     1.0.6   K Hoang      27/06/2020  Add ESP32-AT support and use ESP_AT_Lib. Enhance MultiWiFi connection logic.
+    1.0.7   K Hoang      27/07/2020  Add support to all STM32F/L/H/G/WB/MP1 and Seeeduino SAMD21/SAMD51 boards.
  *****************************************************************************************************************************/
 
 #ifndef BlynkSimpleShieldEsp8266_SAMD_WM_h
@@ -37,7 +38,7 @@
       || defined(ARDUINO_SAMD_NANO_33_IOT) || defined(ARDUINO_SAMD_MKRFox1200) || defined(ARDUINO_SAMD_MKRWAN1300) || defined(ARDUINO_SAMD_MKRWAN1310) \
       || defined(ARDUINO_SAMD_MKRGSM1400) || defined(ARDUINO_SAMD_MKRNB1500) || defined(ARDUINO_SAMD_MKRVIDOR4000) || defined(__SAMD21G18A__) \
       || defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS) || defined(__SAMD21E18A__) || defined(__SAMD51__) || defined(__SAMD51J20A__) || defined(__SAMD51J19A__) \
-      || defined(__SAMD51G19A__) || defined(__SAMD21G18A__) )
+      || defined(__SAMD51G19A__) || defined(__SAMD51P19A__) || defined(__SAMD21G18A__) )
 #if defined(BLYNK_ESP8266_AT_USE_SAMD)
 #undef BLYNK_ESP8266_AT_USE_SAMD
 #endif
@@ -977,7 +978,7 @@ class BlynkWifi
         *_pointer = EEPROM.read(offset);
       }
          
-      BLYNK_LOG4(BLYNK_F("CrCCSum="), checkSum, F(",CrRCSum="), readCheckSum);
+      BLYNK_LOG4(BLYNK_F("CrCCSum="), String(checkSum, HEX), F(",CrRCSum="), String(readCheckSum, HEX));
       
       if ( checkSum != readCheckSum)
       {
@@ -1028,7 +1029,8 @@ class BlynkWifi
       
       EEPROM.commit();
       
-      BLYNK_LOG2(BLYNK_F("CrCCSum="), checkSum);
+      BLYNK_LOG2(BLYNK_F("CrCCSum=0x"), String(checkSum, HEX));
+      
     }   
     
     void loadAndSaveDefaultConfigData(void)

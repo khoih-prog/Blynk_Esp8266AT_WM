@@ -8,7 +8,7 @@
    Forked from Blynk library v0.6.1 https://github.com/blynkkk/blynk-library/releases
    Built by Khoi Hoang https://github.com/khoih-prog/Blynk_WM
    Licensed under MIT license
-   Version: 1.0.6
+   Version: 1.0.7
 
    Version Modified By   Date        Comments
    ------- -----------  ----------   -----------
@@ -19,7 +19,8 @@
     1.0.4   K Hoang      13/03/2020  Add SAM DUE support. Enhance GUI.
     1.0.5   K Hoang      23/06/2020  Add Adafruit SAMD21/SAMD51 and nRF52 support, DRD, MultiWiFi features.
                                      WPA2 SSID PW to 63 chars. Permit special chars such as !,@,#,$,%,^,&,* into data fields.
-    1.0.6   K Hoang      27/06/2020  Add ESP32-AT support and use ESP_AT_Lib. Enhance MultiWiFi connection logic. 
+    1.0.6   K Hoang      27/06/2020  Add ESP32-AT support and use ESP_AT_Lib. Enhance MultiWiFi connection logic.
+    1.0.7   K Hoang      27/07/2020  Add support to all STM32F/L/H/G/WB/MP1 and Seeeduino SAMD21/SAMD51 boards.
  *****************************************************************************************************************************/
 /****************************************************************************************************************************
     Important notes:
@@ -80,10 +81,13 @@
   #define BOARD_TYPE      "AVR Mega"
 #endif
 
+#ifndef BOARD_NAME
+  #define BOARD_NAME    BOARD_TYPE
+#endif
 
 // Start location in EEPROM to store config data. Default 0
 // Config data Size currently is 128 bytes)
-#define EEPROM_START     512
+#define EEPROM_START     0
 
 #define USE_BLYNK_WM      true
 //#define USE_BLYNK_WM      false
@@ -105,7 +109,7 @@
   #endif
   
   #define BLYNK_SERVER_HARDWARE_PORT    8080
-  
+
   // Your WiFi credentials.
   char ssid[] = "****";
   char pass[] = "****";
@@ -167,7 +171,7 @@ void setup()
   Serial.begin(115200);
   while (!Serial);
 
-  Serial.println("\nStart Mega_ESP8266Shield on " + String(BOARD_TYPE));
+  Serial.println("\nStart Mega_ESP8266Shield on " + String(BOARD_NAME));
 
   // initialize serial for ESP module
   EspSerial.begin(ESP8266_BAUD);

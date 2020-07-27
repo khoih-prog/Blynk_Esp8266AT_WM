@@ -7,7 +7,7 @@
    Forked from Blynk library v0.6.1 https://github.com/blynkkk/blynk-library/releases
    Built by Khoi Hoang https://github.com/khoih-prog/Blynk_WM
    Licensed under MIT license
-   Version: 1.0.6
+   Version: 1.0.7
 
    Version Modified By   Date        Comments
    ------- -----------  ----------   -----------
@@ -18,7 +18,8 @@
     1.0.4   K Hoang      13/03/2020  Add SAM DUE support. Enhance GUI.
     1.0.5   K Hoang      23/06/2020  Add Adafruit SAMD21/SAMD51 and nRF52 support, DRD, MultiWiFi features.
                                      WPA2 SSID PW to 63 chars. Permit special chars such as !,@,#,$,%,^,&,* into data fields.
-    1.0.6   K Hoang      27/06/2020  Add ESP32-AT support and use ESP_AT_Lib. Enhance MultiWiFi connection logic. 
+    1.0.6   K Hoang      27/06/2020  Add ESP32-AT support and use ESP_AT_Lib. Enhance MultiWiFi connection logic.
+    1.0.7   K Hoang      27/07/2020  Add support to all STM32F/L/H/G/WB/MP1 and Seeeduino SAMD21/SAMD51 boards. 
  *****************************************************************************************************************************/
 
 #ifndef Credentials_h
@@ -65,7 +66,7 @@ typedef struct Configuration
 // Default Config Data will override Data input from Config Portal (CP)
 // Use LOAD_DEFAULT_CONFIG_DATA = false in normal operation, and use dummy value here
 // Data input from Config Portal (CP) will override Default Config Data
-bool LOAD_DEFAULT_CONFIG_DATA = true;
+bool LOAD_DEFAULT_CONFIG_DATA = false;
 
 Blynk_WF_Configuration defaultConfig =
 {

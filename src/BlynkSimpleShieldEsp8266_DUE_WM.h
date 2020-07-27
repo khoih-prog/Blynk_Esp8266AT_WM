@@ -8,7 +8,7 @@
    Forked from Blynk library v0.6.1 https://github.com/blynkkk/blynk-library/releases
    Built by Khoi Hoang https://github.com/khoih-prog/Blynk_WM
    Licensed under MIT license
-   Version: 1.0.6
+   Version: 1.0.7
 
    Original Blynk Library author:
    @file       BlynkSimpleShieldEsp8266.h
@@ -28,6 +28,7 @@
     1.0.5   K Hoang      23/06/2020  Add Adafruit SAMD21/SAMD51 and nRF52 support, DRD, MultiWiFi features.
                                      WPA2 SSID PW to 63 chars. Permit special chars such as !,@,#,$,%,^,&,* into data fields.
     1.0.6   K Hoang      27/06/2020  Add ESP32-AT support and use ESP_AT_Lib. Enhance MultiWiFi connection logic.
+    1.0.7   K Hoang      27/07/2020  Add support to all STM32F/L/H/G/WB/MP1 and Seeeduino SAMD21/SAMD51 boards. 
  *****************************************************************************************************************************/
 
 #ifndef BlynkSimpleShieldEsp8266_DUE_WM_h
@@ -1007,7 +1008,8 @@ class BlynkWifi
       
       byteCount += sizeof(readCheckSum);      
       
-      BLYNK_LOG6(F("CrCCsum="), checkSum, F(",CrRCsum="), readCheckSum, F(",TotalDataSz="), totalDataSize);
+      BLYNK_LOG6(F("CrCCsum=0x"), String(checkSum, HEX), F(",CrRCsum=0x"), String(readCheckSum, HEX), 
+                F(",TotalDataSz="), totalDataSize);
       
       if ( checkSum != readCheckSum)
       {
@@ -1063,7 +1065,7 @@ class BlynkWifi
       
       dueFlashStorageData.write(offset, buffer, byteCount);
       
-      BLYNK_LOG4(F("CrCCSum="), checkSum, F(",byteCount="), byteCount);
+      BLYNK_LOG4(F("CrCCSum=0x"), String(checkSum, HEX), F(",byteCount="), byteCount);
     } 
     
     void loadAndSaveDefaultConfigData(void)
@@ -1089,7 +1091,7 @@ class BlynkWifi
       hadConfigData = false;    
           
       // For DUE, DATA_LENGTH = ((IFLASH1_PAGE_SIZE/sizeof(byte))*4) = 1KBytes
-      BLYNK_LOG2(F("Simulate EEPROM, sz:"), DATA_LENGTH);
+      BLYNK_LOG2(F("Simulate EEPROM,Sz="), DATA_LENGTH);
 
       // Use new LOAD_DEFAULT_CONFIG_DATA logic
       if (LOAD_DEFAULT_CONFIG_DATA)
@@ -1218,7 +1220,7 @@ class BlynkWifi
       int calChecksum = calcChecksum();
       Blynk8266_WF_config.checkSum = calChecksum;
       
-      BLYNK_LOG4(F("SaveData,sz="), totalDataSize, F(",chkSum="), calChecksum);
+      BLYNK_LOG4(F("SaveData,Sz="), totalDataSize, F(",chkSum=0x"), String(calChecksum, HEX));
 
       dueFlashStorage_put();
     }

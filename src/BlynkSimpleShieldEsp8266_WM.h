@@ -8,7 +8,7 @@
    Forked from Blynk library v0.6.1 https://github.com/blynkkk/blynk-library/releases
    Built by Khoi Hoang https://github.com/khoih-prog/Blynk_WM
    Licensed under MIT license
-   Version: 1.0.6
+   Version: 1.0.7
 
    Original Blynk Library author:
    @file       BlynkSimpleShieldEsp8266.h
@@ -28,6 +28,7 @@
     1.0.5   K Hoang      23/06/2020  Add Adafruit SAMD21/SAMD51 and nRF52 support, DRD, MultiWiFi features.
                                      WPA2 SSID PW to 63 chars. Permit special chars such as !,@,#,$,%,^,&,* into data fields.
     1.0.6   K Hoang      27/06/2020  Add ESP32-AT support and use ESP_AT_Lib. Enhance MultiWiFi connection logic.
+    1.0.7   K Hoang      27/07/2020  Add support to all STM32F/L/H/G/WB/MP1 and Seeeduino SAMD21/SAMD51 boards.
  *****************************************************************************************************************************/
 
 #ifndef BlynkSimpleShieldEsp8266_WM_h
@@ -725,7 +726,7 @@ class BlynkWifi
 
       int calChecksum = calcChecksum();
 
-      BLYNK_LOG4(BLYNK_F("CCSum="), calChecksum, BLYNK_F(",RCSsum="), Blynk8266_WF_config.checkSum);
+      BLYNK_LOG4(BLYNK_F("CCSum=0x"), String(calChecksum, HEX), BLYNK_F(",RCSsum=0x"), String(Blynk8266_WF_config.checkSum, HEX));
 
       if ( (strncmp(Blynk8266_WF_config.header, BLYNK_BOARD_TYPE, strlen(BLYNK_BOARD_TYPE)) != 0) ||
            (calChecksum != Blynk8266_WF_config.checkSum) )
@@ -734,7 +735,7 @@ class BlynkWifi
 
         //EEPROM.put(EEPROM_START, Blynk8266_WF_config);
 
-        BLYNK_LOG2(BLYNK_F("InitEEPROM sz="), EEPROM.length());
+        BLYNK_LOG2(BLYNK_F("InitEEPROM Sz="), EEPROM.length());
         // doesn't have any configuration
         strcpy(Blynk8266_WF_config.header,           BLYNK_BOARD_TYPE);
         strcpy(Blynk8266_WF_config.wifi_ssid,        WM_NO_CONFIG);
@@ -769,8 +770,8 @@ class BlynkWifi
     {
       int calChecksum = calcChecksum();
       Blynk8266_WF_config.checkSum = calChecksum;
-      BLYNK_LOG4(BLYNK_F("SaveEEPROM,Sz="), EEPROM.length(), BLYNK_F(",CSum="), calChecksum);
-
+      BLYNK_LOG4(BLYNK_F("SaveEEPROM,Sz="), EEPROM.length(), BLYNK_F(",CSum=0x"), String(calChecksum, HEX));
+      
       EEPROM.put(EEPROM_START, Blynk8266_WF_config);
     }
 
