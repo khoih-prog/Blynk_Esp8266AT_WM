@@ -18,14 +18,14 @@ New recent features:
 
 ### New Releases v1.0.7
 
-1. Add support to all STM32F/L/H/G/WB/MP1 (Nucleo-144 NUCLEO_F767ZI, Nucleo-64 NUCLEO_L053R8, etc.)
-2. Add support to Seeeduino SAMD21/SAMD51 boards (SEEED_WIO_TERMINAL, SEEED_FEMTO_M0, SEEED_XIAO_M0, Wio_Lite_MG126, WIO_GPS_BOARD, SEEEDUINO_ZERO, SEEEDUINO_LORAWAN, SEEED_GROVE_UI_WIRELESS, etc.)
-3. Sync with latest [ESP8266_AT_WebServer Library v1.0.12](https://github.com/khoih-prog/ESP8266_AT_WebServer/releases/tag/v1.0.12)
+1. Add support to all **STM32F/L/H/G/WB/MP1** (Nucleo-144 NUCLEO_F767ZI, Nucleo-64 NUCLEO_L053R8, etc.)
+2. Add support to **Seeeduino SAMD21/SAMD51 boards** (SEEED_WIO_TERMINAL, SEEED_FEMTO_M0, SEEED_XIAO_M0, Wio_Lite_MG126, WIO_GPS_BOARD, SEEEDUINO_ZERO, SEEEDUINO_LORAWAN, SEEED_GROVE_UI_WIRELESS, etc.)
+3. Sync with latest [**ESP8266_AT_WebServer Library v1.0.12**](https://github.com/khoih-prog/ESP8266_AT_WebServer/releases/tag/v1.0.12)
 
 ### New Releases v1.0.6
 
-1. Add support to ESP32-AT
-2. Use new [ESP_AT_Lib](https://github.com/khoih-prog/ESP_AT_Lib) to support ESP8266/ESP32-AT
+1. Add support to **ESP32-AT**
+2. Use new [**ESP_AT_Lib**](https://github.com/khoih-prog/ESP_AT_Lib) to support ESP8266/ESP32-AT
 3. Enhance MultiWiFi connection logic.
 4. New logic for `USE_DEFAULT_CONFIG_DATA` to autoload Config / Dynamic Data in developing stage.
 
@@ -37,23 +37,23 @@ New recent features:
 4. Add ***DoubleResetDetector*** (DRD) feature.
 5. Increase WPA2 SSID and PW to 63 chars. Permit special chars such as !,@,#,$,%,^,&,* into data fields.
 6. Restructure examples separate Credentials / Defines / Dynamic Params / Code.
-7. Drop support to Teensy boards.
+7. Drop support to **Teensy** boards.
 
 ### New Releases v1.0.4
 
-1. Add support to SAM DUE
+1. Add support to **SAM DUE**
 2. Reduce html and code size for faster Config Portal response. 
 3. Enhance GUI.
 4. Config Portal AP SSID and Password will use 4 bytes of hardware unique macAddress, only for Teensy.
 
 ### New Version v1.0.3
 
-1. Add support to STM32 (STM32F1, F2, F3, F4, F7, etc) boards. STM32F0 boards are not supported.
+1. Add support to **STM32F/L/H/G/WB/MP1** boards. STM32F0 boards are not supported.
 2. Add clearConfigData() function.
 
 ### New Version v1.0.2
 
-1. Add support to SAMD (ZERO, MKR, NANO_33_IOT, M0, M0 Pro, AdaFruit CIRCUITPLAYGROUND_EXPRESS, etc.) boards
+1. Add support to **SAMD** (ZERO, MKR, NANO_33_IOT, M0, M0 Pro, AdaFruit CIRCUITPLAYGROUND_EXPRESS, etc.) boards
 
 To help you to eliminate `hardcoding` your Wifi and Blynk credentials for Mega/Teensy boards running ESP8266 AT shields, and updating/reflashing every time when you need to change them. Configuration data are saved in configurable locatioon in EEPROM.
 
@@ -73,9 +73,9 @@ With version `v1.0.0` or later, you now can configure:
  4. [`Teensy core 1.53+`](https://www.pjrc.com/teensy/td_download.html) for Teensy (4.1, 4.0, 3.6, 3.5, 3,2, 3.1, 3.0, LC) boards
  5. [`Arduino SAM DUE core 1.6.12+`](https://www.arduino.cc/en/Guide/ArduinoDue) for SAM DUE ARM Cortex-M3 boards
  6. [`Arduino SAMD core 1.8.9+`](https://www.arduino.cc/en/Guide/ArduinoM0) for SAMD ARM Cortex-M0+ boards  (Nano 33 IoT, etc.).
- 7. [`Adafruit SAMD core 1.6.3+`](https://www.adafruit.com/)  for SAMD ARM Cortex-M0+ and M4 boards (Itsy-Bitsy M4, etc.)
+ 7. [`Adafruit SAMD core 1.6.4+`](https://www.adafruit.com/)  for SAMD ARM Cortex-M0+ and M4 boards (Itsy-Bitsy M4, etc.)
  8. [`Adafruit nRF52 v0.21.0+`](www.adafruit.com) for nRF52 boards such as AdaFruit Feather nRF52840 Express, NINA_B302_ublox, NINA_B112_ublox, etc.
- 9. [`Seeeduino SAMD core 1.7.9+`](https://www.seeedstudio.com/) for SAMD21/SAMD51 boards (XIAO M0, Wio Terminal, etc.) 
+ 9. [`Seeeduino SAMD core 1.8.1+`](https://www.seeedstudio.com/) for SAMD21/SAMD51 boards (XIAO M0, Wio Terminal, etc.) 
 10. [`ESP8266_AT_WebServer v1.1.1+`](https://github.com/khoih-prog/ESP8266_AT_WebServer). To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/ESP8266_AT_WebServer.svg?)](https://www.ardu-badge.com/ESP8266_AT_WebServer)
 11. [`FlashStorage_SAMD v1.0.0+`](https://github.com/khoih-prog/FlashStorage_SAMD) for SAMD21 boards (ZERO, MKR, NANO_33_IOT, M0, M0 Pro, AdaFruit CIRCUITPLAYGROUND_EXPRESS, Seeeduino XIAO M0, etc.) and SAMD51 boards (Itsy-Bitsy M4, Metro M4, Grand Central M4, Feather M4 Express, Seeeduino Wio Terminal, etc.)
 12. [`DueFlashStorage library v1.0+`](https://github.com/sebnil/DueFlashStorage) for SAM DUE
@@ -244,22 +244,22 @@ These files must be copied into the directory:
 
 Whenever the above-mentioned compiler error issue is fixed with the new Arduino SAMD release, you don't need to copy the `Arduino.h` file anymore.
 
- 5. ***To be able to automatically detect and display BOARD_NAME on Adafruit SAMD (Itsy-Bitsy M4, etc) boards***, you have to copy the file [Adafruit SAMD platform.txt](Packages_Patches/adafruit/hardware/samd/1.6.3) into Adafruit samd directory (~/.arduino15/packages/adafruit/hardware/samd/1.6.3). 
+ 5. ***To be able to automatically detect and display BOARD_NAME on Adafruit SAMD (Itsy-Bitsy M4, etc) boards***, you have to copy the file [Adafruit SAMD platform.txt](Packages_Patches/adafruit/hardware/samd/1.6.4) into Adafruit samd directory (~/.arduino15/packages/adafruit/hardware/samd/1.6.4). 
 
-Supposing the Adafruit SAMD core version is 1.6.3. This file must be copied into the directory:
+Supposing the Adafruit SAMD core version is 1.6.4. This file must be copied into the directory:
 
-- `~/.arduino15/packages/adafruit/hardware/samd/1.6.3/platform.txt`
+- `~/.arduino15/packages/adafruit/hardware/samd/1.6.4/platform.txt`
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
 This file must be copied into the directory:
 
 - `~/.arduino15/packages/adafruit/hardware/samd/x.yy.zz/platform.txt`
 
- 6. ***To be able to automatically detect and display BOARD_NAME on Seeeduino SAMD (XIAO M0, Wio Terminal, etc) boards***, you have to copy the file [Seeeduino SAMD platform.txt](Packages_Patches/Seeeduino/hardware/samd/1.7.9) into Adafruit samd directory (~/.arduino15/packages/Seeeduino/hardware/samd/1.7.9). 
+ 6. ***To be able to automatically detect and display BOARD_NAME on Seeeduino SAMD (XIAO M0, Wio Terminal, etc) boards***, you have to copy the file [Seeeduino SAMD platform.txt](Packages_Patches/Seeeduino/hardware/samd/1.8.1) into Adafruit samd directory (~/.arduino15/packages/Seeeduino/hardware/samd/1.8.1). 
 
-Supposing the Seeeduino SAMD core version is 1.7.9. This file must be copied into the directory:
+Supposing the Seeeduino SAMD core version is 1.8.1. This file must be copied into the directory:
 
-- `~/.arduino15/packages/Seeeduino/hardware/samd/1.7.9/platform.txt`
+- `~/.arduino15/packages/Seeeduino/hardware/samd/1.8.1/platform.txt`
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
 This file must be copied into the directory:
@@ -1509,18 +1509,18 @@ Sometimes, the library will only work if you update the `ESP8266 AT shield` core
 
 ### New Releases v1.0.7
 
-1. Add support to all STM32F/L/H/G/WB/MP1 (Nucleo-144 NUCLEO_F767ZI, Nucleo-64 NUCLEO_L053R8, etc.)
-2. Add support to Seeeduino SAMD21/SAMD51 boards (SEEED_WIO_TERMINAL, SEEED_FEMTO_M0, SEEED_XIAO_M0, Wio_Lite_MG126, WIO_GPS_BOARD, SEEEDUINO_ZERO, SEEEDUINO_LORAWAN, SEEED_GROVE_UI_WIRELESS, etc.)
-3. Sync with latest [ESP8266_AT_WebServer Library v1.0.12](https://github.com/khoih-prog/ESP8266_AT_WebServer/releases/tag/v1.0.12)
+1. Add support to all **STM32F/L/H/G/WB/MP1** (Nucleo-144 NUCLEO_F767ZI, Nucleo-64 NUCLEO_L053R8, etc.)
+2. Add support to **Seeeduino SAMD21/SAMD51 boards** (SEEED_WIO_TERMINAL, SEEED_FEMTO_M0, SEEED_XIAO_M0, Wio_Lite_MG126, WIO_GPS_BOARD, SEEEDUINO_ZERO, SEEEDUINO_LORAWAN, SEEED_GROVE_UI_WIRELESS, etc.)
+3. Sync with latest [**ESP8266_AT_WebServer Library v1.0.12**](https://github.com/khoih-prog/ESP8266_AT_WebServer/releases/tag/v1.0.12)
 
-#### New Releases v1.0.6
+### New Releases v1.0.6
 
-1. Add support Add ESP32-AT
-2. Use new [ESP_AT_Lib](https://github.com/khoih-prog/ESP_AT_Lib) to support ESP8266/ESP32-AT
+1. Add support to **ESP32-AT**
+2. Use new [**ESP_AT_Lib**](https://github.com/khoih-prog/ESP_AT_Lib) to support ESP8266/ESP32-AT
 3. Enhance MultiWiFi connection logic.
 4. New logic for `USE_DEFAULT_CONFIG_DATA` to autoload Config / Dynamic Data in developing stage.
 
-#### Major Releases v1.0.5
+### Major Releases v1.0.5
 
 1. Add support to ***nRF52 (AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B302_ublox, NINA_B112_ublox, etc.)***. Dynamic custom parameters to be saved ***automatically in LittleFS***.
 2. Add support to ***Adafruit SAMD21/SAM51 (Itsy-Bitsy M0/M4, Metro M0/M4, Grand Central M4, Feather M0/M4 Express, etc.)***. Dynamic custom parameters to be saved ***automatically in FlashStorage***.
@@ -1528,23 +1528,23 @@ Sometimes, the library will only work if you update the `ESP8266 AT shield` core
 4. Add ***DoubleResetDetector*** (DRD) feature.
 5. Increase WPA2 SSID and PW to 63 chars. Permit special chars such as !,@,#,$,%,^,&,* into data fields.
 6. Restructure examples separate Credentials / Defines / Dynamic Params / Code.
-7. Drop support to Teensy boards.
+7. Drop support to **Teensy** boards.
 
-#### New Releases v1.0.4
+### New Releases v1.0.4
 
-1. Add support to SAM DUE
+1. Add support to **SAM DUE**
 2. Reduce html and code size for faster Config Portal response. 
 3. Enhance GUI.
 4. Config Portal AP SSID and Password will use 4 bytes of hardware unique macAddress, only for Teensy.
 
-#### New Version v1.0.3
+### New Version v1.0.3
 
-1. Add support to STM32 (STM32F1, F2, F3, F4, F7, etc) boards
+1. Add support to **STM32F/L/H/G/WB/MP1** boards. STM32F0 boards are not supported.
 2. Add clearConfigData() function.
 
-#### New Release v1.0.2
+### New Version v1.0.2
 
-1. Add support to SAMD (DUE, ZERO, MKR, NANO_33_IOT, M0, M0 Pro, AdaFruit CIRCUITPLAYGROUND_EXPRESS, etc.) boards
+1. Add support to **SAMD** (ZERO, MKR, NANO_33_IOT, M0, M0 Pro, AdaFruit CIRCUITPLAYGROUND_EXPRESS, etc.) boards
 
 #### Release v1.0.1
 
@@ -1577,13 +1577,13 @@ Sometimes, the library will only work if you update the `ESP8266 AT shield` core
  4. If the config data not entered completely (SSID, password, Server and Blynk token), entering config portal
  5. Add configurable Config Portal IP, SSID and Password
  6. Add configurable Static IP, GW, Subnet Mask and 2 DNS Servers' IP Addresses.
- 7. Add support to nRF52, SAMD21/SAMD51, STM32F, SAM-DUE
- 8. Add support to ESP32-AT shields.
+ 7. Add support to **nRF52, SAMD21/SAMD51, STM32F, SAM-DUE**
+ 8. Add support to **ESP32-AT** shields.
  9. Add MultiWiFi features with auto(re)connect
 10. Add DRD
 11. Add Dynamic Parameters
 12. Add Default Config Data
-13. Add support to all STM32F/L/H/G/WB/MP1 boards
+13. Add support to all **STM32F/L/H/G/WB/MP1** boards
 
 ---
 
