@@ -22,6 +22,33 @@
       "tests"
     ]
   },
+   "dependencies": 
+  [
+    {
+      "owner": "blynkkk",
+      "name": "Blynk",
+      "version": "^0.6.1",
+      "platforms": ["*"]
+    },
+    {
+      "owner": "khoih-prog",
+      "name": "ESP8266_AT_WebServer",
+      "version": "^1.0.3",
+      "platforms": ["*"]
+    },
+    {
+      "owner": "khoih-prog",
+      "name": "DoubleResetDetector_Generic",
+      "version": "^1.0.2",
+      "platforms": ["*"]
+    },
+    {
+      "owner": "khoih-prog",
+      "name": "ESP_AT_Lib",
+      "version": "^1.0.0",
+      "platforms": ["*"]
+    }
+  ],
   "frameworks": "*",
   "platforms": "*",
   "examples": "examples/*/*/*.ino"
