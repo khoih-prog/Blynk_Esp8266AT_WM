@@ -71,7 +71,7 @@
   * [3. File Credentials.h](#3-file-credentialsh) 
   * [4. File dynamicParams.h](#4-file-dynamicparamsh) 
 * [Debug Terminal Output Samples](#debug-terminal-output-samples)
-  * [1. nRF52_ESP8266Shield using LittleFS on NRF52840_ITSYBITSY_EXPRESS with ESP8266-AT shield](#1-nrf52_esp8266shield-on-nrf52840_itsybitsy_express-with-esp8266-at-shield)
+  * [1. nRF52_ESP8266Shield using LittleFS on NRF52840_ITSYBITSY_EXPRESS with ESP8266-AT shield](#1-nrf52_esp8266shield-using-littlefs-on-nrf52840_itsybitsy_express-with-esp8266-at-shield)
   * [2. STM32_ESP8266Shield using emulated-EEPROM on STM32F7 NUCLEO_F767ZI with ESP8266-AT shield](#2-stm32_esp8266shield-using-emulated-eeprom-on-stm32f7-nucleo_f767zi-with-esp8266-at-shield)
   * [3. SAM_DUE_ESP8266Shield using DueFlashStorage on SAM-DUE with ESP8266-AT shield](#3-sam_due_esp8266shield-using-dueflashstorage-on-sam-due-with-esp8266-at-shield)
   * [4. SAMD_ESP8266Shield using FlashStorage_SAMD on Adafruit ITSYBITSY_M4 with ESP8266-AT shield](#4-samd_esp8266shield-using-flashstorage_samd-on-adafruit-itsybitsy_m4-with-esp8266-at-shield)
