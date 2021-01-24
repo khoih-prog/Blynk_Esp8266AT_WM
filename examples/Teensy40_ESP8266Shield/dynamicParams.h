@@ -1,6 +1,6 @@
 /****************************************************************************************************************************
-  dynamicParams.h for nRF52_ESP8266Shield.ino
-   
+  dynamicParams.h for STM32_ESP8266Shield.ino
+  
   Blynk_Esp8266AT_WM is a library for the Mega, Teensy, SAM DUE and SAMD boards (https://github.com/khoih-prog/Blynk_Esp8266AT_WM)
   to enable easy configuration/reconfiguration and autoconnect/autoreconnect of WiFi/Blynk
   
@@ -8,7 +8,7 @@
   Built by Khoi Hoang https://github.com/khoih-prog/Blynk_Esp8266AT_WM
   Licensed under MIT license
   Version: 1.1.0
-  
+
   Version Modified By   Date        Comments
   ------- -----------  ----------   -----------
   1.0.0   K Hoang      16/02/2020  Initial coding
@@ -17,7 +17,7 @@
   1.0.3   K Hoang      03/03/2020  Add support to STM32 boards, except STM32F0
   1.0.4   K Hoang      13/03/2020  Add SAM DUE support. Enhance GUI.
   1.0.5   K Hoang      23/06/2020  Add Adafruit SAMD21/SAMD51 and nRF52 support, DRD, MultiWiFi features.
-                                 WPA2 SSID PW to 63 chars. Permit special chars such as !,@,#,$,%,^,&,* into data fields.
+                                   WPA2 SSID PW to 63 chars. Permit special chars such as !,@,#,$,%,^,&,* into data fields.
   1.0.6   K Hoang      27/06/2020  Add ESP32-AT support and use ESP_AT_Lib. Enhance MultiWiFi connection logic.
   1.0.7   K Hoang      27/07/2020  Add support to all STM32F/L/H/G/WB/MP1 and Seeeduino SAMD21/SAMD51 boards.
   1.1.0   K Hoang      15/01/2021  Restore support to Teensy to be used only with Teensy core v1.51.
@@ -32,7 +32,7 @@
 
 /////////////// Start dynamic Credentials ///////////////
 
-//Defined in <BlynkSimpleShieldEsp8266_nRF52_WM.h>
+//Defined in <BlynkSimpleShieldEsp8266_Teensy_WM.h>
 /**************************************
   #define MAX_ID_LEN                5
   #define MAX_DISPLAY_NAME_LEN      16
@@ -49,7 +49,7 @@
 #if USE_DYNAMIC_PARAMETERS
 
 #define MAX_MQTT_SERVER_LEN      34
-char MQTT_Server  [MAX_MQTT_SERVER_LEN + 1]   = "mqtt-server";
+char MQTT_Server  [MAX_MQTT_SERVER_LEN + 1]   = "default-mqtt-server";
 
 #define MAX_MQTT_PORT_LEN        6
 char MQTT_Port   [MAX_MQTT_PORT_LEN + 1]  = "1883";

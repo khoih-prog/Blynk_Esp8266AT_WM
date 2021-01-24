@@ -1,26 +1,27 @@
 /****************************************************************************************************************************
-   SAMD_ESP8266Shield.ino
-   For SAMD using ESP8266 WiFi Shield
+  SAMD_ESP8266Shield.ino
+  For SAMD using ESP8266 WiFi Shield
+  
+  Blynk_Esp8266AT_WM is a library for the Mega, Teensy, SAM DUE and SAMD boards (https://github.com/khoih-prog/Blynk_Esp8266AT_WM)
+  to enable easy configuration/reconfiguration and autoconnect/autoreconnect of WiFi/Blynk
+  
+  Based on and Modified from Blynk library v0.6.1 https://github.com/blynkkk/blynk-library/releases
+  Built by Khoi Hoang https://github.com/khoih-prog/Blynk_Esp8266AT_WM
+  Licensed under MIT license
+  Version: 1.1.0
 
-   Blynk_Esp8266AT_WM is a library for the Mega, Teensy, SAM DUE and SAMD boards (https://github.com/khoih-prog/Blynk_Esp8266AT_WM)
-   to enable easy configuration/reconfiguration and autoconnect/autoreconnect of WiFi/Blynk
-
-   Forked from Blynk library v0.6.1 https://github.com/blynkkk/blynk-library/releases
-   Built by Khoi Hoang https://github.com/khoih-prog/Blynk_WM
-   Licensed under MIT license
-   Version: 1.0.7
-
-   Version Modified By   Date        Comments
-   ------- -----------  ----------   -----------
-    1.0.0   K Hoang      16/02/2020  Initial coding
-    1.0.1   K Hoang      17/02/2020  Add checksum, fix bug
-    1.0.2   K Hoang      22/02/2020  Add support to SAMD boards
-    1.0.3   K Hoang      03/03/2020  Add support to STM32 boards, except STM32F0
-    1.0.4   K Hoang      13/03/2020  Add SAM DUE support. Enhance GUI.
-    1.0.5   K Hoang      23/06/2020  Add Adafruit SAMD21/SAMD51 and nRF52 support, DRD, MultiWiFi features.
-                                     WPA2 SSID PW to 63 chars. Permit special chars such as !,@,#,$,%,^,&,* into data fields.
-    1.0.6   K Hoang      27/06/2020  Add ESP32-AT support and use ESP_AT_Lib. Enhance MultiWiFi connection logic.
-    1.0.7   K Hoang      27/07/2020  Add support to all STM32F/L/H/G/WB/MP1 and Seeeduino SAMD21/SAMD51 boards. 
+  Version Modified By   Date        Comments
+  ------- -----------  ----------   -----------
+  1.0.0   K Hoang      16/02/2020  Initial coding
+  1.0.1   K Hoang      17/02/2020  Add checksum, fix bug
+  1.0.2   K Hoang      22/02/2020  Add support to SAMD boards
+  1.0.3   K Hoang      03/03/2020  Add support to STM32 boards, except STM32F0
+  1.0.4   K Hoang      13/03/2020  Add SAM DUE support. Enhance GUI.
+  1.0.5   K Hoang      23/06/2020  Add Adafruit SAMD21/SAMD51 and nRF52 support, DRD, MultiWiFi features.
+                                   WPA2 SSID PW to 63 chars. Permit special chars such as !,@,#,$,%,^,&,* into data fields.
+  1.0.6   K Hoang      27/06/2020  Add ESP32-AT support and use ESP_AT_Lib. Enhance MultiWiFi connection logic.
+  1.0.7   K Hoang      27/07/2020  Add support to all STM32F/L/H/G/WB/MP1 and Seeeduino SAMD21/SAMD51 boards.
+  1.1.0   K Hoang      15/01/2021  Restore support to Teensy to be used only with Teensy core v1.51.
  *****************************************************************************************************************************/
 /****************************************************************************************************************************
     Important notes:
@@ -33,7 +34,7 @@
     b) ESP8266-AT version:1.7.4.0(May 11 2020 19:13:04)
        SDK version:3.0.4(9532ceb)
        compile time:May 27 2020 10:12:22
-       Bin version(Wroom 02):1.7.4     
+       Bin version(Wroom 02):1.7.4
 
     2) These versions don't work on SAMD,  but work on Mega (hanging when connect to Blynk, WiFi OK)
        To find bug and fix in Blynk ESP8266_Lib or Blynk library
@@ -41,23 +42,50 @@
 #include "defines.h"
 
 #if USE_BLYNK_WM
-  #include "Credentials.h"
-  #include "dynamicParams.h"
+#include "Credentials.h"
+#include "dynamicParams.h"
 #endif
 
 ESP8266 wifi(&EspSerial);
 
-void heartBeatPrint(void)
+#define BLYNK_PIN_FORCED_CONFIG           V10
+#define BLYNK_PIN_FORCED_PERS_CONFIG      V20
+
+// Use button V10 (BLYNK_PIN_FORCED_CONFIG) to forced Config Portal
+BLYNK_WRITE(BLYNK_PIN_FORCED_CONFIG)
+{
+  if (param.asInt())
+  {
+    Serial.println( F("\nCP Button Hit. Rebooting") );
+
+    // This will keep CP once, clear after reset, even you didn't enter CP at all.
+    Blynk.resetAndEnterConfigPortal();
+  }
+}
+
+// Use button V20 (BLYNK_PIN_FORCED_PERS_CONFIG) to forced Persistent Config Portal
+BLYNK_WRITE(BLYNK_PIN_FORCED_PERS_CONFIG)
+{
+  if (param.asInt())
+  {
+    Serial.println( F("\nPersistent CP Button Hit. Rebooting") );
+
+    // This will keep CP forever, until you successfully enter CP, and Save data to clear the flag.
+    Blynk.resetAndEnterConfigPortalPersistent();
+  }
+}
+
+void heartBeatPrint()
 {
   static int num = 1;
 
   if (Blynk.connected())
   {
-    Serial.print("B");
+    Serial.print(F("B"));
   }
   else
   {
-    Serial.print("F");
+    Serial.print(F("F"));
   }
 
   if (num == 80)
@@ -67,7 +95,7 @@ void heartBeatPrint(void)
   }
   else if (num++ % 10 == 0)
   {
-    Serial.print(" ");
+    Serial.print(F(" "));
   }
 }
 
@@ -92,8 +120,11 @@ void setup()
   // Debug console
   Serial.begin(115200);
   while (!Serial);
-  
-  Serial.println("\nStart SAMD_ESP8266Shield on " + String(BOARD_NAME));
+
+  delay(200);
+
+  Serial.print(F("\nStart SAMD_ESP8266Shield on ")); Serial.println(BOARD_NAME);
+  Serial.println(BLYNK_ESP8266AT_WM_VERSION);
 
   // initialize serial for ESP module
   EspSerial.begin(ESP8266_BAUD);
@@ -102,12 +133,12 @@ void setup()
   Serial.println(F("Start Blynk_ESP8266AT_WM"));
 
   // Optional to change default AP IP(192.168.4.1) and channel(10)
-  Blynk.setConfigPortalIP(IPAddress(192, 168, 200, 1));
+  //Blynk.setConfigPortalIP(IPAddress(192, 168, 200, 1));
   // Personalized portal_ssid and password
   Blynk.setConfigPortal(portal_ssid, portal_password);
   //Blynk.setConfigPortal("SAMD_WM", "MySAMD_PW");
   Blynk.setConfigPortalChannel(0);
-  
+
   Blynk.begin(wifi);
 #else
   Serial.print(F("Start Blynk no WM with BlynkServer = "));
@@ -120,13 +151,15 @@ void setup()
 }
 
 #if USE_DYNAMIC_PARAMETERS
-void displayCredentials(void)
+void displayCredentials()
 {
-  Serial.println("\nYour stored Credentials :");
+  Serial.println(F("\nYour stored Credentials :"));
 
-  for (int i = 0; i < NUM_MENU_ITEMS; i++)
+  for (uint16_t i = 0; i < NUM_MENU_ITEMS; i++)
   {
-    Serial.println(String(myMenuItems[i].displayName) + " = " + myMenuItems[i].pdata);
+    Serial.print(myMenuItems[i].displayName);
+    Serial.print(F(" = "));
+    Serial.println(myMenuItems[i].pdata);
   }
 }
 #endif
@@ -141,7 +174,7 @@ void loop()
 
   if (!displayedCredentials)
   {
-    for (int i = 0; i < NUM_MENU_ITEMS; i++)
+    for (uint16_t i = 0; i < NUM_MENU_ITEMS; i++)
     {
       if (!strlen(myMenuItems[i].pdata))
       {
@@ -155,5 +188,5 @@ void loop()
       }
     }
   }
-#endif  
+#endif
 }

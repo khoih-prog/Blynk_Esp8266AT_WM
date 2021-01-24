@@ -17,6 +17,7 @@ BlynkTransportShieldEsp8266 KEYWORD1
 BlynkWifi KEYWORD1
 
 #########################
+
 MenuItem  KEYWORD1
 WiFi_Credentials  KEYWORD1
 Blynk_WF_Configuration  KEYWORD1
@@ -55,7 +56,9 @@ getHWPort KEYWORD2
 getFullConfigData KEYWORD2
 getLocalIP  KEYWORD2
 clearConfigData KEYWORD2
-isConfigDataValid
+isConfigDataValid KEYWORD2
+resetAndEnterConfigPortal KEYWORD2
+resetAndEnterConfigPortalPersistent KEYWORD2
 resetFunc KEYWORD2
 
 ################

@@ -1,34 +1,36 @@
 /****************************************************************************************************************************
-   BlynkSimpleShieldEsp8266_nRF52.h
-   For ESP8266 AT-command shields
+  BlynkSimpleShieldEsp8266_nRF52.h
+  For ESP8266 AT-command shields
 
-   Blynk_Esp8266AT_WM is a library for the Mega, Teensy, SAM DUE and SAMD boards (https://github.com/khoih-prog/Blynk_Esp8266AT_WM)
-   to enable easy configuration/reconfiguration and autoconnect/autoreconnect of WiFi/Blynk
+  Blynk_Esp8266AT_WM is a library for the Mega, Teensy, SAM DUE and SAMD boards (https://github.com/khoih-prog/Blynk_Esp8266AT_WM)
+  to enable easy configuration/reconfiguration and autoconnect/autoreconnect of WiFi/Blynk
 
-   Forked from Blynk library v0.6.1 https://github.com/blynkkk/blynk-library/releases
-   Built by Khoi Hoang https://github.com/khoih-prog/Blynk_WM
-   Licensed under MIT license
-   Version: 1.0.7
+  Based on and Modified from Blynk library v0.6.1 https://github.com/blynkkk/blynk-library/releases
+  Built by Khoi Hoang https://github.com/khoih-prog/Blynk_WM
+  Licensed under MIT license
 
-   Original Blynk Library author:
-   @file       BlynkSimpleShieldEsp8266.h
-   @author     Volodymyr Shymanskyy
-   @license    This project is released under the MIT License (MIT)
-   @copyright  Copyright (c) 2015 Volodymyr Shymanskyy
-   @date       Jun 2015
-   @brief
+  Original Blynk Library author:
+  @file       BlynkSimpleShieldEsp8266.h
+  @author     Volodymyr Shymanskyy
+  @license    This project is released under the MIT License (MIT)
+  @copyright  Copyright (c) 2015 Volodymyr Shymanskyy
+  @date       Jun 2015
+  @brief
 
-   Version Modified By   Date        Comments
-   ------- -----------  ----------   -----------
-    1.0.0   K Hoang      16/02/2020  Initial coding
-    1.0.1   K Hoang      17/02/2020  Add checksum, fix bug
-    1.0.2   K Hoang      22/02/2020  Add support to SAMD boards
-    1.0.3   K Hoang      03/03/2020  Add support to STM32 boards, except STM32F0
-    1.0.4   K Hoang      13/03/2020  Add SAM DUE support. Enhance GUI.
-    1.0.5   K Hoang      23/06/2020  Add Adafruit SAMD21/SAMD51 and nRF52 support, DRD, MultiWiFi features.
-                                     WPA2 SSID PW to 63 chars. Permit special chars such as !,@,#,$,%,^,&,* into data fields.
-    1.0.6   K Hoang      27/06/2020  Add ESP32-AT support and use ESP_AT_Lib. Enhance MultiWiFi connection logic.
-    1.0.7   K Hoang      27/07/2020  Add support to all STM32F/L/H/G/WB/MP1 and Seeeduino SAMD21/SAMD51 boards.
+  Version: 1.1.0
+
+  Version Modified By   Date        Comments
+  ------- -----------  ----------   -----------
+  1.0.0   K Hoang      16/02/2020  Initial coding
+  1.0.1   K Hoang      17/02/2020  Add checksum, fix bug
+  1.0.2   K Hoang      22/02/2020  Add support to SAMD boards
+  1.0.3   K Hoang      03/03/2020  Add support to STM32 boards, except STM32F0
+  1.0.4   K Hoang      13/03/2020  Add SAM DUE support. Enhance GUI.
+  1.0.5   K Hoang      23/06/2020  Add Adafruit SAMD21/SAMD51 and nRF52 support, DRD, MultiWiFi features.
+                                   WPA2 SSID PW to 63 chars. Permit special chars such as !,@,#,$,%,^,&,* into data fields.
+  1.0.6   K Hoang      27/06/2020  Add ESP32-AT support and use ESP_AT_Lib. Enhance MultiWiFi connection logic.
+  1.0.7   K Hoang      27/07/2020  Add support to all STM32F/L/H/G/WB/MP1 and Seeeduino SAMD21/SAMD51 boards.
+  1.1.0   K Hoang      15/01/2021  Restore support to Teensy to be used only with Teensy core v1.51.
  *****************************************************************************************************************************/
 
 #ifndef BlynkSimpleShieldEsp8266_nRF52_h
@@ -37,23 +39,25 @@
 #if ( defined(NRF52840_FEATHER) || defined(NRF52832_FEATHER) || defined(NRF52_SERIES) || defined(ARDUINO_NRF52_ADAFRUIT) || \
       defined(NRF52840_FEATHER_SENSE) || defined(NRF52840_ITSYBITSY) || defined(NRF52840_CIRCUITPLAY) || defined(NRF52840_CLUE) || \
       defined(NRF52840_METRO) || defined(NRF52840_PCA10056) || defined(PARTICLE_XENON) || defined(NINA_B302_ublox) || defined(NINA_B112_ublox) )
-#if defined(BLYNK_ESP8266_AT_USE_nRF528XX)
-#undef BLYNK_ESP8266_AT_USE_nRF528XX
-#endif
-#define BLYNK_ESP8266_AT_USE_nRF528XX      true
-#warning Use nFR52 architecture from Blynk_Esp8266AT_WM
+  #if defined(BLYNK_ESP8266_AT_USE_nRF528XX)
+    #undef BLYNK_ESP8266_AT_USE_nRF528XX
+  #endif
+  #define BLYNK_ESP8266_AT_USE_nRF528XX      true
+  #warning Use nFR52 architecture from Blynk_Esp8266AT_WM
 #endif
 
 #if ( defined(ESP8266) || defined(ESP32) || defined(ARDUINO_AVR_MEGA2560) || defined(ARDUINO_AVR_MEGA) || !(BLYNK_ESP8266_AT_USE_nRF528XX) )
-#error This code is intended to run on the nRF52 platform! Please check your Tools->Board setting.
+  #error This code is intended to run on the nRF52 platform! Please check your Tools->Board setting.
 #endif
 
+#define BLYNK_ESP8266AT_WM_VERSION    "Blynk_Esp8266AT_WM v1.1.0"
+
 #ifndef BLYNK_INFO_CONNECTION
-#define BLYNK_INFO_CONNECTION  "ESP8266"
+  #define BLYNK_INFO_CONNECTION  "ESP8266"
 #endif
 
 #ifndef BLYNK_ESP8266_MUX
-#define BLYNK_ESP8266_MUX  1
+  #define BLYNK_ESP8266_MUX  1
 #endif
 
 #define BLYNK_SEND_ATOMIC

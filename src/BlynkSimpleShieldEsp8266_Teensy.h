@@ -1,6 +1,6 @@
 /****************************************************************************************************************************
-  BlynkSimpleShieldEsp8266_DUE.h
-  For SAM DUE boards using ESP8266 WiFi Shields
+  BlynkSimpleShieldEsp8266_Teensy.h
+  For ESP8266 AT-command shields
 
   Blynk_Esp8266AT_WM is a library for the Mega, Teensy, SAM DUE and SAMD boards (https://github.com/khoih-prog/Blynk_Esp8266AT_WM)
   to enable easy configuration/reconfiguration and autoconnect/autoreconnect of WiFi/Blynk
@@ -30,33 +30,30 @@
                                    WPA2 SSID PW to 63 chars. Permit special chars such as !,@,#,$,%,^,&,* into data fields.
   1.0.6   K Hoang      27/06/2020  Add ESP32-AT support and use ESP_AT_Lib. Enhance MultiWiFi connection logic.
   1.0.7   K Hoang      27/07/2020  Add support to all STM32F/L/H/G/WB/MP1 and Seeeduino SAMD21/SAMD51 boards.
-  1.1.0   K Hoang      15/01/2021  Restore support to Teensy to be used only with Teensy core v1.51. 
+  1.1.0   K Hoang      15/01/2021  Restore support to Teensy to be used only with Teensy core v1.51.
  *****************************************************************************************************************************/
 
-#ifndef BlynkSimpleShieldEsp8266_DUE_h
-#define BlynkSimpleShieldEsp8266_DUE_h
+#ifndef BlynkSimpleShieldEsp8266_Teensy_h
+#define BlynkSimpleShieldEsp8266_Teensy_h
 
-#if ( defined(ARDUINO_SAM_DUE) || defined(__SAM3X8E__) )
-  #if defined(BLYNK_ESP8266_AT_USE_SAM_DUE)
-    #undef BLYNK_ESP8266_AT_USE_SAM_DUE
+#if defined(CORE_TEENSY)
+  #if defined(BLYNK_ESP8266_AT_USE_TEENSY)
+    #undef BLYNK_ESP8266_AT_USE_TEENSY
   #endif
-  #define BLYNK_ESP8266_AT_USE_SAM_DUE      true
-  #warning Use SAM_DUE architecture from Blynk_Esp8266AT_WM
-#endif
-
-#if ( defined(ESP8266) || defined(ESP32) || defined(ARDUINO_AVR_MEGA2560) || defined(ARDUINO_AVR_MEGA) || \
-      defined(CORE_TEENSY) || defined(CORE_TEENSY) || !(BLYNK_ESP8266_AT_USE_SAM_DUE) )
-  #error This code is intended to run on the SAM DUE platform! Please check your Tools->Board setting.
+  #define BLYNK_ESP8266_AT_USE_TEENSY      true
+  #warning Use Teensy architecture from Blynk_Esp8266AT_WM
+#else
+  #error This code is intended to run on the Teensy platform! Please check your Tools->Board setting.
 #endif
 
 #define BLYNK_ESP8266AT_WM_VERSION    "Blynk_Esp8266AT_WM v1.1.0"
 
 #ifndef BLYNK_INFO_CONNECTION
-  #define BLYNK_INFO_CONNECTION  "ESP8266"
+#define BLYNK_INFO_CONNECTION  "ESP8266"
 #endif
 
 #ifndef BLYNK_ESP8266_MUX
-  #define BLYNK_ESP8266_MUX  1
+#define BLYNK_ESP8266_MUX  1
 #endif
 
 #define BLYNK_SEND_ATOMIC
@@ -73,7 +70,9 @@
   #include <ESP8266_Lib.h>
 #endif
 
-#define SIMPLE_SHIELD_ESP8266_DEBUG       0
+#ifndef SIMPLE_SHIELD_ESP8266_DEBUG
+  #define SIMPLE_SHIELD_ESP8266_DEBUG       0
+#endif
 
 class BlynkTransportShieldEsp8266
 {
@@ -88,7 +87,7 @@ class BlynkTransportShieldEsp8266
 
       //KH
 #if (SIMPLE_SHIELD_ESP8266_DEBUG > 1)
-      BLYNK_LOG4("Got:", len, ", Free:", buffer.free());
+      BLYNK_LOG4(BLYNK_F("Got: "), len, BLYNK_F(", Free: "), buffer.free());
 #endif
       //
 
@@ -96,7 +95,7 @@ class BlynkTransportShieldEsp8266
       {
         //KH
 #if (SIMPLE_SHIELD_ESP8266_DEBUG > 0)
-        BLYNK_LOG4("OVF,Got:", len, ",Free:", buffer.free());
+        BLYNK_LOG4(BLYNK_F("OVF,Got:"), len, BLYNK_F(",Free:"), buffer.free());
 #endif
         return;
       }
@@ -110,11 +109,6 @@ class BlynkTransportShieldEsp8266
           len--;
         }
       }
-      //KH
-#if (SIMPLE_SHIELD_ESP8266_DEBUG > 1)
-      BLYNK_LOG2(BLYNK_F("onData Buffer len"), len );
-#endif
-      //
     }
 
   public:
@@ -158,7 +152,7 @@ class BlynkTransportShieldEsp8266
       //Check to see if all data are read or not
 
 #if (SIMPLE_SHIELD_ESP8266_DEBUG > 1)
-      BLYNK_LOG4("rd:len=", len, ",Buf=", buffer.size());
+      BLYNK_LOG4(BLYNK_F("rd:len="), len, BLYNK_F(",Buf="), buffer.size());
 #endif
 
       while ((buffer.size() < len) && (BlynkMillis() - start < 1500))
@@ -167,6 +161,7 @@ class BlynkTransportShieldEsp8266
         // then call onData() to get len bytes of data to buffer => BlynkProtocol::ProcessInput()
         client->run();
       }
+
       //All data got in FIFO buffer, copy to destination buf and return len
       return buffer.get((uint8_t*)buf, len);
     }
@@ -186,7 +181,7 @@ class BlynkTransportShieldEsp8266
     {
       client->run();
 #if (SIMPLE_SHIELD_ESP8266_DEBUG > 2)
-      BLYNK_LOG2("Still:", buffer.size());
+      BLYNK_LOG2(BLYNK_F("Still:"), buffer.size());
 #endif
       return buffer.size();
     }
@@ -194,18 +189,27 @@ class BlynkTransportShieldEsp8266
   private:
     ESP8266* client;
     bool status;
-
     //KH
-#if (BLYNK_ESP8266_AT_USE_SAM_DUE)
-    // For SAM DUE
+#ifdef CORE_TEENSY
+  #if defined(__IMXRT1062__)
+    // For Teensy 4.1/4.0
     BlynkFifo<uint8_t, 4096> buffer;
-#warning Board SAM DUE uses 4k FIFO buffer
+    #warning Board Teensy 4.0 uses 4k FIFO buffer
+  #elif ( defined(__MKL26Z64__) || defined(ARDUINO_ARCH_AVR) )
+    // For Teensy LC and 2.0
+    BlynkFifo<uint8_t, 512> buffer;
+    #warning Teensy LC and 2.0 uses 512bytes FIFO buffer
+  #else
+    // For Teensy 3.x
+    BlynkFifo<uint8_t, 2048> buffer;
+    #warning Teensy 3.x uses 2k FIFO buffer
+  #endif
 #else
-    // For other boards
+    // For other AVR Mega
     //BlynkFifo<uint8_t,256> buffer;
     // For MeGa 2560 or 1280
     BlynkFifo<uint8_t, 512> buffer;
-#warning Not SAM DUE board => uses 512bytes FIFO buffer
+    #warning Not Teensy board => uses 512bytes FIFO buffer
 #endif
 
     const char* domain;
@@ -312,9 +316,9 @@ class BlynkWifi
 #if 1
       ipAddress = wifi->getStationIp();
 #else
-      ipAddress = wifi->getLocalIP();
-      ipAddress.replace("+CIFSR:STAIP,\"", "");
-      ipAddress.replace("\"", "");
+      ipAddress = wifi->getLocalIP().replace("+CIFSR:STAIP,\"", "");
+      ipAddress = ipAddress.replace("\"", "");
+
 #endif
 
       BLYNK_LOG2(BLYNK_F("IP = "), ipAddress);

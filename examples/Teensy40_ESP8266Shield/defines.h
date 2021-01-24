@@ -1,6 +1,6 @@
 /****************************************************************************************************************************
   defines.h for STM32_ESP8266Shield.ino
-   
+  
   Blynk_Esp8266AT_WM is a library for the Mega, Teensy, SAM DUE and SAMD boards (https://github.com/khoih-prog/Blynk_Esp8266AT_WM)
   to enable easy configuration/reconfiguration and autoconnect/autoreconnect of WiFi/Blynk
   
@@ -8,7 +8,7 @@
   Built by Khoi Hoang https://github.com/khoih-prog/Blynk_Esp8266AT_WM
   Licensed under MIT license
   Version: 1.1.0
-  
+
   Version Modified By   Date        Comments
   ------- -----------  ----------   -----------
   1.0.0   K Hoang      16/02/2020  Initial coding
@@ -17,7 +17,7 @@
   1.0.3   K Hoang      03/03/2020  Add support to STM32 boards, except STM32F0
   1.0.4   K Hoang      13/03/2020  Add SAM DUE support. Enhance GUI.
   1.0.5   K Hoang      23/06/2020  Add Adafruit SAMD21/SAMD51 and nRF52 support, DRD, MultiWiFi features.
-                                 WPA2 SSID PW to 63 chars. Permit special chars such as !,@,#,$,%,^,&,* into data fields.
+                                   WPA2 SSID PW to 63 chars. Permit special chars such as !,@,#,$,%,^,&,* into data fields.
   1.0.6   K Hoang      27/06/2020  Add ESP32-AT support and use ESP_AT_Lib. Enhance MultiWiFi connection logic.
   1.0.7   K Hoang      27/07/2020  Add support to all STM32F/L/H/G/WB/MP1 and Seeeduino SAMD21/SAMD51 boards.
   1.1.0   K Hoang      15/01/2021  Restore support to Teensy to be used only with Teensy core v1.51.
@@ -30,7 +30,7 @@
 #define BLYNK_PRINT                   Serial
 
 // Debug level, 0-3
-#define BLYNK_WM_DEBUG                4
+#define BLYNK_WM_DEBUG                3
 
 #define USE_NEW_WEBSERVER_VERSION     true  //false
 #define _ESP_AT_LOGLEVEL_             0
@@ -59,86 +59,42 @@
   //#define USE_ESP_AT_LIB    false
 #endif
 
-#if ( defined(STM32F0) || defined(STM32F1) || defined(STM32F2) || defined(STM32F3)  ||defined(STM32F4) || defined(STM32F7) || \
-       defined(STM32L0) || defined(STM32L1) || defined(STM32L4) || defined(STM32H7)  ||defined(STM32G0) || defined(STM32G4) || \
-       defined(STM32WB) || defined(STM32MP1) )
-  #if defined(ESP8266_AT_USE_STM32)
-    #undef ESP8266_AT_USE_STM32
+#if ( defined(CORE_TEENSY) )
+  #if defined(ESP8266_AT_USE_TEENSY)
+    #undef ESP8266_AT_USE_TEENSY
   #endif
-  #define ESP8266_AT_USE_STM32      true
+  #define ESP8266_AT_USE_TEENSY      true
 #else
-  #error This code is intended to run on STM32F platform! Please check your Tools->Board setting.  
+  #error This code is intended to run on Teensy platform! Please check your Tools->Board setting.  
 #endif
 
-#if ESP8266_AT_USE_STM32
-  // For STM32
-  #warning EspSerial using SERIAL_PORT_HARDWARE, can be Serial or Serial1. See your board variant.h
-  #define EspSerial     SERIAL_PORT_HARDWARE    //Serial1
-
-  #if defined(STM32F0)
-    #warning STM32F0 board selected
-    #define BOARD_TYPE  "STM32F0"
-  #elif defined(STM32F1)
-    #warning STM32F1 board selected
-    #define BOARD_TYPE  "STM32F1"
-  #elif defined(STM32F2)
-    #warning STM32F2 board selected
-    #define BOARD_TYPE  "STM32F2"
-  #elif defined(STM32F3)
-    #warning STM32F3 board selected
-    #define BOARD_TYPE  "STM32F3"
-  #elif defined(STM32F4)
-    #warning STM32F4 board selected
-    #define BOARD_TYPE  "STM32F4"
-  #elif defined(STM32F7)
-
-    #if defined(ARDUINO_NUCLEO_F767ZI)
-      #warning Nucleo-144 NUCLEO_F767ZI board selected, using HardwareSerial Serial1 @ pin D0/RX and D1/TX
-      // RX TX
-      HardwareSerial Serial1(D0, D1);
-    #else
-    
-      #warning STM32F7 board selected
-      #define BOARD_TYPE  "STM32F7"
-
-    #endif
-    
-  #elif defined(STM32L0)
-    #if defined(ARDUINO_NUCLEO_L053R8)
-      #warning Nucleo-64 NUCLEO_L053R8 board selected, using HardwareSerial Serial1 @ pin D0/RX and D1/TX
-      // RX TX
-      HardwareSerial Serial1(D0, D1);   // (PA3, PA2);
-    #else
-    
-      #warning STM32L0 board selected
-      #define BOARD_TYPE  "STM32L0"
-
-    #endif
-    
-  #elif defined(STM32L1)
-    #warning STM32L1 board selected
-    #define BOARD_TYPE  "STM32L1"
-  #elif defined(STM32L4)
-    #warning STM32L4 board selected
-    #define BOARD_TYPE  "STM32L4"
-  #elif defined(STM32H7)
-    #warning STM32H7 board selected
-    #define BOARD_TYPE  "STM32H7"
-  #elif defined(STM32G0)
-    #warning STM32G0 board selected
-    #define BOARD_TYPE  "STM32G0"
-  #elif defined(STM32G4)
-    #warning STM32G4 board selected
-    #define BOARD_TYPE  "STM32G4"
-  #elif defined(STM32WB)
-    #warning STM32WB board selected
-    #define BOARD_TYPE  "STM32WB"
-  #elif defined(STM32MP1)
-    #warning STM32MP1 board selected
-    #define BOARD_TYPE  "STM32MP1"
+#ifdef CORE_TEENSY
+  // For Teensy 4.1/4.0
+  //#define EspSerial Serial1   //Serial1, Pin RX1 :  0, TX1 :  1
+  #define EspSerial Serial2   //Serial2, Pin RX2 :  7, TX2 :  8
+  //#define EspSerial Serial3   //Serial3, Pin RX3 : 15, TX3 : 14
+  //#define EspSerial Serial4   //Serial4, Pin RX4 : 16, TX4 : 17
+  
+  #if defined(__IMXRT1062__)
+    // For Teensy 4.1/4.0
+    #define BOARD_TYPE      "TEENSY 4.1/4.0"
+  #elif defined(__MK66FX1M0__)
+    #define BOARD_TYPE "Teensy 3.6"
+  #elif defined(__MK64FX512__)
+    #define BOARD_TYPE "Teensy 3.5"
+  #elif defined(__MKL26Z64__)
+    #define BOARD_TYPE "Teensy LC"
+  #elif defined(__MK20DX256__)
+    #define BOARD_TYPE "Teensy 3.2" // and Teensy 3.1 (obsolete)
+  #elif defined(__MK20DX128__)
+    #define BOARD_TYPE "Teensy 3.0"
+  #elif defined(__AVR_AT90USB1286__)
+    #error Teensy 2.0++ not supported yet
+  #elif defined(__AVR_ATmega32U4__)
+    #error Teensy 2.0 not supported yet
   #else
-    #warning STM32 unknown board selected
-    #define BOARD_TYPE  "STM32 Unknown"
+    // For Other Boards
+    #define BOARD_TYPE      "Unknown Teensy Board"
   #endif
 
 #endif
@@ -155,12 +111,12 @@
 //#define USE_BLYNK_WM      false
 
 #if USE_BLYNK_WM
-  #define USE_DYNAMIC_PARAMETERS                    true
+  #define USE_DYNAMIC_PARAMETERS      true
   
-  #include <BlynkSimpleShieldEsp8266_STM32_WM.h>
+  #include <BlynkSimpleShieldEsp8266_Teensy_WM.h>
 #else
-  #include <BlynkSimpleShieldEsp8266_STM32.h>
-
+  #include <BlynkSimpleShieldEsp8266_Teensy.h>
+  
   #define USE_LOCAL_SERVER      true
   
   #if USE_LOCAL_SERVER
