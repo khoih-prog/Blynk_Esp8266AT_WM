@@ -75,7 +75,7 @@
   * [2. STM32_ESP8266Shield using emulated-EEPROM on STM32F7 NUCLEO_F767ZI with ESP8266-AT shield](#2-stm32_esp8266shield-using-emulated-eeprom-on-stm32f7-nucleo_f767zi-with-esp8266-at-shield)
   * [3. SAM_DUE_ESP8266Shield using DueFlashStorage on SAM-DUE with ESP8266-AT shield](#3-sam_due_esp8266shield-using-dueflashstorage-on-sam-due-with-esp8266-at-shield)
   * [4. SAMD_ESP8266Shield using FlashStorage_SAMD on Adafruit ITSYBITSY_M4 with ESP8266-AT shield](#4-samd_esp8266shield-using-flashstorage_samd-on-adafruit-itsybitsy_m4-with-esp8266-at-shield)
-  * [5. Teensy_ESP8266Shield using EEPROM on TEENSY 4.0 with ESP8266-AT shield](#5-teensy_esp8266shield-using-eeprom-on-teensy-40-with-esp8266-at-shield)
+  * [5. Teensy40_ESP8266Shield using EEPROM on TEENSY 4.0 with ESP8266-AT shield](#5-teensy40_esp8266shield-using-eeprom-on-teensy-40-with-esp8266-at-shield)
 * [Debug](#debug)
 * [Troubleshooting](#troubleshooting)
 * [Releases](#releases)
@@ -2232,7 +2232,7 @@ FF
 ---
 ---
 
-### 5. Teensy_ESP8266Shield using EEPROM on TEENSY 4.0 with ESP8266-AT shield
+### 5. Teensy40_ESP8266Shield using EEPROM on TEENSY 4.0 with ESP8266-AT shield
 
 #### 5.1. No ConfigDat or Forced Config Portal => Config Portal
 
