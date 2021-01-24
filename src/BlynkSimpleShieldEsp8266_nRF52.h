@@ -6,7 +6,7 @@
   to enable easy configuration/reconfiguration and autoconnect/autoreconnect of WiFi/Blynk
 
   Based on and Modified from Blynk library v0.6.1 https://github.com/blynkkk/blynk-library/releases
-  Built by Khoi Hoang https://github.com/khoih-prog/Blynk_WM
+  Built by Khoi Hoang https://github.com/khoih-prog/Blynk_Esp8266AT_WM
   Licensed under MIT license
 
   Original Blynk Library author:

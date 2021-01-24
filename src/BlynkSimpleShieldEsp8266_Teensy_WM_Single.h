@@ -6,7 +6,7 @@
   to enable easy configuration/reconfiguration and autoconnect/autoreconnect of WiFi/Blynk
 
   Based on and Modified from Blynk library v0.6.1 https://github.com/blynkkk/blynk-library/releases
-  Built by Khoi Hoang https://github.com/khoih-prog/Blynk_WM
+  Built by Khoi Hoang https://github.com/khoih-prog/Blynk_Esp8266AT_WM
   Licensed under MIT license
 
   Original Blynk Library author:
@@ -44,6 +44,10 @@
   #warning Use Teensy architecture from Blynk_Esp8266AT_WM
 #else
   #error This code is intended to run on the Teensy platform! Please check your Tools->Board setting.
+#endif
+
+#if !( (TEENSYDUINO==150) ||  (TEENSYDUINO==151) )
+  #error This code is intended to run only on the Teensy code v1.51 ! Please check your Teensy core.
 #endif
 
 #define BLYNK_ESP8266AT_WM_VERSION    "Blynk_Esp8266AT_WM v1.1.0"
