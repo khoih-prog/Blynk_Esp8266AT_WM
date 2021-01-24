@@ -17,7 +17,7 @@
   @date       Jun 2015
   @brief
 
-  Version: 1.1.0
+  Version: 1.1.1
 
   Version Modified By   Date        Comments
   ------- -----------  ----------   -----------
@@ -31,6 +31,7 @@
   1.0.6   K Hoang      27/06/2020  Add ESP32-AT support and use ESP_AT_Lib. Enhance MultiWiFi connection logic.
   1.0.7   K Hoang      27/07/2020  Add support to all STM32F/L/H/G/WB/MP1 and Seeeduino SAMD21/SAMD51 boards.
   1.1.0   K Hoang      15/01/2021  Restore support to Teensy to be used only with Teensy core v1.51.
+  1.1.1   K Hoang      24/01/2021  Add support to Teensy 3.x, to be used only with Teensy core v1.51.
  *****************************************************************************************************************************/
 
 #ifndef BlynkSimpleShieldEsp8266_Teensy_WM_Single_h
@@ -50,7 +51,7 @@
   #error This code is intended to run only on the Teensy code v1.51 ! Please check your Teensy core.
 #endif
 
-#define BLYNK_ESP8266AT_WM_VERSION    "Blynk_Esp8266AT_WM v1.1.0"
+#define BLYNK_ESP8266AT_WM_VERSION    "Blynk_Esp8266AT_WM v1.1.1"
 
 #ifndef BLYNK_INFO_CONNECTION
   #define BLYNK_INFO_CONNECTION  "ESP8266"
@@ -763,8 +764,17 @@ class BlynkWifi
     
     void resetFunc()
     {
-      SCB_AIRCR = 0x05FA0004; //write value for restart for Teensy
+#if defined(__IMXRT1062__)     
+      SCB_AIRCR = 0x05FA0004; //write value for restart for Teensy 4.x
+#else
+      #define RESTART_ADDR       0xE000ED0C
+      #define READ_RESTART()     (*(volatile uint32_t *)RESTART_ADDR)
+      #define WRITE_RESTART(val) ((*(volatile uint32_t *)RESTART_ADDR) = (val))
+      
+      WRITE_RESTART(0x5FA0004);
+#endif
     }
+    
 
   private:
     ESP8266* wifi;
@@ -1242,11 +1252,16 @@ class BlynkWifi
 
       if ( (portal_ssid == "") || portal_pass == "" )
       {
-        String hardwareID = String(HW_OCOTP_MAC0, HEX);
+#if defined(__IMXRT1062__)      
+        String hardwareID = String(HW_OCOTP_MAC0, HEX);  
+#else
+        // To use hardware ID in future version
+        String hardwareID = String(random(0xFFFFFF), HEX);
+#endif
         hardwareID.toUpperCase();
         
-        portal_ssid = "ESP_AT_" + hardwareID;
-        portal_pass = "MyESP_AT_" + hardwareID;
+        portal_ssid = "Teensy_" + hardwareID;
+        portal_pass = "MyTeensy_" + hardwareID;
       }
 
       BLYNK_LOG6(BLYNK_F("stConf:SSID="), portal_ssid, BLYNK_F(",PW="), portal_pass, BLYNK_F(",IP="), portal_apIP);

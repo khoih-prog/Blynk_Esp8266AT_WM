@@ -16,8 +16,8 @@
   * [Currently Supported Boards](#currently-supported-boards)
   * [Currently Supported AT-command shields](#currently-supported-at-command-shields)
 * [Changelog](#changelog)
+  * [Releases v1.1.1](#releases-v111)
   * [Major Releases v1.1.0](#major-releases-v110)
-  * [Releases v1.0.12](#releases-v1012)
   * [Releases v1.0.7](#releases-v107)
   * [Releases v1.0.6](#releases-v106)
   * [Major Releases v1.0.5](#major-releases-v105)
@@ -135,21 +135,25 @@ New recent features:
 
 ## Changelog
 
+### Releases v1.1.1
+
+1. Add support to **Teensy 3.x boards**, using only Teensy core v1.51 if Config Portal is needed.
+
 ### Major Releases v1.1.0
 
-1. Restore support to Teensy boards, using only Teensy core v1.51 if Config Portal is needed.
+1. Restore support to **Teensy 4.x boards**, using only Teensy core v1.51 if Config Portal is needed.
 2. Add STM32 emulated-EEPROM feature so that saving to EEPROM is usable and much faster.
 3. Add functions to control Config Portal from software or Virtual Switches. Check [How to trigger a Config Portal from code #25](https://github.com/khoih-prog/Blynk_WM/issues/25)
 4. Renew all examples to demo the new Virtual ConfigPortal SW feature
 5. Optimize code and fix many bugs.
 
-### New Releases v1.0.7
+### Releases v1.0.7
 
 1. Add support to all **STM32F/L/H/G/WB/MP1** (Nucleo-144 NUCLEO_F767ZI, Nucleo-64 NUCLEO_L053R8, etc.)
 2. Add support to **Seeeduino SAMD21/SAMD51 boards** (SEEED_WIO_TERMINAL, SEEED_FEMTO_M0, SEEED_XIAO_M0, Wio_Lite_MG126, WIO_GPS_BOARD, SEEEDUINO_ZERO, SEEEDUINO_LORAWAN, SEEED_GROVE_UI_WIRELESS, etc.)
 3. Sync with latest [**ESP8266_AT_WebServer Library v1.0.12**](https://github.com/khoih-prog/ESP8266_AT_WebServer/releases/tag/v1.0.12)
 
-### New Releases v1.0.6
+### Releases v1.0.6
 
 1. Add support to **ESP32-AT**
 2. Use new [**ESP_AT_Lib**](https://github.com/khoih-prog/ESP_AT_Lib) to support ESP8266/ESP32-AT
@@ -166,19 +170,19 @@ New recent features:
 6. Restructure examples separate Credentials / Defines / Dynamic Params / Code.
 7. Drop support to **Teensy** boards.
 
-### New Releases v1.0.4
+### Releases v1.0.4
 
 1. Add support to **SAM DUE**
 2. Reduce html and code size for faster Config Portal response. 
 3. Enhance GUI.
 4. Config Portal AP SSID and Password will use 4 bytes of hardware unique macAddress, only for Teensy.
 
-### New Version v1.0.3
+### Releases v1.0.3
 
 1. Add support to **STM32F/L/H/G/WB/MP1** boards. STM32F0 boards are not supported.
 2. Add clearConfigData() function.
 
-### New Version v1.0.2
+### Releases v1.0.2
 
 1. Add support to **SAMD** (ZERO, MKR, NANO_33_IOT, M0, M0 Pro, AdaFruit CIRCUITPLAYGROUND_EXPRESS, etc.) boards
 
@@ -1295,7 +1299,7 @@ uint16_t NUM_MENU_ITEMS = 0;
 
 ```
 Start nRF52_ESP8266Shield on NRF52840_ITSYBITSY
-Blynk_Esp8266AT_WM v1.1.0
+Blynk_Esp8266AT_WM v1.1.1
 Start Blynk_ESP8266AT_WM
 [7691] AT version:1.7.4.0(May 11 2020 19:13:04)
 SDK version:3.0.4(9532ceb)
@@ -1404,7 +1408,7 @@ FFFFFFF
 [260526] h:Rst
 
 Start nRF52_ESP8266Shield on NRF52840_ITSYBITSY
-Blynk_Esp8266AT_WM v1.1.0
+Blynk_Esp8266AT_WM v1.1.1
 Start Blynk_ESP8266AT_WM
 [7919] AT version:1.7.4.0(May 11 2020 19:13:04)
 SDK version:3.0.4(9532ceb)
@@ -1492,7 +1496,7 @@ CP Button Hit. Rebooting
 [175987] OK
 
 Start nRF52_ESP8266Shield on NRF52840_ITSYBITSY
-Blynk_Esp8266AT_WM v1.1.0
+Blynk_Esp8266AT_WM v1.1.1
 Start Blynk_ESP8266AT_WM
 [7466] AT version:1.7.4.0(May 11 2020 19:13:04)
 SDK version:3.0.4(9532ceb)
@@ -1559,7 +1563,7 @@ Persistent CP Button Hit. Rebooting
 [43432] OK
 
 Start nRF52_ESP8266Shield on NRF52840_ITSYBITSY
-Blynk_Esp8266AT_WM v1.1.0
+Blynk_Esp8266AT_WM v1.1.1
 Start Blynk_ESP8266AT_WM
 [7441] AT version:1.7.4.0(May 11 2020 19:13:04)
 SDK version:3.0.4(9532ceb)
@@ -1618,7 +1622,7 @@ Port = 1883
 
 ```
 Start STM32_ESP8266Shield on NUCLEO_F767ZI
-Blynk_Esp8266AT_WM v1.1.0
+Blynk_Esp8266AT_WM v1.1.1
 Start Blynk_ESP8266AT_WM
 [6769] AT version:1.1.0.0(May 11 2016 18:09:56)
 SDK version:1.5.4(baaeaebb)
@@ -1676,7 +1680,7 @@ FFF[60707] h:repl
 
 ```
 Start STM32_ESP8266Shield on NUCLEO_F767ZI
-Blynk_Esp8266AT_WM v1.1.0
+Blynk_Esp8266AT_WM v1.1.1
 Start Blynk_ESP8266AT_WM
 [6768] AT version:1.1.0.0(May 11 2016 18:09:56)
 SDK version:1.5.4(baaeaebb)
@@ -1737,7 +1741,7 @@ CP Button Hit. Rebooting
 [49650] setForcedCP non-Persistent
 
 Start STM32_ESP8266Shield on NUCLEO_F767ZI
-Blynk_Esp8266AT_WM v1.1.0
+Blynk_Esp8266AT_WM v1.1.1
 Start Blynk_ESP8266AT_WM
 [6769] AT version:1.1.0.0(May 11 2016 18:09:56)
 SDK version:1.5.4(baaeaebb)
@@ -1776,7 +1780,7 @@ Persistent CP Button Hit. Rebooting
 [38325] setForcedCP Persistent
 
 Start STM32_ESP8266Shield on NUCLEO_F767ZI
-Blynk_Esp8266AT_WM v1.1.0
+Blynk_Esp8266AT_WM v1.1.1
 Start Blynk_ESP8266AT_WM
 [6769] AT version:1.1.0.0(May 11 2016 18:09:56)
 SDK version:1.5.4(baaeaebb)
@@ -1816,7 +1820,7 @@ FFFFFF
 
 ```
 Start SAM_DUE_ESP8266Shield on SAM DUE
-Blynk_Esp8266AT_WM v1.1.0
+Blynk_Esp8266AT_WM v1.1.1
 Start Blynk_ESP8266AT_WM
 [6779] AT version:1.1.0.0(May 11 2016 18:09:56)
 SDK version:1.5.4(baaeaebb)
@@ -1887,7 +1891,7 @@ FFFF[126459] h:repl id
 
 ```
 Start SAM_DUE_ESP8266Shield on SAM DUE
-Blynk_Esp8266AT_WM v1.1.0
+Blynk_Esp8266AT_WM v1.1.1
 Start Blynk_ESP8266AT_WM
 [6771] AT version:1.1.0.0(May 11 2016 18:09:56)
 SDK version:1.5.4(baaeaebb)
@@ -1952,7 +1956,7 @@ CP Button Hit. Rebooting
 [272907] setForcedCP non-Persistent
 
 Start SAM_DUE_ESP8266Shield on SAM DUE
-Blynk_Esp8266AT_WM v1.1.0
+Blynk_Esp8266AT_WM v1.1.1
 Start Blynk_ESP8266AT_WM
 [6771] AT version:1.1.0.0(May 11 2016 18:09:56)
 SDK version:1.5.4(baaeaebb)
@@ -1995,7 +1999,7 @@ Persistent CP Button Hit. Rebooting
 [83192] setForcedCP Persistent
 
 Start SAM_DUE_ESP8266Shield on SAM DUE
-Blynk_Esp8266AT_WM v1.1.0
+Blynk_Esp8266AT_WM v1.1.1
 Start Blynk_ESP8266AT_WM
 [6771] AT version:1.1.0.0(May 11 2016 18:09:56)
 SDK version:1.5.4(baaeaebb)
@@ -2038,7 +2042,7 @@ MQTT Server = default-mqtt-server
 
 ```
 Start SAMD_ESP8266Shield on ITSYBITSY_M4
-Blynk_Esp8266AT_WM v1.1.0
+Blynk_Esp8266AT_WM v1.1.1
 Start Blynk_ESP8266AT_WM
 [30676] AT version:1.7.4.0(May 11 2020 19:13:04)
 SDK version:3.0.4(9532ceb)
@@ -2079,7 +2083,7 @@ F
 
 ```
 Start SAMD_ESP8266Shield on ITSYBITSY_M4
-Blynk_Esp8266AT_WM v1.1.0
+Blynk_Esp8266AT_WM v1.1.1
 Start Blynk_ESP8266AT_WM
 [35347] AT version:1.7.4.0(May 11 2020 19:13:04)
 SDK version:3.0.4(9532ceb)
@@ -2148,7 +2152,7 @@ CP Button Hit. Rebooting
 
 
 Start SAMD_ESP8266Shield on ITSYBITSY_M4
-Blynk_Esp8266AT_WM v1.1.0
+Blynk_Esp8266AT_WM v1.1.1
 Start Blynk_ESP8266AT_WM
 [30676] AT version:1.7.4.0(May 11 2020 19:13:04)
 SDK version:3.0.4(9532ceb)
@@ -2191,7 +2195,7 @@ F
 Persistent CP Button Hit. Rebooting
 [40547] setForcedCP Persistent
 Start SAMD_ESP8266Shield on ITSYBITSY_M4
-Blynk_Esp8266AT_WM v1.1.0
+Blynk_Esp8266AT_WM v1.1.1
 Start Blynk_ESP8266AT_WM
 [34937] AT version:1.7.4.0(May 11 2020 19:13:04)
 SDK version:3.0.4(9532ceb)
@@ -2235,7 +2239,7 @@ FF
 
 ```
 Start Teensy_ESP8266Shield on TEENSY 4.1/4.0
-Blynk_Esp8266AT_WM v1.1.0
+Blynk_Esp8266AT_WM v1.1.1
 [8878] AT version:1.7.4.0(May 11 2020 19:13:04)
 SDK version:3.0.4(9532ceb)
 compile time:May 27 2020 10:12:17
@@ -2314,7 +2318,7 @@ FFFF[106580] h:repl id
 
 ```
 Start Teensy_ESP8266Shield on TEENSY 4.1/4.0
-Blynk_Esp8266AT_WM v1.1.0
+Blynk_Esp8266AT_WM v1.1.1
 Start Blynk_ESP8266AT_WM
 [80347] AT version:1.7.4.0(May 11 2020 19:13:04)
 SDK version:3.0.4(9532ceb)
@@ -2421,21 +2425,25 @@ Sometimes, the library will only work if you update the `ESP8266 AT shield` core
 
 ## Releases
 
+### Releases v1.1.1
+
+1. Add support to **Teensy 3.x boards**, using only Teensy core v1.51 if Config Portal is needed.
+
 ### Major Releases v1.1.0
 
-1. Restore support to Teensy boards, using only Teensy core v1.51 if Config Portal is needed.
+1. Restore support to **Teensy 4.x boards**, using only Teensy core v1.51 if Config Portal is needed.
 2. Add STM32 emulated-EEPROM feature so that saving to EEPROM is usable and much faster.
 3. Add functions to control Config Portal from software or Virtual Switches. Check [How to trigger a Config Portal from code #25](https://github.com/khoih-prog/Blynk_WM/issues/25)
 4. Renew all examples to demo the new Virtual ConfigPortal SW feature
 5. Optimize code and fix many bugs.
 
-### New Releases v1.0.7
+### Releases v1.0.7
 
 1. Add support to all **STM32F/L/H/G/WB/MP1** (Nucleo-144 NUCLEO_F767ZI, Nucleo-64 NUCLEO_L053R8, etc.)
 2. Add support to **Seeeduino SAMD21/SAMD51 boards** (SEEED_WIO_TERMINAL, SEEED_FEMTO_M0, SEEED_XIAO_M0, Wio_Lite_MG126, WIO_GPS_BOARD, SEEEDUINO_ZERO, SEEEDUINO_LORAWAN, SEEED_GROVE_UI_WIRELESS, etc.)
 3. Sync with latest [**ESP8266_AT_WebServer Library v1.0.12**](https://github.com/khoih-prog/ESP8266_AT_WebServer/releases/tag/v1.0.12)
 
-### New Releases v1.0.6
+### Releases v1.0.6
 
 1. Add support to **ESP32-AT**
 2. Use new [**ESP_AT_Lib**](https://github.com/khoih-prog/ESP_AT_Lib) to support ESP8266/ESP32-AT
@@ -2452,29 +2460,29 @@ Sometimes, the library will only work if you update the `ESP8266 AT shield` core
 6. Restructure examples separate Credentials / Defines / Dynamic Params / Code.
 7. Drop support to **Teensy** boards.
 
-### New Releases v1.0.4
+### Releases v1.0.4
 
 1. Add support to **SAM DUE**
 2. Reduce html and code size for faster Config Portal response. 
 3. Enhance GUI.
 4. Config Portal AP SSID and Password will use 4 bytes of hardware unique macAddress, only for Teensy.
 
-### New Version v1.0.3
+### Releases v1.0.3
 
 1. Add support to **STM32F/L/H/G/WB/MP1** boards. STM32F0 boards are not supported.
 2. Add clearConfigData() function.
 
-### New Version v1.0.2
+### Releases v1.0.2
 
 1. Add support to **SAMD** (ZERO, MKR, NANO_33_IOT, M0, M0 Pro, AdaFruit CIRCUITPLAYGROUND_EXPRESS, etc.) boards
 
-#### Release v1.0.1
+#### Releases v1.0.1
 
 1. Add ESP8266_AT_WebServer dependency for auto-install via Library Manager
 2. Add prerequisite to README.md
 3. Add checksum, fix bug
 
-#### Release v1.0.0
+#### Releases v1.0.0
 
 ***Features***
 
@@ -2516,6 +2524,7 @@ Submit issues to: [Blynk_WM issues](https://github.com/khoih-prog/Blynk_Esp8266A
 13. Fix the ***EEPROM not working*** in some STM32 boards  by using emulated or integrated EEPROM
 14. Add support to all **STM32F/L/H/G/WB/MP1** boards, using emulated or integrated EEPROM
 15. Add support to **Teensy** boards using Teensy core v1.51 for Config Portal
+16. Add Table-of-Contents
 
 ---
 
