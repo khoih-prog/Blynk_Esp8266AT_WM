@@ -17,7 +17,7 @@
   @date       Jun 2015
   @brief
 
-  Version: 1.1.1
+  Version: 1.2.0
 
   Version Modified By   Date        Comments
   ------- -----------  ----------   -----------
@@ -32,6 +32,7 @@
   1.0.7   K Hoang      27/07/2020  Add support to all STM32F/L/H/G/WB/MP1 and Seeeduino SAMD21/SAMD51 boards.
   1.1.0   K Hoang      15/01/2021  Restore support to Teensy to be used only with Teensy core v1.51.
   1.1.1   K Hoang      24/01/2021  Add support to Teensy 3.x, to be used only with Teensy core v1.51.
+  1.2.0   K Hoang      28/01/2021  Fix bug. Use more efficient FlashStorage_STM32 and FlashStorage_SAMD.
  *****************************************************************************************************************************/
 
 #ifndef BlynkSimpleShieldEsp8266_Teensy_WM_h
@@ -51,7 +52,7 @@
   #error This code is intended to run only on the Teensy code v1.51 ! Please check your Teensy core.
 #endif
 
-#define BLYNK_ESP8266AT_WM_VERSION    "Blynk_Esp8266AT_WM v1.1.1"
+#define BLYNK_ESP8266AT_WM_VERSION    "Blynk_Esp8266AT_WM v1.2.0"
 
 #ifndef BLYNK_INFO_CONNECTION
   #define BLYNK_INFO_CONNECTION  "ESP8266"
@@ -1622,24 +1623,15 @@ class BlynkWifi
           result.replace("[[pw1]]",    Blynk8266_WF_config.WiFi_Creds[1].wifi_pw);
           result.replace("[[sv]]",     Blynk8266_WF_config.blynk_server);
           result.replace("[[tk]]",     Blynk8266_WF_config.blynk_token);
-
-#if USE_DYNAMIC_PARAMETERS
-          if (!menuItemUpdated)
-          {
-            // Don't need to free
-            menuItemUpdated = new bool[NUM_MENU_ITEMS];
-          }
           
+#if USE_DYNAMIC_PARAMETERS         
           for (uint16_t i = 0; i < NUM_MENU_ITEMS; i++)
           {
             String toChange = String("[[") + myMenuItems[i].id + "]]";
             result.replace(toChange, myMenuItems[i].pdata);
             
-            // To flag item is not yet updated
-            menuItemUpdated[i] = false;
-            
   #if ( BLYNK_WM_DEBUG > 2)                 
-            BLYNK_LOG4(BLYNK_F("h1:myMenuItems["), i, BLYNK_F("]="), myMenuItems[i].pdata )
+            BLYNK_LOG4(BLYNK_F("h1:myMenuItems["), i, BLYNK_F("]="), myMenuItems[i].pdata );
   #endif            
           }
 #endif
@@ -1665,7 +1657,31 @@ class BlynkWifi
           memset(&Blynk8266_WF_config, 0, sizeof(Blynk8266_WF_config));
           strcpy(Blynk8266_WF_config.header, BLYNK_BOARD_TYPE);
         }
-       
+        
+#if USE_DYNAMIC_PARAMETERS
+        if (!menuItemUpdated)
+        {
+          // Don't need to free
+          menuItemUpdated = new bool[NUM_MENU_ITEMS];
+          
+          if (menuItemUpdated)
+          {
+            for (uint16_t i = 0; i < NUM_MENU_ITEMS; i++)
+            {           
+              // To flag item is not yet updated
+              menuItemUpdated[i] = false;           
+            }
+  #if ( BLYNK_WM_DEBUG > 2)                 
+            BLYNK_LOG1(BLYNK_F("h: Init menuItemUpdated" ));
+  #endif                        
+          }
+          else
+          {
+            BLYNK_LOG1(BLYNK_F("h: Error can't alloc memory for menuItemUpdated" ));
+          }
+        }  
+#endif
+
         static bool id_Updated  = false;
         static bool pw_Updated  = false;
         static bool id1_Updated = false;
@@ -1781,7 +1797,7 @@ class BlynkWifi
         //#endif
 
         server->send(200, "text/html", "OK");
-        
+
 #if USE_DYNAMIC_PARAMETERS        
         if (number_items_Updated == NUM_CONFIGURABLE_ITEMS + NUM_MENU_ITEMS)
 #else

@@ -16,6 +16,7 @@
   * [Currently Supported Boards](#currently-supported-boards)
   * [Currently Supported AT-command shields](#currently-supported-at-command-shields)
 * [Changelog](#changelog)
+  * [Releases v1.2.0](#releases-v120)
   * [Releases v1.1.1](#releases-v111)
   * [Major Releases v1.1.0](#major-releases-v110)
   * [Releases v1.0.7](#releases-v107)
@@ -135,6 +136,11 @@ New recent features:
 
 ## Changelog
 
+### Releases v1.2.0
+
+1. Use new and more efficient [FlashStorage_STM32](https://github.com/khoih-prog/FlashStorage_STM32) and [FlashStorage_SAMD](https://github.com/khoih-prog/FlashStorage_SAMD) library versions.
+2. Fix Config Portal bug
+
 ### Releases v1.1.1
 
 1. Add support to **Teensy 3.x boards**, using only Teensy core v1.51 if Config Portal is needed.
@@ -215,6 +221,8 @@ With version `v1.0.0` or later, you now can configure:
 15. [`Adafruit's LittleFS/InternalFS`](https://www.adafruit.com) for nRF52
 16. [`DoubleResetDetector_Generic v1.0.3+`](https://github.com/khoih-prog/DoubleResetDetector_Generic). To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/DoubleResetDetector_Generic.svg?)](https://www.ardu-badge.com/DoubleResetDetector_Generic)
 17. [`ESP_AT_Lib v1.0.0+`](https://github.com/khoih-prog/ESP_AT_Lib) for ESP8266/ESP32-AT shields. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/ESP_AT_Lib.svg?)](https://www.ardu-badge.com/ESP_AT_Lib)
+18. [`FlashStorage_SAMD v1.1.0+`](https://github.com/khoih-prog/FlashStorage_SAMD) for SAMD21/SAMD51 boards.
+19. [`FlashStorage_STM32 v1.0.0+`](https://github.com/khoih-prog/FlashStorage_STM32) for STM32F/L/H/G/WB/MP1 boards. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/FlashStorage_STM32.svg?)](https://www.ardu-badge.com/FlashStorage_STM32)
 
 ---
 ---
@@ -371,11 +379,11 @@ These files must be copied into the directory:
 
 #### 2. For Teensy boards
  
- **To be able to compile and run on Teensy boards**, you have to copy the file [Teensy boards.txt](Packages_Patches/hardware/teensy/avr/boards.txt) into Teensy hardware directory (./arduino-1.8.12/hardware/teensy/avr/boards.txt). 
+ **To be able to compile and run on Teensy boards**, you have to copy the file [Teensy boards.txt](Packages_Patches/hardware/teensy/avr/boards.txt) into Teensy hardware directory (./arduino-1.8.13/hardware/teensy/avr/boards.txt). 
 
-Supposing the Arduino version is 1.8.12. This file must be copied into the directory:
+Supposing the Arduino version is 1.8.13. This file must be copied into the directory:
 
-- `./arduino-1.8.12/hardware/teensy/avr/boards.txt`
+- `./arduino-1.8.13/hardware/teensy/avr/boards.txt`
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
 This file must be copied into the directory:
@@ -1299,7 +1307,7 @@ uint16_t NUM_MENU_ITEMS = 0;
 
 ```
 Start nRF52_ESP8266Shield on NRF52840_ITSYBITSY
-Blynk_Esp8266AT_WM v1.1.1
+Blynk_Esp8266AT_WM v1.2.0
 Start Blynk_ESP8266AT_WM
 [7691] AT version:1.7.4.0(May 11 2020 19:13:04)
 SDK version:3.0.4(9532ceb)
@@ -1408,7 +1416,7 @@ FFFFFFF
 [260526] h:Rst
 
 Start nRF52_ESP8266Shield on NRF52840_ITSYBITSY
-Blynk_Esp8266AT_WM v1.1.1
+Blynk_Esp8266AT_WM v1.2.0
 Start Blynk_ESP8266AT_WM
 [7919] AT version:1.7.4.0(May 11 2020 19:13:04)
 SDK version:3.0.4(9532ceb)
@@ -1496,7 +1504,7 @@ CP Button Hit. Rebooting
 [175987] OK
 
 Start nRF52_ESP8266Shield on NRF52840_ITSYBITSY
-Blynk_Esp8266AT_WM v1.1.1
+Blynk_Esp8266AT_WM v1.2.0
 Start Blynk_ESP8266AT_WM
 [7466] AT version:1.7.4.0(May 11 2020 19:13:04)
 SDK version:3.0.4(9532ceb)
@@ -1563,7 +1571,7 @@ Persistent CP Button Hit. Rebooting
 [43432] OK
 
 Start nRF52_ESP8266Shield on NRF52840_ITSYBITSY
-Blynk_Esp8266AT_WM v1.1.1
+Blynk_Esp8266AT_WM v1.2.0
 Start Blynk_ESP8266AT_WM
 [7441] AT version:1.7.4.0(May 11 2020 19:13:04)
 SDK version:3.0.4(9532ceb)
@@ -1622,7 +1630,7 @@ Port = 1883
 
 ```
 Start STM32_ESP8266Shield on NUCLEO_F767ZI
-Blynk_Esp8266AT_WM v1.1.1
+Blynk_Esp8266AT_WM v1.2.0
 Start Blynk_ESP8266AT_WM
 [6769] AT version:1.1.0.0(May 11 2016 18:09:56)
 SDK version:1.5.4(baaeaebb)
@@ -1680,7 +1688,7 @@ FFF[60707] h:repl
 
 ```
 Start STM32_ESP8266Shield on NUCLEO_F767ZI
-Blynk_Esp8266AT_WM v1.1.1
+Blynk_Esp8266AT_WM v1.2.0
 Start Blynk_ESP8266AT_WM
 [6768] AT version:1.1.0.0(May 11 2016 18:09:56)
 SDK version:1.5.4(baaeaebb)
@@ -1741,7 +1749,7 @@ CP Button Hit. Rebooting
 [49650] setForcedCP non-Persistent
 
 Start STM32_ESP8266Shield on NUCLEO_F767ZI
-Blynk_Esp8266AT_WM v1.1.1
+Blynk_Esp8266AT_WM v1.2.0
 Start Blynk_ESP8266AT_WM
 [6769] AT version:1.1.0.0(May 11 2016 18:09:56)
 SDK version:1.5.4(baaeaebb)
@@ -1780,7 +1788,7 @@ Persistent CP Button Hit. Rebooting
 [38325] setForcedCP Persistent
 
 Start STM32_ESP8266Shield on NUCLEO_F767ZI
-Blynk_Esp8266AT_WM v1.1.1
+Blynk_Esp8266AT_WM v1.2.0
 Start Blynk_ESP8266AT_WM
 [6769] AT version:1.1.0.0(May 11 2016 18:09:56)
 SDK version:1.5.4(baaeaebb)
@@ -1820,7 +1828,7 @@ FFFFFF
 
 ```
 Start SAM_DUE_ESP8266Shield on SAM DUE
-Blynk_Esp8266AT_WM v1.1.1
+Blynk_Esp8266AT_WM v1.2.0
 Start Blynk_ESP8266AT_WM
 [6779] AT version:1.1.0.0(May 11 2016 18:09:56)
 SDK version:1.5.4(baaeaebb)
@@ -1891,7 +1899,7 @@ FFFF[126459] h:repl id
 
 ```
 Start SAM_DUE_ESP8266Shield on SAM DUE
-Blynk_Esp8266AT_WM v1.1.1
+Blynk_Esp8266AT_WM v1.2.0
 Start Blynk_ESP8266AT_WM
 [6771] AT version:1.1.0.0(May 11 2016 18:09:56)
 SDK version:1.5.4(baaeaebb)
@@ -1956,7 +1964,7 @@ CP Button Hit. Rebooting
 [272907] setForcedCP non-Persistent
 
 Start SAM_DUE_ESP8266Shield on SAM DUE
-Blynk_Esp8266AT_WM v1.1.1
+Blynk_Esp8266AT_WM v1.2.0
 Start Blynk_ESP8266AT_WM
 [6771] AT version:1.1.0.0(May 11 2016 18:09:56)
 SDK version:1.5.4(baaeaebb)
@@ -1999,7 +2007,7 @@ Persistent CP Button Hit. Rebooting
 [83192] setForcedCP Persistent
 
 Start SAM_DUE_ESP8266Shield on SAM DUE
-Blynk_Esp8266AT_WM v1.1.1
+Blynk_Esp8266AT_WM v1.2.0
 Start Blynk_ESP8266AT_WM
 [6771] AT version:1.1.0.0(May 11 2016 18:09:56)
 SDK version:1.5.4(baaeaebb)
@@ -2042,7 +2050,7 @@ MQTT Server = default-mqtt-server
 
 ```
 Start SAMD_ESP8266Shield on ITSYBITSY_M4
-Blynk_Esp8266AT_WM v1.1.1
+Blynk_Esp8266AT_WM v1.2.0
 Start Blynk_ESP8266AT_WM
 [30676] AT version:1.7.4.0(May 11 2020 19:13:04)
 SDK version:3.0.4(9532ceb)
@@ -2083,7 +2091,7 @@ F
 
 ```
 Start SAMD_ESP8266Shield on ITSYBITSY_M4
-Blynk_Esp8266AT_WM v1.1.1
+Blynk_Esp8266AT_WM v1.2.0
 Start Blynk_ESP8266AT_WM
 [35347] AT version:1.7.4.0(May 11 2020 19:13:04)
 SDK version:3.0.4(9532ceb)
@@ -2152,7 +2160,7 @@ CP Button Hit. Rebooting
 
 
 Start SAMD_ESP8266Shield on ITSYBITSY_M4
-Blynk_Esp8266AT_WM v1.1.1
+Blynk_Esp8266AT_WM v1.2.0
 Start Blynk_ESP8266AT_WM
 [30676] AT version:1.7.4.0(May 11 2020 19:13:04)
 SDK version:3.0.4(9532ceb)
@@ -2195,7 +2203,7 @@ F
 Persistent CP Button Hit. Rebooting
 [40547] setForcedCP Persistent
 Start SAMD_ESP8266Shield on ITSYBITSY_M4
-Blynk_Esp8266AT_WM v1.1.1
+Blynk_Esp8266AT_WM v1.2.0
 Start Blynk_ESP8266AT_WM
 [34937] AT version:1.7.4.0(May 11 2020 19:13:04)
 SDK version:3.0.4(9532ceb)
@@ -2239,7 +2247,7 @@ FF
 
 ```
 Start Teensy_ESP8266Shield on TEENSY 4.1/4.0
-Blynk_Esp8266AT_WM v1.1.1
+Blynk_Esp8266AT_WM v1.2.0
 [8878] AT version:1.7.4.0(May 11 2020 19:13:04)
 SDK version:3.0.4(9532ceb)
 compile time:May 27 2020 10:12:17
@@ -2318,7 +2326,7 @@ FFFF[106580] h:repl id
 
 ```
 Start Teensy_ESP8266Shield on TEENSY 4.1/4.0
-Blynk_Esp8266AT_WM v1.1.1
+Blynk_Esp8266AT_WM v1.2.0
 Start Blynk_ESP8266AT_WM
 [80347] AT version:1.7.4.0(May 11 2020 19:13:04)
 SDK version:3.0.4(9532ceb)
@@ -2425,6 +2433,11 @@ Sometimes, the library will only work if you update the `ESP8266 AT shield` core
 
 ## Releases
 
+### Releases v1.2.0
+
+1. Use new and more efficient [FlashStorage_STM32](https://github.com/khoih-prog/FlashStorage_STM32) and [FlashStorage_SAMD](https://github.com/khoih-prog/FlashStorage_SAMD) library versions.
+2. Fix Config Portal bug
+
 ### Releases v1.1.1
 
 1. Add support to **Teensy 3.x boards**, using only Teensy core v1.51 if Config Portal is needed.
@@ -2496,7 +2509,7 @@ Sometimes, the library will only work if you update the `ESP8266 AT shield` core
 
 ### Issues
 
-Submit issues to: [Blynk_WM issues](https://github.com/khoih-prog/Blynk_Esp8266AT_WM/issues)
+Submit issues to: [Blynk_Esp8266AT_WM issues](https://github.com/khoih-prog/Blynk_Esp8266AT_WM/issues)
 
 ---
 ---
@@ -2515,7 +2528,7 @@ Submit issues to: [Blynk_WM issues](https://github.com/khoih-prog/Blynk_Esp8266A
  4. If the config data not entered completely (SSID, password, Server and Blynk token), entering config portal
  5. Add configurable Config Portal IP, SSID and Password
  6. Add configurable Static IP, GW, Subnet Mask and 2 DNS Servers' IP Addresses.
- 7. Add support to **nRF52, SAMD21/SAMD51, STM32F, SAM-DUE**
+ 7. Add support to **nRF52, SAMD21/SAMD51, STM32F/L/H/G/WB/MP1, SAM-DUE**
  8. Add support to **ESP32-AT** shields.
  9. Add MultiWiFi features with auto(re)connect
 10. Add DRD
@@ -2525,6 +2538,7 @@ Submit issues to: [Blynk_WM issues](https://github.com/khoih-prog/Blynk_Esp8266A
 14. Add support to all **STM32F/L/H/G/WB/MP1** boards, using emulated or integrated EEPROM
 15. Add support to **Teensy** boards using Teensy core v1.51 for Config Portal
 16. Add Table-of-Contents
+17. Use more efficient [FlashStorage_STM32](https://github.com/khoih-prog/FlashStorage_STM32) and [FlashStorage_SAMD](https://github.com/khoih-prog/FlashStorage_SAMD) library versions.
 
 ---
 

@@ -17,7 +17,7 @@
   @date       Jun 2015
   @brief
 
-  Version: 1.1.1
+  Version: 1.2.0
 
   Version Modified By   Date        Comments
   ------- -----------  ----------   -----------
@@ -32,6 +32,7 @@
   1.0.7   K Hoang      27/07/2020  Add support to all STM32F/L/H/G/WB/MP1 and Seeeduino SAMD21/SAMD51 boards.
   1.1.0   K Hoang      15/01/2021  Restore support to Teensy to be used only with Teensy core v1.51.
   1.1.1   K Hoang      24/01/2021  Add support to Teensy 3.x, to be used only with Teensy core v1.51.
+  1.2.0   K Hoang      28/01/2021  Fix bug. Use more efficient FlashStorage_STM32 and FlashStorage_SAMD.
  *****************************************************************************************************************************/
 
 #ifndef BlynkSimpleShieldEsp8266_SAMD_WM_h
@@ -46,6 +47,7 @@
     #undef BLYNK_ESP8266_AT_USE_SAMD
   #endif
   #define BLYNK_ESP8266_AT_USE_SAMD      true
+  #warning To be used with FlashStorage_SAMD library v1.1.0+
 #endif
 
 #if ( defined(ESP8266) || defined(ESP32) || defined(ARDUINO_AVR_MEGA2560) || defined(ARDUINO_AVR_MEGA) || \
@@ -53,7 +55,7 @@
   #error This code is intended to run on the SAMD platform! Please check your Tools->Board setting.
 #endif
 
-#define BLYNK_ESP8266AT_WM_VERSION    "Blynk_Esp8266AT_WM v1.1.1"
+#define BLYNK_ESP8266AT_WM_VERSION    "Blynk_Esp8266AT_WM v1.2.0"
 
 #ifndef BLYNK_INFO_CONNECTION
   #define BLYNK_INFO_CONNECTION  "ESP8266"
@@ -80,7 +82,6 @@
 #include <ESP8266_AT_WebServer.h>
 
 // Include EEPROM-like API for FlashStorage
-//#include <FlashAsEEPROM.h>                //https://github.com/cmaglie/FlashStorage
 #include <FlashAsEEPROM_SAMD.h>                //https://github.com/khoih-prog/FlashStorage_SAMD
 
 #ifndef SIMPLE_SHIELD_ESP8266_DEBUG
@@ -1586,25 +1587,15 @@ class BlynkWifi
           result.replace("[[pw1]]",    Blynk8266_WF_config.WiFi_Creds[1].wifi_pw);
           result.replace("[[sv]]",     Blynk8266_WF_config.blynk_server);
           result.replace("[[tk]]",     Blynk8266_WF_config.blynk_token);
-
-#if USE_DYNAMIC_PARAMETERS
           
-          if (!menuItemUpdated)
-          {
-            // Don't need to free
-            menuItemUpdated = new bool[NUM_MENU_ITEMS];
-          }
-                  
+#if USE_DYNAMIC_PARAMETERS         
           for (uint16_t i = 0; i < NUM_MENU_ITEMS; i++)
           {
             String toChange = String("[[") + myMenuItems[i].id + "]]";
             result.replace(toChange, myMenuItems[i].pdata);
             
-            // To flag item is not yet updated
-            menuItemUpdated[i] = false;
-            
   #if ( BLYNK_WM_DEBUG > 2)                 
-            BLYNK_LOG4(BLYNK_F("h1:myMenuItems["), i, BLYNK_F("]="), myMenuItems[i].pdata )
+            BLYNK_LOG4(BLYNK_F("h1:myMenuItems["), i, BLYNK_F("]="), myMenuItems[i].pdata );
   #endif            
           }
 #endif
@@ -1615,10 +1606,9 @@ class BlynkWifi
           
           BLYNK_LOG2(BLYNK_F("h:HTML page size:"), HTML_page_size);
           
-          if (HTML_page_size > 2048)
+          if (HTML_page_size > MAX_HTML_SIZE)
           {
             BLYNK_LOG1(BLYNK_F("h:HTML page larger than 2K. Config Portal not work. Reduce dynamic params"));
-            BLYNK_LOG1(result);
           }   
 
           server->send(200, "text/html", result);
@@ -1632,15 +1622,37 @@ class BlynkWifi
           strcpy(Blynk8266_WF_config.header, BLYNK_BOARD_TYPE);
         }
         
-        // TODO Find a way to update and count only once for each item !!!
-        
+#if USE_DYNAMIC_PARAMETERS
+        if (!menuItemUpdated)
+        {
+          // Don't need to free
+          menuItemUpdated = new bool[NUM_MENU_ITEMS];
+          
+          if (menuItemUpdated)
+          {
+            for (uint16_t i = 0; i < NUM_MENU_ITEMS; i++)
+            {           
+              // To flag item is not yet updated
+              menuItemUpdated[i] = false;           
+            }
+  #if ( BLYNK_WM_DEBUG > 2)                 
+            BLYNK_LOG1(BLYNK_F("h: Init menuItemUpdated" ));
+  #endif                        
+          }
+          else
+          {
+            BLYNK_LOG1(BLYNK_F("h: Error can't alloc memory for menuItemUpdated" ));
+          }
+        }  
+#endif
+
         static bool id_Updated  = false;
         static bool pw_Updated  = false;
         static bool id1_Updated = false;
         static bool pw1_Updated = false;
         static bool sv_Updated  = false;
         static bool tk_Updated  = false;
-
+          
         if (!id_Updated && (key == String("id")))
         {
 #if ( BLYNK_WM_DEBUG > 2)        
@@ -1743,10 +1755,10 @@ class BlynkWifi
         }
 #endif
 
-        #if ( BLYNK_WM_DEBUG > 2)   
+        //#if ( BLYNK_WM_DEBUG > 2)   
         BLYNK_LOG2(F("h:items updated ="), number_items_Updated);
         BLYNK_LOG4(F("h:key ="), key, ", value =", value);
-        #endif
+        //#endif
 
         server->send(200, "text/html", "OK");
 
@@ -1756,10 +1768,10 @@ class BlynkWifi
         if (number_items_Updated == NUM_CONFIGURABLE_ITEMS)
 #endif 
         {
-          BLYNK_LOG1(BLYNK_F("h:UpdFlash"));
+          BLYNK_LOG1(BLYNK_F("h:UpdEEPROM"));
 
           saveConfigData();
-
+          
           // Done with CP, Clear CP Flag here if forced
           if (isForcedConfigPortal)
             clearForcedCP();

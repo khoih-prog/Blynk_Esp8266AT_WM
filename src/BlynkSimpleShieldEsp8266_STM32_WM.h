@@ -17,7 +17,7 @@
   @date       Jun 2015
   @brief
 
-  Version: 1.1.1
+  Version: 1.2.0
 
   Version Modified By   Date        Comments
   ------- -----------  ----------   -----------
@@ -32,6 +32,7 @@
   1.0.7   K Hoang      27/07/2020  Add support to all STM32F/L/H/G/WB/MP1 and Seeeduino SAMD21/SAMD51 boards.
   1.1.0   K Hoang      15/01/2021  Restore support to Teensy to be used only with Teensy core v1.51.
   1.1.1   K Hoang      24/01/2021  Add support to Teensy 3.x, to be used only with Teensy core v1.51.
+  1.2.0   K Hoang      28/01/2021  Fix bug. Use more efficient FlashStorage_STM32 and FlashStorage_SAMD.
  *****************************************************************************************************************************/
 
 #ifndef BlynkSimpleShieldEsp8266_STM32_WM_h
@@ -50,7 +51,7 @@
   #error This code is intended to run on STM32 platform! Please check your Tools->Board setting.
 #endif
 
-#define BLYNK_ESP8266AT_WM_VERSION    "Blynk_Esp8266AT_WM v1.1.1"
+#define BLYNK_ESP8266AT_WM_VERSION    "Blynk_Esp8266AT_WM v1.2.0"
 
 #ifndef BLYNK_INFO_CONNECTION
   #define BLYNK_INFO_CONNECTION  "ESP8266"
@@ -75,7 +76,6 @@
 #endif
 
 #include <ESP8266_AT_WebServer.h>
-#include <EEPROM.h>
 
 #include <IWatchdog.h>
 
@@ -1046,16 +1046,28 @@ class BlynkWifi
       Blynk8266_WF_config.blynk_server[SERVER_MAX_LEN - 1]  = 0;
       Blynk8266_WF_config.blynk_token [TOKEN_MAX_LEN - 1]   = 0;
     }
-    
-    //////////////////////////////////////////////
+       
+       
+//////////////////////////////////////////////
     
 #if defined(DATA_EEPROM_BASE)
-
     // For STM32 devices having integrated EEPROM.
-    #warning "STM32 devices have integrated EEPROM. Not using buffered API."
-    
-    //////////////////////////////////////////////
-    
+    #include <EEPROM.h>
+    #warning STM32 devices have integrated EEPROM. Not using buffered API.   
+#else  
+    /**
+     Most STM32 devices don't have an integrated EEPROM. To emulate a EEPROM, the STM32 Arduino core emulated
+     the operation of an EEPROM with the help of the embedded flash.
+     Writing to a flash is very expensive operation, since a whole flash page needs to be written, even if you only
+     want to access the flash byte-wise.
+     The STM32 Arduino core provides a buffered access API to the emulated EEPROM. The library has allocated the
+     buffer even if you don't use the buffered API, so it's strongly suggested to use the buffered API anyhow.
+     */
+    #include <FlashStorage_STM32.h>       // https://github.com/khoih-prog/FlashStorage_STM32
+    #warning STM32 devices have no integrated EEPROM. Using buffered API with FlashStorage_STM32 library
+#endif    // #if defined(DATA_EEPROM_BASE)
+//////////////////////////////////////////////
+          
     void setForcedCP(bool isPersistent)
     {
       uint32_t readForcedConfigPortalFlag = isPersistent? FORCED_PERS_CONFIG_PORTAL_FLAG_DATA : FORCED_CONFIG_PORTAL_FLAG_DATA;
@@ -1253,285 +1265,6 @@ class BlynkWifi
     
     //////////////////////////////////////////////
     
-#else   // #if defined(DATA_EEPROM_BASE)
-    
-    /**
-     Most STM32 devices don't have an integrated EEPROM. To emulate a EEPROM, the STM32 Arduino core emulated
-     the operation of an EEPROM with the help of the embedded flash.
-     Writing to a flash is very expensive operation, since a whole flash page needs to be written, even if you only
-     want to access the flash byte-wise.
-     The STM32 Arduino core provides a buffered access API to the emulated EEPROM. The library has allocated the
-     buffer even if you don't use the buffered API, so it's strongly suggested to use the buffered API anyhow.
-     */
-
-    #warning "STM32 devices don't have integrated EEPROM. Using buffered API."
-    
-    //////////////////////////////////////////////
-    
-    void setForcedCP(bool isPersistent)
-    {
-      uint32_t readForcedConfigPortalFlag = isPersistent? FORCED_PERS_CONFIG_PORTAL_FLAG_DATA : FORCED_CONFIG_PORTAL_FLAG_DATA;
-
-#if ( BLYNK_WM_DEBUG > 2)      
-      BLYNK_LOG1(isPersistent ? BLYNK_F("setForcedCP Persistent") : BLYNK_F("setForcedCP non-Persistent"));
-#endif
-                
-      // First, to copy the data from the flash to the buffer to protect previous data
-      eeprom_buffer_fill();
-      
-      uint16_t offset = CONFIG_EEPROM_START + CONFIG_DATA_SIZE;
-           
-      uint8_t* _pointer = (uint8_t *) &readForcedConfigPortalFlag;
-      
-      for (uint16_t i = 0; i < sizeof(readForcedConfigPortalFlag); i++, _pointer++, offset++)
-      {              
-        eeprom_buffered_write_byte(offset, *_pointer);
-      }
-      
-      // Save the data from the buffer to the flash
-      eeprom_buffer_flush();
-    }
-    
-    //////////////////////////////////////////////
-    
-    void clearForcedCP()
-    {
-      uint32_t readForcedConfigPortalFlag = 0;
-      
-      // First, to copy the data from the flash to the buffer to protect previous data
-      eeprom_buffer_fill();
-               
-      uint16_t offset = CONFIG_EEPROM_START + CONFIG_DATA_SIZE;
-           
-      uint8_t* _pointer = (uint8_t *) &readForcedConfigPortalFlag;
-      
-      for (uint16_t i = 0; i < sizeof(readForcedConfigPortalFlag); i++, _pointer++, offset++)
-      {              
-        eeprom_buffered_write_byte(offset, *_pointer);
-      }
-      
-      // Save the data from the buffer to the flash
-      eeprom_buffer_flush();
-    }
-    
-    //////////////////////////////////////////////
-
-    bool isForcedCP()
-    {
-      uint32_t readForcedConfigPortalFlag;
-      
-      // Return true if forced CP (0xDEADBEEF read at offset EPROM_START + DRD_FLAG_DATA_SIZE + CONFIG_DATA_SIZE)
-      // => set flag noForcedConfigPortal = false
-     
-      // First, to copy the data from the flash to the buffer to protect previous data
-      eeprom_buffer_fill();
-      
-      uint16_t offset = CONFIG_EEPROM_START + CONFIG_DATA_SIZE;
-                
-      uint8_t* _pointer = (uint8_t *) &readForcedConfigPortalFlag;
-      
-      for (uint16_t i = 0; i < sizeof(readForcedConfigPortalFlag); i++, _pointer++, offset++)
-      {              
-        *_pointer = eeprom_buffered_read_byte(offset);
-      }
-      
-      // Return true if forced CP (0xDEADBEEF read at offset EPROM_START + DRD_FLAG_DATA_SIZE + CONFIG_DATA_SIZE)
-      // => set flag noForcedConfigPortal = false     
-      if (readForcedConfigPortalFlag == FORCED_CONFIG_PORTAL_FLAG_DATA)
-      {       
-        persForcedConfigPortal = false;
-        return true;
-      }
-      else if (readForcedConfigPortalFlag == FORCED_PERS_CONFIG_PORTAL_FLAG_DATA)
-      {       
-        persForcedConfigPortal = true;
-        return true;
-      }
-      else
-      {       
-        return false;
-      }
-    }
-    
-    //////////////////////////////////////////////
-
-#if USE_DYNAMIC_PARAMETERS
-
-    bool checkDynamicData()
-    {
-      int checkSum = 0;
-      int readCheckSum;
-           
-      // First, to copy the data from the flash to the buffer to protect previous data
-      eeprom_buffer_fill();
-      
-      uint16_t offset = CONFIG_EEPROM_START + sizeof(Blynk8266_WF_config) + FORCED_CONFIG_PORTAL_FLAG_DATA_SIZE;
-                
-      // Find the longest pdata, then dynamically allocate buffer. Remember to free when done
-      // This is used to store tempo data to calculate checksum to see of data is valid
-      // We dont like to destroy myMenuItems[i].pdata with invalid data
-      
-      for (uint16_t i = 0; i < NUM_MENU_ITEMS; i++)
-      {                             
-        for (uint16_t j = 0; j < myMenuItems[i].maxlen; j++, offset++)
-        {       
-          checkSum += eeprom_buffered_read_byte(offset);    
-        }       
-      }
-      
-      uint8_t* _pointer = (uint8_t *) &readCheckSum;
-      
-      for (uint16_t i = 0; i < sizeof(readCheckSum); i++, _pointer++, offset++)
-      {                  
-        *_pointer = eeprom_buffered_read_byte(offset);
-      }  
-                  
-      BLYNK_LOG4(BLYNK_F("ChkCrR:CrCCsum=0x"), String(checkSum, HEX), F(",CrRCsum=0x"), String(readCheckSum, HEX));
-           
-      if ( checkSum != readCheckSum)
-      {
-        return false;
-      }
-      
-      return true;    
-    }
-    
-    //////////////////////////////////////////////
-    
-    bool EEPROM_getDynamicData()
-    {
-      int readCheckSum;
-      int checkSum = 0;
-      
-      // First, to copy the data from the flash to the buffer to protect previous data
-      eeprom_buffer_fill();
-      
-      totalDataSize = sizeof(Blynk8266_WF_config) + sizeof(readCheckSum);
-          
-      // Using FORCED_CONFIG_PORTAL_FLAG_DATA
-      uint16_t offset = CONFIG_EEPROM_START + sizeof(Blynk8266_WF_config) + FORCED_CONFIG_PORTAL_FLAG_DATA_SIZE;
-      uint8_t* _pointer;
-      
-      for (uint16_t i = 0; i < NUM_MENU_ITEMS; i++)
-      {       
-        _pointer = (uint8_t *) myMenuItems[i].pdata;
-        totalDataSize += myMenuItems[i].maxlen;
-        
-        // Actual size of pdata is [maxlen + 1]
-        memset(myMenuItems[i].pdata, 0, myMenuItems[i].maxlen + 1);
-               
-        for (uint16_t j = 0; j < myMenuItems[i].maxlen; j++, _pointer++, offset++)
-        {
-          *_pointer = eeprom_buffered_read_byte(offset);          
-          checkSum += *_pointer;  
-         }       
-      }
-      
-      _pointer = (uint8_t *) &readCheckSum;
-      
-      for (uint16_t i = 0; i < sizeof(readCheckSum); i++, _pointer++, offset++)
-      {                  
-        *_pointer = eeprom_buffered_read_byte(offset);
-      }
-         
-      BLYNK_LOG4(BLYNK_F("CrCCSum="), String(checkSum, HEX), F(",CrRCSum="), String(readCheckSum, HEX));
-      
-      if ( checkSum != readCheckSum)
-      {
-        return false;
-      }
-     
-      return true;
-    }
-    
-    //////////////////////////////////////////////
-
-    void EEPROM_putDynamicData()
-    {    
-      int checkSum = 0;
-      
-      // First, to copy the data from the flash to the buffer to protect previous data
-      eeprom_buffer_fill();
-      
-      // Using FORCED_CONFIG_PORTAL_FLAG_DATA
-      uint16_t offset = CONFIG_EEPROM_START + sizeof(Blynk8266_WF_config) + FORCED_CONFIG_PORTAL_FLAG_DATA_SIZE;
-      uint8_t* _pointer;
-    
-      for (uint16_t i = 0; i < NUM_MENU_ITEMS; i++)
-      {       
-        _pointer = (uint8_t *) myMenuItems[i].pdata;
-
-#if ( BLYNK_WM_DEBUG > 2)        
-        BLYNK_LOG4(BLYNK_F("pdata="), myMenuItems[i].pdata, F(",len="), myMenuItems[i].maxlen);
-#endif
-                     
-        for (uint16_t j = 0; j < myMenuItems[i].maxlen; j++,_pointer++,offset++)
-        {
-          eeprom_buffered_write_byte(offset, *_pointer);
-          
-          checkSum += *_pointer;     
-         }
-      }
-      
-      _pointer = (uint8_t *) &checkSum;
-      
-      for (uint16_t i = 0; i < sizeof(checkSum); i++, _pointer++, offset++)
-      {              
-        eeprom_buffered_write_byte(offset, *_pointer);
-      }
-      
-      BLYNK_LOG2(BLYNK_F("CrCCSum=0x"), String(checkSum, HEX));
-      
-      // Save the data from the buffer to the flash
-      eeprom_buffer_flush();
-    }
-#endif    // #if USE_DYNAMIC_PARAMETERS
-
-    //////////////////////////////////////////////
-    
-    bool EEPROM_get()
-    {           
-      // Copy the data from the flash to the buffer
-      eeprom_buffer_fill();
-      
-      uint16_t offset = CONFIG_EEPROM_START;
-                
-      uint8_t* _pointer = (uint8_t *) &Blynk8266_WF_config;
-      
-      for (uint16_t i = 0; i < sizeof(Blynk8266_WF_config); i++, _pointer++, offset++)
-      {              
-        *_pointer = eeprom_buffered_read_byte(offset);
-      }
-      
-      NULLTerminateConfig();
-      
-      return true;
-    }
-    
-    //////////////////////////////////////////////
-    
-    void EEPROM_put()
-    {     
-      // First, to copy the data from the flash to the buffer to protect previous data
-      eeprom_buffer_fill();
-      
-      uint16_t offset = CONFIG_EEPROM_START;
-           
-      uint8_t* _pointer = (uint8_t *) &Blynk8266_WF_config;
-      
-      for (uint16_t i = 0; i < sizeof(Blynk8266_WF_config); i++, _pointer++, offset++)
-      {              
-        eeprom_buffered_write_byte(offset, *_pointer);
-      }
-
-      // Save the data from the buffer to the flash
-      eeprom_buffer_flush();  
-    }
-    
-#endif   // #if defined(DATA_EEPROM_BASE) 
-    
-    //////////////////////////////////////////////
-
     void saveConfigData()
     {
       int calChecksum = calcChecksum();
@@ -1893,23 +1626,14 @@ class BlynkWifi
           result.replace("[[sv]]",     Blynk8266_WF_config.blynk_server);
           result.replace("[[tk]]",     Blynk8266_WF_config.blynk_token);
           
-#if USE_DYNAMIC_PARAMETERS
-          if (!menuItemUpdated)
-          {
-            // Don't need to free
-            menuItemUpdated = new bool[NUM_MENU_ITEMS];
-          }
-          
+#if USE_DYNAMIC_PARAMETERS         
           for (uint16_t i = 0; i < NUM_MENU_ITEMS; i++)
           {
             String toChange = String("[[") + myMenuItems[i].id + "]]";
             result.replace(toChange, myMenuItems[i].pdata);
             
-            // To flag item is not yet updated
-            menuItemUpdated[i] = false;
-            
   #if ( BLYNK_WM_DEBUG > 2)                 
-            BLYNK_LOG4(BLYNK_F("h1:myMenuItems["), i, BLYNK_F("]="), myMenuItems[i].pdata )
+            BLYNK_LOG4(BLYNK_F("h1:myMenuItems["), i, BLYNK_F("]="), myMenuItems[i].pdata );
   #endif            
           }
 #endif
@@ -1935,6 +1659,30 @@ class BlynkWifi
           memset(&Blynk8266_WF_config, 0, sizeof(Blynk8266_WF_config));
           strcpy(Blynk8266_WF_config.header, BLYNK_BOARD_TYPE);
         }
+        
+#if USE_DYNAMIC_PARAMETERS
+        if (!menuItemUpdated)
+        {
+          // Don't need to free
+          menuItemUpdated = new bool[NUM_MENU_ITEMS];
+          
+          if (menuItemUpdated)
+          {
+            for (uint16_t i = 0; i < NUM_MENU_ITEMS; i++)
+            {           
+              // To flag item is not yet updated
+              menuItemUpdated[i] = false;           
+            }
+  #if ( BLYNK_WM_DEBUG > 2)                 
+            BLYNK_LOG1(BLYNK_F("h: Init menuItemUpdated" ));
+  #endif                        
+          }
+          else
+          {
+            BLYNK_LOG1(BLYNK_F("h: Error can't alloc memory for menuItemUpdated" ));
+          }
+        }  
+#endif
 
         static bool id_Updated  = false;
         static bool pw_Updated  = false;
