@@ -7,22 +7,6 @@
   Based on and Modified from Blynk library v0.6.1 https://github.com/blynkkk/blynk-library/releases
   Built by Khoi Hoang https://github.com/khoih-prog/Blynk_Esp8266AT_WM
   Licensed under MIT license
-  Version: 1.2.0
-
-  Version Modified By   Date        Comments
-  ------- -----------  ----------   -----------
-  1.0.0   K Hoang      16/02/2020  Initial coding
-  1.0.1   K Hoang      17/02/2020  Add checksum, fix bug
-  1.0.2   K Hoang      22/02/2020  Add support to SAMD boards
-  1.0.3   K Hoang      03/03/2020  Add support to STM32 boards, except STM32F0
-  1.0.4   K Hoang      13/03/2020  Add SAM DUE support. Enhance GUI.
-  1.0.5   K Hoang      23/06/2020  Add Adafruit SAMD21/SAMD51 and nRF52 support, DRD, MultiWiFi features.
-                                   WPA2 SSID PW to 63 chars. Permit special chars such as !,@,#,$,%,^,&,* into data fields.
-  1.0.6   K Hoang      27/06/2020  Add ESP32-AT support and use ESP_AT_Lib. Enhance MultiWiFi connection logic.
-  1.0.7   K Hoang      27/07/2020  Add support to all STM32F/L/H/G/WB/MP1 and Seeeduino SAMD21/SAMD51 boards.
-  1.1.0   K Hoang      15/01/2021  Restore support to Teensy to be used only with Teensy core v1.51.
-  1.1.1   K Hoang      24/01/2021  Add support to Teensy 3.x, to be used only with Teensy core v1.51.
-  1.2.0   K Hoang      28/01/2021  Fix bug. Use more efficient FlashStorage_STM32 and FlashStorage_SAMD.
  *****************************************************************************************************************************/
 
 #ifndef dynamicParams_h

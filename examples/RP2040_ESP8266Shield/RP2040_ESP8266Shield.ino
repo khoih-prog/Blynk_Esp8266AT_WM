@@ -1,6 +1,6 @@
 /****************************************************************************************************************************
-  nRF52_ESP8266Shield.ino
-  For nRF52 boards using ESP8266 WiFi Shield
+  RP2040_ESP8266Shield.ino
+  For RP2040 boards using ESP8266 WiFi Shield
 
   Blynk_Esp8266AT_WM is a library for the Mega, Teensy, SAM DUE and SAMD boards (https://github.com/khoih-prog/Blynk_Esp8266AT_WM)
   to enable easy configuration/reconfiguration and autoconnect/autoreconnect of WiFi/Blynk
@@ -28,7 +28,7 @@
  *****************************************************************************************************************************/
 /****************************************************************************************************************************
     Important notes:
-    1) Tested OK with SAMD, Mega, nRF52, SAM DUE
+    1) Tested OK with SAMD, Mega, nRF52, SAM DUE, RP2040
 
     a) ESP8266-AT version:1.1.0.0(May 11 2016 18:09:56)
        SDK version:1.5.4(baaeaebb)
@@ -128,7 +128,7 @@ void setup()
 
   delay(200);
   
-  Serial.print(F("\nStart nRF52_ESP8266Shield on ")); Serial.println(BOARD_NAME);
+  Serial.print(F("\nStart RP2040_ESP8266Shield on ")); Serial.println(BOARD_NAME);
   Serial.println(BLYNK_ESP8266AT_WM_VERSION);
   Serial.println(ESP_AT_LIB_VERSION);
 
@@ -143,7 +143,7 @@ void setup()
   //Blynk.setConfigPortalIP(IPAddress(192, 168, 152, 1));
   // Personalized portal_ssid and password
   Blynk.setConfigPortal(portal_ssid, portal_password);
-  //Blynk.setConfigPortal("nRF52_WM", "MynRF52_PW");
+  //Blynk.setConfigPortal("RP2040_WM", "MyRP2040_PW");
   Blynk.setConfigPortalChannel(0);
   
   Blynk.begin(wifi);

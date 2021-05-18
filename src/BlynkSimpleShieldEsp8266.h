@@ -17,7 +17,7 @@
   @date       Jun 2015
   @brief
 
-  Version: 1.2.0
+  Version: 1.3.0
 
   Version Modified By   Date        Comments
   ------- -----------  ----------   -----------
@@ -33,16 +33,42 @@
   1.1.0   K Hoang      15/01/2021  Restore support to Teensy to be used only with Teensy core v1.51.
   1.1.1   K Hoang      24/01/2021  Add support to Teensy 3.x, to be used only with Teensy core v1.51.
   1.2.0   K Hoang      28/01/2021  Fix bug. Use more efficient FlashStorage_STM32 and FlashStorage_SAMD.
+  1.3.0   K Hoang      17/05/2021  Add support to RP2040-based boards such as RASPBERRY_PI_PICO
  *****************************************************************************************************************************/
 
 #ifndef BlynkSimpleShieldEsp8266_h
 #define BlynkSimpleShieldEsp8266_h
 
-#ifdef ESP8266
-  #error This code is not intended to run on the ESP8266 platform! Please check your Tools->Board setting.
+#if !( defined(__AVR_ATmega2560__) || defined(__AVR_ATmega2561__) || defined(__AVR_ATmega1280__)   || defined(__AVR_ATmega1281__) || \
+       defined(__AVR_ATmega640__)  || defined(__AVR_ATmega641__)  || defined(ARDUINO_AVR_MEGA2560) || defined(ARDUINO_AVR_MEGA) )
+  #error This code is intended to run on the Mega2560 platform! Please check your Tools->Board setting.
 #endif
 
-#define BLYNK_ESP8266AT_WM_VERSION    "Blynk_Esp8266AT_WM v1.2.0"
+#define BLYNK_ESP8266AT_WM_VERSION    "Blynk_Esp8266AT_WM v1.3.0"
+
+//////////////////////////////////////////////
+// From v1.3.0 to display correct BLYNK_INFO_DEVICE
+
+#define BLYNK_USE_128_VPINS
+
+#if defined(BLYNK_INFO_DEVICE)
+  #undef BLYNK_INFO_DEVICE
+#endif
+#define BLYNK_BUFFERS_SIZE    4096
+
+#if defined(BLYNK_INFO_DEVICE)
+  #undef BLYNK_INFO_DEVICE
+#endif
+
+#if defined(BOARD_NAME)
+  #define BLYNK_INFO_DEVICE   BOARD_NAME
+#elif defined(BOARD_TYPE)
+  #define BLYNK_INFO_DEVICE   BOARD_TYPE
+#else
+  #define BLYNK_INFO_DEVICE   "AVR Mega"
+#endif
+
+//////////////////////////////////////////////
 
 #ifndef BLYNK_INFO_CONNECTION
   #define BLYNK_INFO_CONNECTION  "ESP8266"
@@ -68,39 +94,61 @@
 
 #define SIMPLE_SHIELD_ESP8266_DEBUG       0
 
+//////////////////////////////////////////////
+
 class BlynkTransportShieldEsp8266
 {
-    static void onData(uint8_t mux_id, uint32_t len, void* ptr) {
+    static void onData(uint8_t mux_id, uint32_t len, void* ptr) 
+    {
       ((BlynkTransportShieldEsp8266*)ptr)->onData(mux_id, len);
     }
+    
+    //////////////////////////////////////////////
 
-    void onData(uint8_t mux_id, uint32_t len) {
-      if (mux_id != BLYNK_ESP8266_MUX) {
+    void onData(uint8_t mux_id, uint32_t len) 
+    {
+      if (mux_id != BLYNK_ESP8266_MUX) 
+      {
         return;
+      }
+
+      //KH
+#if (SIMPLE_SHIELD_ESP8266_DEBUG > 1)
+      BLYNK_LOG4("Got:", len, ",Free:", buffer.free());
+#endif
+      //
+
+      if ( (uint32_t) buffer.free() < len)
+      {
+        //KH
+#if (SIMPLE_SHIELD_ESP8266_DEBUG > 0)
+        BLYNK_LOG4("OVF,Got:", len, ",Free:", buffer.free());
+#endif
+
+        return;
+      }
+      
+      while (len) 
+      {
+        if (client->getUart()->available()) 
+        {
+          uint8_t b = client->getUart()->read();
+          //KH
+          // len got from +IPD data
+          buffer.put(b);
+          //
+          len--;
+        }
       }
       
       //KH
 #if (SIMPLE_SHIELD_ESP8266_DEBUG > 1)
-      BLYNK_LOG4(BLYNK_F("Got:"), len, BLYNK_F(", Free:"), buffer.free());
+      BLYNK_LOG2(BLYNK_F("onData Buffer len"), len );
 #endif
       //
-
-      if (buffer.free() < len) 
-      {
-        //KH
-#if (SIMPLE_SHIELD_ESP8266_DEBUG > 0)
-        BLYNK_LOG4(BLYNK_F("OVF,Got:"), len, BLYNK_F(", Free:"), buffer.free());
-#endif
-        return;
-      }
-      while (len) {
-        if (client->getUart()->available()) {
-          uint8_t b = client->getUart()->read();
-          buffer.put(b);
-          len--;
-        }
-      }
     }
+    
+    //////////////////////////////////////////////
 
   public:
     BlynkTransportShieldEsp8266()
@@ -109,60 +157,98 @@ class BlynkTransportShieldEsp8266
       , domain(NULL)
       , port(0)
     {}
+    
+    //////////////////////////////////////////////
 
-    void setEsp8266(ESP8266* esp8266) {
+    void setEsp8266(ESP8266* esp8266) 
+    {
       client = esp8266;
       client->setOnData(onData, this);
     }
+    
+    //////////////////////////////////////////////
 
     //TODO: IPAddress
 
-    void begin(const char* d,  uint16_t p) {
+    void begin(const char* d,  uint16_t p) 
+    {
       domain = d;
       port = p;
     }
+    
+    //////////////////////////////////////////////
 
-    bool connect() {
+    bool connect() 
+    {
       if (!domain || !port)
         return false;
       status = client->createTCP(BLYNK_ESP8266_MUX, domain, port);
       return status;
     }
+    
+    //////////////////////////////////////////////
 
-    void disconnect() {
+    void disconnect() 
+    {
       status = false;
       buffer.clear();
       client->releaseTCP(BLYNK_ESP8266_MUX);
     }
+    
+    //////////////////////////////////////////////
 
-    size_t read(void* buf, size_t len) {
+    size_t read(void* buf, size_t len)
+    {
       millis_time_t start = BlynkMillis();
+      //KH
+      //buffer.size() is number of bytes currently still in FIFO buffer
+      //Check to see if all data are read or not
+
 #if (SIMPLE_SHIELD_ESP8266_DEBUG > 1)
-      BLYNK_LOG4(BLYNK_F("rd:len="), len, BLYNK_F(",Buf="), buffer.size());
+      BLYNK_LOG4("rd:len=", len, ",Buf=", buffer.size());
 #endif
-      while ((buffer.size() < len) && (BlynkMillis() - start < 1500)) {
+
+      while ((buffer.size() < len) && (BlynkMillis() - start < 1500))
+      {
+        // Actually call ESP8266 run/rx_empty (read and locate +IPD, know data len,
+        // then call onData() to get len bytes of data to buffer => BlynkProtocol::ProcessInput()
         client->run();
       }
+      //All data got in FIFO buffer, copy to destination buf and return len
       return buffer.get((uint8_t*)buf, len);
     }
-    size_t write(const void* buf, size_t len) {
-      if (client->send(BLYNK_ESP8266_MUX, (const uint8_t*)buf, len)) {
+    
+    //////////////////////////////////////////////
+
+    size_t write(const void* buf, size_t len) 
+    {
+      if (client->send(BLYNK_ESP8266_MUX, (const uint8_t*)buf, len)) 
+      {
         return len;
       }
+      
       return 0;
     }
+    
+    //////////////////////////////////////////////
 
-    bool connected() {
+    bool connected() 
+    {
       return status;
     }
+    
+    //////////////////////////////////////////////
 
-    int available() {
+    int available()
+    {
       client->run();
 #if (SIMPLE_SHIELD_ESP8266_DEBUG > 2)
-      BLYNK_LOG2(BLYNK_F("Still:"), buffer.size());
+      BLYNK_LOG2("Still:", buffer.size());
 #endif
       return buffer.size();
     }
+    
+    //////////////////////////////////////////////
 
   private:
     ESP8266* client;
@@ -195,15 +281,22 @@ class BlynkTransportShieldEsp8266
     uint16_t    port;
 };
 
+//////////////////////////////////////////////
+
 class BlynkWifi
   : public BlynkProtocol<BlynkTransportShieldEsp8266>
 {
     typedef BlynkProtocol<BlynkTransportShieldEsp8266> Base;
   public:
+  
+    //////////////////////////////////////////////
+    
     BlynkWifi(BlynkTransportShieldEsp8266& transp)
       : Base(transp)
       , wifi(NULL)
     {}
+    
+    //////////////////////////////////////////////
 
     bool WiFiInit()
     {
@@ -244,6 +337,8 @@ class BlynkWifi
 
       return true;
     }
+    
+    //////////////////////////////////////////////
 
     bool connectWiFi(const char* ssid, const char* pass)
     {
@@ -265,6 +360,8 @@ class BlynkWifi
 
       return true;
     }
+    
+    //////////////////////////////////////////////
 
     void config(ESP8266&    esp8266,
                 const char* auth,
@@ -276,6 +373,8 @@ class BlynkWifi
       this->conn.setEsp8266(wifi);
       this->conn.begin(domain, port);
     }
+    
+    //////////////////////////////////////////////
 
     void begin(const char* auth,
                ESP8266&    esp8266,
@@ -288,6 +387,8 @@ class BlynkWifi
       connectWiFi(ssid, pass);
       while (this->connect() != true) {}
     }
+    
+    //////////////////////////////////////////////
 
   String getLocalIP(void)
     {
@@ -303,11 +404,15 @@ class BlynkWifi
       BLYNK_LOG2(BLYNK_F("IP = "), ipAddress);
       return ipAddress;
     }
+    
+    //////////////////////////////////////////////
 
   private:
     ESP8266* wifi;
     String ipAddress = "0.0.0.0";
 };
+
+//////////////////////////////////////////////
 
 static BlynkTransportShieldEsp8266 _blynkTransport;
 BlynkWifi Blynk(_blynkTransport);

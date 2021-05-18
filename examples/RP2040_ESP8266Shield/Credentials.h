@@ -1,5 +1,5 @@
 /****************************************************************************************************************************
-  Credentials.h for STM32_ESP8266Shield.ino
+  Credentials.h for RP2040_ESP8266Shield.ino
    
   Blynk_Esp8266AT_WM is a library for the Mega, Teensy, SAM DUE and SAMD boards (https://github.com/khoih-prog/Blynk_Esp8266AT_WM)
   to enable easy configuration/reconfiguration and autoconnect/autoreconnect of WiFi/Blynk
@@ -43,7 +43,7 @@ typedef struct Configuration
 } Blynk_WF_Configuration;
 */
 
-#define TO_LOAD_DEFAULT_CONFIG_DATA      false    //true
+#define TO_LOAD_DEFAULT_CONFIG_DATA      true
 
 #if TO_LOAD_DEFAULT_CONFIG_DATA
 
@@ -51,12 +51,12 @@ typedef struct Configuration
 // Default Config Data will override Data input from Config Portal (CP)
 // Use LOAD_DEFAULT_CONFIG_DATA = false in normal operation, and use dummy value here
 // Data input from Config Portal (CP) will override Default Config Data
-bool LOAD_DEFAULT_CONFIG_DATA = false;
+bool LOAD_DEFAULT_CONFIG_DATA = false;    //true;
 
 Blynk_WF_Configuration defaultConfig =
 {
   //char header[16], dummy, not used
-  "STM32_ESP_AT",
+  "RP2040_ESP_AT",
   
   // WiFi_Credentials  WiFi_Creds  [NUM_WIFI_CREDENTIALS];
   // WiFi_Credentials.wifi_ssid and WiFi_Credentials.wifi_pw

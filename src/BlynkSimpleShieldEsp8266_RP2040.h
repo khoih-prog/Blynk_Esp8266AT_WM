@@ -1,5 +1,5 @@
 /****************************************************************************************************************************
-  BlynkSimpleShieldEsp8266_Teensy.h
+  BlynkSimpleShieldEsp8266_RP2040.h
   For ESP8266 AT-command shields
 
   Blynk_Esp8266AT_WM is a library for the Mega, Teensy, SAM DUE and SAMD boards (https://github.com/khoih-prog/Blynk_Esp8266AT_WM)
@@ -36,17 +36,17 @@
   1.3.0   K Hoang      17/05/2021  Add support to RP2040-based boards such as RASPBERRY_PI_PICO
  *****************************************************************************************************************************/
 
-#ifndef BlynkSimpleShieldEsp8266_Teensy_h
-#define BlynkSimpleShieldEsp8266_Teensy_h
+#ifndef BlynkSimpleShieldEsp8266_RP2040_h
+#define BlynkSimpleShieldEsp8266_RP2040_h
 
-#if defined(CORE_TEENSY)
-  #if defined(BLYNK_ESP8266_AT_USE_TEENSY)
-    #undef BLYNK_ESP8266_AT_USE_TEENSY
+#if ( defined(ARDUINO_RASPBERRY_PI_PICO) || defined(ARDUINO_ADAFRUIT_FEATHER_RP2040) || defined(ARDUINO_GENERIC_RP2040) )
+  #if defined(BLYNK_ESP8266_AT_USE_RP2040)
+    #undef BLYNK_ESP8266_AT_USE_RP2040
   #endif
-  #define BLYNK_ESP8266_AT_USE_TEENSY      true
-  #warning Use Teensy architecture from Blynk_Esp8266AT_WM
+  #define BLYNK_ESP8266_AT_USE_RP2040      true
+  #warning Use RP2040 architecture from Blynk_Esp8266AT_WM
 #else
-  #error This code is intended to run on the Teensy platform! Please check your Tools->Board setting.
+  #error This code is intended to run only on the RP2040-based boards ! Please check your Tools->Board setting.
 #endif
 
 #define BLYNK_ESP8266AT_WM_VERSION    "Blynk_Esp8266AT_WM v1.3.0"
@@ -69,18 +69,20 @@
   #define BLYNK_INFO_DEVICE   BOARD_NAME
 #elif defined(BOARD_TYPE)
   #define BLYNK_INFO_DEVICE   BOARD_TYPE
+#elif defined(ARDUINO_ARCH_MBED)
+  #define BLYNK_INFO_DEVICE   "MBED RP2040"
 #else
-  #define BLYNK_INFO_DEVICE   "Teensy"
+  #define BLYNK_INFO_DEVICE   "RP2040"
 #endif
 
 //////////////////////////////////////////////
 
 #ifndef BLYNK_INFO_CONNECTION
-#define BLYNK_INFO_CONNECTION  "ESP8266"
+  #define BLYNK_INFO_CONNECTION  "ESP8266"
 #endif
 
 #ifndef BLYNK_ESP8266_MUX
-#define BLYNK_ESP8266_MUX  1
+  #define BLYNK_ESP8266_MUX  1
 #endif
 
 #define BLYNK_SEND_ATOMIC
@@ -97,11 +99,7 @@
   #include <ESP8266_Lib.h>
 #endif
 
-#ifndef SIMPLE_SHIELD_ESP8266_DEBUG
-  #define SIMPLE_SHIELD_ESP8266_DEBUG       0
-#endif
-
-//////////////////////////////////////////////
+#define SIMPLE_SHIELD_ESP8266_DEBUG       0
 
 class BlynkTransportShieldEsp8266
 {
@@ -262,26 +260,15 @@ class BlynkTransportShieldEsp8266
     bool status;
     
     //KH
-#ifdef CORE_TEENSY
-  #if defined(__IMXRT1062__)
-    // For Teensy 4.1/4.0
+#if (BLYNK_ESP8266_AT_USE_RP2040)
+    // For all RP2040
     BlynkFifo<uint8_t, 4096> buffer;
-    #warning Board Teensy 4.0 uses 4k FIFO buffer
-  #elif ( defined(__MKL26Z64__) || defined(ARDUINO_ARCH_AVR) )
-    // For Teensy LC and 2.0
-    BlynkFifo<uint8_t, 512> buffer;
-    #warning Teensy LC and 2.0 uses 512bytes FIFO buffer
-  #else
-    // For Teensy 3.x
-    BlynkFifo<uint8_t, 2048> buffer;
-    #warning Teensy 3.x uses 2k FIFO buffer
-  #endif
+#warning Board RP2040 uses 4k FIFO buffer
 #else
-    // For other AVR Mega
+    // For other unknown RP2040
     //BlynkFifo<uint8_t,256> buffer;
-    // For MeGa 2560 or 1280
     BlynkFifo<uint8_t, 512> buffer;
-    #warning Not Teensy board => uses 512bytes FIFO buffer
+#warning Not known RP2040 board => uses 512bytes FIFO buffer
 #endif
 
     const char* domain;
@@ -426,4 +413,4 @@ BlynkWifi Blynk(_blynkTransport);
 
 #include <BlynkWidgets.h>
 
-#endif
+#endif    //BlynkSimpleShieldEsp8266_RP2040_h

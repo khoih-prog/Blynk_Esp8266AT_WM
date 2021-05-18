@@ -1,6 +1,6 @@
 /****************************************************************************************************************************
   Teensy40_ESP8266Shield_Single.ino
-  For Teensy 4.0 using ESP8266 WiFi Shield
+  For Teensy using ESP8266 WiFi Shield
   
   Blynk_Esp8266AT_WM is a library for the Mega, Teensy, SAM DUE and SAMD boards (https://github.com/khoih-prog/Blynk_Esp8266AT_WM)
   to enable easy configuration/reconfiguration and autoconnect/autoreconnect of WiFi/Blynk
@@ -8,7 +8,7 @@
   Based on and Modified from Blynk library v0.6.1 https://github.com/blynkkk/blynk-library/releases
   Built by Khoi Hoang https://github.com/khoih-prog/Blynk_Esp8266AT_WM
   Licensed under MIT license
-  Version: 1.2.0
+  Version: 1.3.0
 
   Version Modified By   Date        Comments
   ------- -----------  ----------   -----------
@@ -24,12 +24,13 @@
   1.1.0   K Hoang      15/01/2021  Restore support to Teensy to be used only with Teensy core v1.51.
   1.1.1   K Hoang      24/01/2021  Add support to Teensy 3.x, to be used only with Teensy core v1.51.
   1.2.0   K Hoang      28/01/2021  Fix bug. Use more efficient FlashStorage_STM32 and FlashStorage_SAMD.
+  1.3.0   K Hoang      17/05/2021  Add support to RP2040-based boards such as RASPBERRY_PI_PICO
  *****************************************************************************************************************************/
 
 /* Comment this out to disable prints and save space */
 #define BLYNK_PRINT Serial
 
-#if ( defined(ESP8266) || defined(ESP32) || defined(ARDUINO_AVR_MEGA) || defined(ARDUINO_AVR_MEGA2560) || !defined(CORE_TEENSY) )
+#if !( defined(TEENSYDUINO) || defined(CORE_TEENSY) )
   #error This code is intended to run on Teensy platform! Please check your Tools->Board setting.
 #endif
 
@@ -146,6 +147,8 @@
 
 ESP8266 wifi(&EspSerial);
 
+#if USE_BLYNK_WM
+
 #define BLYNK_PIN_FORCED_CONFIG           V10
 #define BLYNK_PIN_FORCED_PERS_CONFIG      V20
 
@@ -172,6 +175,8 @@ BLYNK_WRITE(BLYNK_PIN_FORCED_PERS_CONFIG)
     Blynk.resetAndEnterConfigPortalPersistent();
   }
 }
+
+#endif
 
 void heartBeatPrint()
 {
@@ -223,11 +228,13 @@ void setup()
 
   Serial.print(F("\nStart Teensy40_ESP8266Shield_Single on ")); Serial.println(BOARD_NAME);
   Serial.println(BLYNK_ESP8266AT_WM_VERSION);
+  Serial.println(ESP_AT_LIB_VERSION);
 
   // initialize serial for ESP module
   EspSerial.begin(ESP8266_BAUD);
 
 #if USE_BLYNK_WM
+  Serial.println(DOUBLERESETDETECTOR_GENERIC_VERSION);
   Serial.println(F("Start Blynk_ESP8266AT_WM"));
   //Blynk.setConfigPortalIP(IPAddress(192, 168, 100, 1));
   Blynk.setConfigPortalChannel(0);
@@ -235,7 +242,11 @@ void setup()
   //Blynk.setConfigPortal("Teensy4", "MyTeensy4");
   Blynk.begin(wifi);
 #else
-  Serial.println(F("Start Blynk"));
+  Serial.print(F("Start Blynk no WM with BlynkServer = "));
+  Serial.print(BlynkServer);
+  Serial.print(F(" and Token = "));
+  Serial.println(auth);
+  
   Blynk.begin(auth, wifi, ssid, pass, BlynkServer.c_str(), BLYNK_SERVER_HARDWARE_PORT);
 #endif
 }

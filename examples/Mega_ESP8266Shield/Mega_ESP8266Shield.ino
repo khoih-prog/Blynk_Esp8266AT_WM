@@ -8,7 +8,7 @@
   Based on and Modified from Blynk library v0.6.1 https://github.com/blynkkk/blynk-library/releases
   Built by Khoi Hoang https://github.com/khoih-prog/Blynk_Esp8266AT_WM
   Licensed under MIT license
-  Version: 1.2.0
+  Version: 1.3.0
 
   Version Modified By   Date        Comments
   ------- -----------  ----------   -----------
@@ -24,6 +24,7 @@
   1.1.0   K Hoang      15/01/2021  Restore support to Teensy to be used only with Teensy core v1.51.
   1.1.1   K Hoang      24/01/2021  Add support to Teensy 3.x, to be used only with Teensy core v1.51.
   1.2.0   K Hoang      28/01/2021  Fix bug. Use more efficient FlashStorage_STM32 and FlashStorage_SAMD.
+  1.3.0   K Hoang      17/05/2021  Add support to RP2040-based boards such as RASPBERRY_PI_PICO
  *****************************************************************************************************************************/
 /****************************************************************************************************************************
     Important notes:
@@ -74,15 +75,21 @@
   //#define USE_ESP_AT_LIB    false
 #endif
 
-#if !( defined(ARDUINO_AVR_MEGA) || defined(ARDUINO_AVR_MEGA2560) )
-  #error This code is intended to run only on the Arduino Mega 1280/2560 boards ! Please check your Tools->Board setting.
+//#if !( defined(ARDUINO_AVR_MEGA) || defined(ARDUINO_AVR_MEGA2560) || defined(ARDUINO_AVR_ADK) )
+#if !( defined(__AVR_ATmega2560__) || defined(__AVR_ATmega2561__) || defined(__AVR_ATmega1280__)   || defined(__AVR_ATmega1281__) || \
+       defined(__AVR_ATmega640__)  || defined(__AVR_ATmega641__)  || defined(ARDUINO_AVR_MEGA2560) || defined(ARDUINO_AVR_MEGA) )
+  #error This code is intended to run only on the Arduino Mega 1280/2560/ADK boards ! Please check your Tools->Board setting.
 #endif
 
 // For Mega, use Serial1 or Serial3
 #define EspSerial Serial3
 
-#if defined(ARDUINO_AVR_MEGA2560)
+#if ( defined(ARDUINO_AVR_MEGA2560)|| defined(__AVR_ATmega2561__) )
   #define BOARD_TYPE      "AVR Mega2560"
+#elif ( defined(__AVR_ATmega1280__) ||  defined(__AVR_ATmega1281__) )
+  #define BOARD_TYPE      "AVR Mega1280"
+#elif defined(ARDUINO_AVR_ADK)
+  #define BOARD_TYPE      "AVR MegaADK"
 #else
   #define BOARD_TYPE      "AVR Mega"
 #endif
@@ -131,6 +138,8 @@ char portal_password[]  = "CfgPrtl-PW";
 
 ESP8266 wifi(&EspSerial);
 
+#if USE_BLYNK_WM
+
 #define BLYNK_PIN_FORCED_CONFIG           V10
 #define BLYNK_PIN_FORCED_PERS_CONFIG      V20
 
@@ -157,6 +166,8 @@ BLYNK_WRITE(BLYNK_PIN_FORCED_PERS_CONFIG)
     Blynk.resetAndEnterConfigPortalPersistent();
   }
 }
+
+#endif
 
 void heartBeatPrint()
 {
@@ -208,11 +219,13 @@ void setup()
 
   Serial.print(F("\nStart Mega_ESP8266Shield on ")); Serial.println(BOARD_NAME);
   Serial.println(BLYNK_ESP8266AT_WM_VERSION);
+  Serial.println(ESP_AT_LIB_VERSION);
 
   // initialize serial for ESP module
   EspSerial.begin(ESP8266_BAUD);
 
 #if USE_BLYNK_WM
+  Serial.println(DOUBLERESETDETECTOR_GENERIC_VERSION);
   Serial.println(F("Start Blynk_ESP8266AT_WM"));
 
   // Optional to change default AP IP(192.168.4.1) and channel(10)
@@ -229,7 +242,7 @@ void setup()
   Serial.print(F(" and Token = "));
   Serial.println(auth);
 
-  Blynk.begin(auth, wifi, ssid, pass, BlynkServer.c_str(), BLYNK_SERVER_HARDWARE_PORT);
+  Blynk.begin(auth, wifi, ssid, pass, BlynkServer, BLYNK_SERVER_HARDWARE_PORT);
 #endif
 }
 

@@ -17,7 +17,7 @@
   @date       Jun 2015
   @brief
 
-  Version: 1.2.0
+  Version: 1.3.0
 
   Version Modified By   Date        Comments
   ------- -----------  ----------   -----------
@@ -33,6 +33,7 @@
   1.1.0   K Hoang      15/01/2021  Restore support to Teensy to be used only with Teensy core v1.51.
   1.1.1   K Hoang      24/01/2021  Add support to Teensy 3.x, to be used only with Teensy core v1.51.
   1.2.0   K Hoang      28/01/2021  Fix bug. Use more efficient FlashStorage_STM32 and FlashStorage_SAMD.
+  1.3.0   K Hoang      17/05/2021  Add support to RP2040-based boards such as RASPBERRY_PI_PICO
  *****************************************************************************************************************************/
 
 #ifndef BlynkSimpleShieldEsp8266_Teensy_WM_Single_h
@@ -49,10 +50,34 @@
 #endif
 
 #if !( (TEENSYDUINO==150) ||  (TEENSYDUINO==151) )
-  #error This code is intended to run only on the Teensy code v1.51 ! Please check your Teensy core.
+  //#error This code is intended to run only on the Teensy code v1.51 ! Please check your Teensy core.
 #endif
 
-#define BLYNK_ESP8266AT_WM_VERSION    "Blynk_Esp8266AT_WM v1.2.0"
+#define BLYNK_ESP8266AT_WM_VERSION    "Blynk_Esp8266AT_WM v1.3.0"
+
+//////////////////////////////////////////////
+// From v1.3.0 to display correct BLYNK_INFO_DEVICE
+
+#define BLYNK_USE_128_VPINS
+
+#if defined(BLYNK_INFO_DEVICE)
+  #undef BLYNK_INFO_DEVICE
+#endif
+#define BLYNK_BUFFERS_SIZE    4096
+
+#if defined(BLYNK_INFO_DEVICE)
+  #undef BLYNK_INFO_DEVICE
+#endif
+
+#if defined(BOARD_NAME)
+  #define BLYNK_INFO_DEVICE   BOARD_NAME
+#elif defined(BOARD_TYPE)
+  #define BLYNK_INFO_DEVICE   BOARD_TYPE
+#else
+  #define BLYNK_INFO_DEVICE   "Teensy"
+#endif
+
+//////////////////////////////////////////////
 
 #ifndef BLYNK_INFO_CONNECTION
   #define BLYNK_INFO_CONNECTION  "ESP8266"
@@ -145,6 +170,7 @@ function udVal(key,val){var request=new XMLHttpRequest();var url='/?key='+key+'&
 function sv(){udVal('id',document.getElementById('id').value);udVal('pw',document.getElementById('pw').value);udVal('sv',document.getElementById('sv').value);\
 udVal('tk',document.getElementById('tk').value);alert('Updated');}</script></html>"
 
+//////////////////////////////////////////////
 
 String IPAddressToString(IPAddress _address)
 {
@@ -158,20 +184,27 @@ String IPAddressToString(IPAddress _address)
   return str;
 }
 
+//////////////////////////////////////////////
+
 class BlynkTransportShieldEsp8266
 {
-    static void onData(uint8_t mux_id, uint32_t len, void* ptr) {
+    static void onData(uint8_t mux_id, uint32_t len, void* ptr) 
+    {
       ((BlynkTransportShieldEsp8266*)ptr)->onData(mux_id, len);
     }
+    
+    //////////////////////////////////////////////
 
-    void onData(uint8_t mux_id, uint32_t len) {
-      if (mux_id != BLYNK_ESP8266_MUX) {
+    void onData(uint8_t mux_id, uint32_t len) 
+    {
+      if (mux_id != BLYNK_ESP8266_MUX) 
+      {
         return;
       }
 
       //KH
 #if (SIMPLE_SHIELD_ESP8266_DEBUG > 1)
-      BLYNK_LOG4(BLYNK_F("Got:"), len, BLYNK_F(",Free:"), buffer.free());
+      BLYNK_LOG4("Got:", len, ",Free:", buffer.free());
 #endif
       //
 
@@ -179,13 +212,16 @@ class BlynkTransportShieldEsp8266
       {
         //KH
 #if (SIMPLE_SHIELD_ESP8266_DEBUG > 0)
-        BLYNK_LOG4(BLYNK_F("OVF,Got:"), len, BLYNK_F(",Free:"), buffer.free());
+        BLYNK_LOG4("OVF,Got:", len, ",Free:", buffer.free());
 #endif
 
         return;
       }
-      while (len) {
-        if (client->getUart()->available()) {
+      
+      while (len) 
+      {
+        if (client->getUart()->available()) 
+        {
           uint8_t b = client->getUart()->read();
           //KH
           // len got from +IPD data
@@ -194,12 +230,15 @@ class BlynkTransportShieldEsp8266
           len--;
         }
       }
+      
       //KH
 #if (SIMPLE_SHIELD_ESP8266_DEBUG > 1)
       BLYNK_LOG2(BLYNK_F("onData Buffer len"), len );
 #endif
       //
     }
+    
+    //////////////////////////////////////////////
 
   public:
     BlynkTransportShieldEsp8266()
@@ -208,31 +247,45 @@ class BlynkTransportShieldEsp8266
       , domain(NULL)
       , port(0)
     {}
+    
+    //////////////////////////////////////////////
 
-    void setEsp8266(ESP8266* esp8266) {
+    void setEsp8266(ESP8266* esp8266) 
+    {
       client = esp8266;
       client->setOnData(onData, this);
     }
+    
+    //////////////////////////////////////////////
 
     //TODO: IPAddress
 
-    void begin(const char* d,  uint16_t p) {
+    void begin(const char* d,  uint16_t p) 
+    {
       domain = d;
       port = p;
     }
+    
+    //////////////////////////////////////////////
 
-    bool connect() {
+    bool connect() 
+    {
       if (!domain || !port)
         return false;
       status = client->createTCP(BLYNK_ESP8266_MUX, domain, port);
       return status;
     }
+    
+    //////////////////////////////////////////////
 
-    void disconnect() {
+    void disconnect() 
+    {
       status = false;
       buffer.clear();
       client->releaseTCP(BLYNK_ESP8266_MUX);
     }
+    
+    //////////////////////////////////////////////
 
     size_t read(void* buf, size_t len)
     {
@@ -242,7 +295,7 @@ class BlynkTransportShieldEsp8266
       //Check to see if all data are read or not
 
 #if (SIMPLE_SHIELD_ESP8266_DEBUG > 1)
-      BLYNK_LOG4(BLYNK_F("rd:len="), len, BLYNK_F(",Buf="), buffer.size());
+      BLYNK_LOG4("rd:len=", len, ",Buf=", buffer.size());
 #endif
 
       while ((buffer.size() < len) && (BlynkMillis() - start < 1500))
@@ -254,26 +307,38 @@ class BlynkTransportShieldEsp8266
       //All data got in FIFO buffer, copy to destination buf and return len
       return buffer.get((uint8_t*)buf, len);
     }
+    
+    //////////////////////////////////////////////
 
-    size_t write(const void* buf, size_t len) {
-      if (client->send(BLYNK_ESP8266_MUX, (const uint8_t*)buf, len)) {
+    size_t write(const void* buf, size_t len) 
+    {
+      if (client->send(BLYNK_ESP8266_MUX, (const uint8_t*)buf, len)) 
+      {
         return len;
       }
+      
       return 0;
     }
+    
+    //////////////////////////////////////////////
 
-    bool connected() {
+    bool connected() 
+    {
       return status;
     }
+    
+    //////////////////////////////////////////////
 
     int available()
     {
       client->run();
 #if (SIMPLE_SHIELD_ESP8266_DEBUG > 2)
-      //BLYNK_LOG2(BLYNK_F("Still:"), buffer.size());
+      BLYNK_LOG2("Still:", buffer.size());
 #endif
       return buffer.size();
     }
+    
+    //////////////////////////////////////////////
 
   private:
     ESP8266* client;
@@ -304,15 +369,20 @@ class BlynkTransportShieldEsp8266
     uint16_t    port;
 };
 
+//////////////////////////////////////////////
+
 class BlynkWifi
   : public BlynkProtocol<BlynkTransportShieldEsp8266>
 {
     typedef BlynkProtocol<BlynkTransportShieldEsp8266> Base;
+    
   public:
     BlynkWifi(BlynkTransportShieldEsp8266& transp)
       : Base(transp)
       , wifi(NULL)
     {}
+    
+    //////////////////////////////////////////////
 
     bool WiFiInit()
     {
@@ -321,18 +391,19 @@ class BlynkWifi
       wifi->restore();
       wifi->kick();
       wifi->setEcho(0);
-#else    
-      if (!wifi->restart()) {
+#else
+      if (!wifi->restart()) 
+      {
         BLYNK_LOG1(BLYNK_F("Fail2Rst"));
         return false;
-      }
-
+      }  
       if (!wifi->kick())
       {
         BLYNK_LOG1(BLYNK_F("ESP no respond"));
         //TODO: BLYNK_LOG_TROUBLE(BLYNK_F("esp8266-not-responding"));
         return false;
       }
+      
       if (!wifi->setEcho(0))
       {
         BLYNK_LOG1(BLYNK_F("FailEcho"));
@@ -360,6 +431,8 @@ class BlynkWifi
 
       return true;
     }
+    
+    //////////////////////////////////////////////
 
     bool connectWiFi(const char* ssid, const char* pass)
     {
@@ -392,6 +465,8 @@ class BlynkWifi
 
       return true;
     }
+    
+    //////////////////////////////////////////////
 
     void config(ESP8266&    esp8266,
                 const char* auth,
@@ -403,6 +478,8 @@ class BlynkWifi
       this->conn.setEsp8266(wifi);
       this->conn.begin(domain, port);
     }
+    
+    //////////////////////////////////////////////
 
     void begin(const char* auth,
                ESP8266&    esp8266,
@@ -416,7 +493,8 @@ class BlynkWifi
       connectWiFi(ssid, pass);
       while (this->connect() != true) {}
     }
-
+    
+    //////////////////////////////////////////////
 
     void config(ESP8266& esp8266)
     {
@@ -424,6 +502,8 @@ class BlynkWifi
       this->conn.setEsp8266(wifi);
       WiFiInit();
     }
+    
+    //////////////////////////////////////////////
 
     void begin(ESP8266& esp8266/*, const char *iHostname = ""*/)
     {
@@ -626,14 +706,20 @@ class BlynkWifi
       }
     }
 
+    //////////////////////////////////////////////
+
     void setConfigPortalIP(IPAddress portalIP = IPAddress(192, 168, 4, 1))
     {
       portal_apIP = portalIP;
     }
     
+    //////////////////////////////////////////////
+    
     #define MIN_WIFI_CHANNEL      1
     #define MAX_WIFI_CHANNEL      11    // Channel 12, 13 is flaky, because of bad number 13 ;-)
 
+    //////////////////////////////////////////////
+    
     int setConfigPortalChannel(int channel = 1)
     {
       // If channel < MIN_WIFI_CHANNEL - 1 or channel > MAX_WIFI_CHANNEL => channel = 1
@@ -646,12 +732,16 @@ class BlynkWifi
 
       return AP_channel;
     }
+    
+    //////////////////////////////////////////////
 
     void setConfigPortal(String ssid = "", String pass = "")
     {
       portal_ssid = ssid;
       portal_pass = pass;
     }
+    
+    //////////////////////////////////////////////
 
     void setSTAStaticIPConfig(IPAddress ip, IPAddress gw, IPAddress sn = IPAddress(255, 255, 255, 0),
                               IPAddress dns_address_1 = IPAddress(0, 0, 0, 0),
@@ -673,6 +763,8 @@ class BlynkWifi
       else
         static_DNS2   = dns_address_2;
     }
+    
+    //////////////////////////////////////////////
 
     String getServerName()
     {
@@ -681,6 +773,8 @@ class BlynkWifi
 
       return (String(Blynk8266_WF_config.blynk_server));
     }
+    
+    //////////////////////////////////////////////
 
     String getToken()
     {
@@ -689,6 +783,8 @@ class BlynkWifi
 
       return (String(Blynk8266_WF_config.blynk_token));
     }
+    
+    //////////////////////////////////////////////
 
     int getHWPort()
     {
@@ -697,6 +793,8 @@ class BlynkWifi
 
       return (BLYNK_SERVER_HARDWARE_PORT);
     }
+    
+    //////////////////////////////////////////////
 
     Blynk_WF_Configuration* getFullConfigData(Blynk_WF_Configuration *configData)
     {
@@ -709,6 +807,8 @@ class BlynkWifi
 
       return (configData);
     }
+    
+    //////////////////////////////////////////////
 
     String getLocalIP(void)
     {
@@ -717,17 +817,22 @@ class BlynkWifi
       ipAddress = wifi->getLocalIP();
       ipAddress.replace("+CIFSR:STAIP,\"", "");
       ipAddress.replace("\"", "");
+
       indexNextLine = ipAddress.indexOf("\n");
       ipAddress = ipAddress.substring(0, indexNextLine);
 
       return ipAddress;
     }
+    
+    //////////////////////////////////////////////
 
     void clearConfigData()
     {
       memset(&Blynk8266_WF_config, 0, sizeof(Blynk8266_WF_config));
       saveConfigData();
     }
+    
+    //////////////////////////////////////////////
     
     // Forced CP => Flag = 0xBEEFBEEF. Else => No forced CP
     // Flag to be stored at (EEPROM_START + DRD_FLAG_DATA_SIZE + CONFIG_DATA_SIZE) 
@@ -740,6 +845,8 @@ class BlynkWifi
     
     #define FORCED_CONFIG_PORTAL_FLAG_DATA_SIZE     4
     
+    //////////////////////////////////////////////
+    
     void resetAndEnterConfigPortal()
     {
       persForcedConfigPortal = false;
@@ -750,6 +857,8 @@ class BlynkWifi
       delay(1000);
       resetFunc();
     }
+    
+    //////////////////////////////////////////////
     
     // This will keep CP forever, until you successfully enter CP, and Save data to clear the flag.
     void resetAndEnterConfigPortalPersistent()
@@ -762,6 +871,8 @@ class BlynkWifi
       delay(1000);
       resetFunc();
     }
+    
+    //////////////////////////////////////////////
     
     void resetFunc()
     {
@@ -776,6 +887,7 @@ class BlynkWifi
 #endif
     }
     
+    //////////////////////////////////////////////
 
   private:
     ESP8266* wifi;
@@ -808,6 +920,8 @@ class BlynkWifi
     IPAddress static_SN   = IPAddress(255, 255, 255, 0);
     IPAddress static_DNS1 = IPAddress(0, 0, 0, 0);
     IPAddress static_DNS2 = IPAddress(0, 0, 0, 0);
+    
+    //////////////////////////////////////////////
 
     void displayConfigData(void)
     {
@@ -816,12 +930,15 @@ class BlynkWifi
       BLYNK_LOG6(BLYNK_F("Svr="),  Blynk8266_WF_config.blynk_server, BLYNK_F(",Prt="), BLYNK_SERVER_HARDWARE_PORT,
                  BLYNK_F(",Tok="), Blynk8266_WF_config.blynk_token);
     }
+    
+    //////////////////////////////////////////////
 
     void displayWiFiData(void)
     {
       BLYNK_LOG2(BLYNK_F("IP="), getLocalIP());
     }
-
+    
+    //////////////////////////////////////////////
 
 #define BLYNK_BOARD_TYPE   "SHD_ESP8266"
 #define NO_CONFIG           "blank"
@@ -892,6 +1009,8 @@ class BlynkWifi
 // Stating positon to store Blynk8266_WM_config
 #define CONFIG_EEPROM_START    (EEPROM_START + DRD_FLAG_DATA_SIZE)
 
+    //////////////////////////////////////////////
+    
     int calcChecksum()
     {
       int checkSum = 0;
@@ -916,10 +1035,14 @@ class BlynkWifi
       EEPROM.put(CONFIG_EEPROM_START + CONFIG_DATA_SIZE, readForcedConfigPortalFlag);
     }
     
+    //////////////////////////////////////////////
+    
     void clearForcedCP()
     {
       EEPROM.put(CONFIG_EEPROM_START + CONFIG_DATA_SIZE, 0);
     }
+    
+    //////////////////////////////////////////////
 
     bool isForcedCP()
     {
@@ -1134,11 +1257,22 @@ class BlynkWifi
 
           // Reset configTimeout to stay here until finished.
           configTimeout = 0;
-
-          result.replace("[[id]]",     Blynk8266_WF_config.wifi_ssid);
-          result.replace("[[pw]]",     Blynk8266_WF_config.wifi_pw);
-          result.replace("[[sv]]",     Blynk8266_WF_config.blynk_server);
-          result.replace("[[tk]]",     Blynk8266_WF_config.blynk_token);
+          
+          if (hadConfigData)
+          {
+            result.replace("[[id]]",     Blynk8266_WF_config.wifi_ssid);
+            result.replace("[[pw]]",     Blynk8266_WF_config.wifi_pw);
+            result.replace("[[sv]]",     Blynk8266_WF_config.blynk_server);
+            result.replace("[[tk]]",     Blynk8266_WF_config.blynk_token);
+          }
+          else
+          {            
+            // Better than garbage
+            result.replace("[[id]]",  "");
+            result.replace("[[pw]]",  "");
+            result.replace("[[sv]]",  "blynk_server");
+            result.replace("[[tk]]",  "blynk_token");
+          }
 
           server->send(200, "text/html", result);
 
@@ -1239,10 +1373,16 @@ class BlynkWifi
     
     //////////////////////////////////////////////
     
+#ifndef CONFIG_TIMEOUT
+  #warning Default CONFIG_TIMEOUT = 60s
+  #define CONFIG_TIMEOUT			60000L
+#endif
+
+    //////////////////////////////////////////////
+    
     void startConfigurationMode()
     {
-#define CONFIG_TIMEOUT			60000L
-
+      // initialize ESP module
 #if USE_ESP32_AT
           wifi->restore();
 #endif
@@ -1308,6 +1448,7 @@ class BlynkWifi
 
 };
 
+//////////////////////////////////////////////
 
 static BlynkTransportShieldEsp8266 _blynkTransport;
 BlynkWifi Blynk(_blynkTransport);

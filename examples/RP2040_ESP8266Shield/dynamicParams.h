@@ -1,5 +1,5 @@
 /****************************************************************************************************************************
-  dynamicParams.h for STM32_ESP8266Shield.ino
+  dynamicParams.h for RP1040_ESP8266Shield.ino
    
   Blynk_Esp8266AT_WM is a library for the Mega, Teensy, SAM DUE and SAMD boards (https://github.com/khoih-prog/Blynk_Esp8266AT_WM)
   to enable easy configuration/reconfiguration and autoconnect/autoreconnect of WiFi/Blynk
@@ -18,7 +18,7 @@
 
 /////////////// Start dynamic Credentials ///////////////
 
-//Defined in <BlynkSimpleShieldEsp8266_STM32_WM.h>
+//Defined in <BlynkSimpleShieldEsp8266_RP2040_WM.h>
 /**************************************
   #define MAX_ID_LEN                5
   #define MAX_DISPLAY_NAME_LEN      16
@@ -35,7 +35,7 @@
 #if USE_DYNAMIC_PARAMETERS
 
 #define MAX_MQTT_SERVER_LEN      34
-char MQTT_Server  [MAX_MQTT_SERVER_LEN + 1]   = "default-mqtt-server";
+char MQTT_Server  [MAX_MQTT_SERVER_LEN + 1]   = "mqtt-server";
 
 #define MAX_MQTT_PORT_LEN        6
 char MQTT_Port   [MAX_MQTT_PORT_LEN + 1]  = "1883";
