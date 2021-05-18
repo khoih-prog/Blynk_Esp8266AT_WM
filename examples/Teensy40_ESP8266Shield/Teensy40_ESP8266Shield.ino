@@ -141,29 +141,24 @@ void setup()
 #endif
 }
 
-#if USE_DYNAMIC_PARAMETERS
+#if (USE_BLYNK_WM && USE_DYNAMIC_PARAMETERS)
 void displayCredentials()
 {
   Serial.println("\nYour stored Credentials :");
 
-  for (uint16_t i = 0; i < NUM_MENU_ITEMS; i++)
+  for (uint8_t i = 0; i < NUM_MENU_ITEMS; i++)
   {
     Serial.println(String(myMenuItems[i].displayName) + " = " + myMenuItems[i].pdata);
   }
 }
-#endif
 
-void loop()
+void displayCredentialsInLoop()
 {
-  Blynk.run();
-  check_status();
-
-#if USE_DYNAMIC_PARAMETERS
   static bool displayedCredentials = false;
 
   if (!displayedCredentials)
   {
-    for (uint16_t i = 0; i < NUM_MENU_ITEMS; i++)
+    for (uint8_t i = 0; i < NUM_MENU_ITEMS; i++)
     {
       if (!strlen(myMenuItems[i].pdata))
       {
@@ -177,5 +172,15 @@ void loop()
       }
     }
   }
-#endif  
+}
+#endif
+
+void loop()
+{
+  Blynk.run();
+  check_status();
+
+#if (USE_BLYNK_WM && USE_DYNAMIC_PARAMETERS)
+  displayCredentialsInLoop();
+#endif 
 }

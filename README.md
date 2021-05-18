@@ -85,7 +85,9 @@
   * [4. SAMD_ESP8266Shield using FlashStorage_SAMD on Adafruit ITSYBITSY_M4 with ESP8266-AT shield](#4-samd_esp8266shield-using-flashstorage_samd-on-adafruit-itsybitsy_m4-with-esp8266-at-shield)
   * [5. Teensy40_ESP8266Shield using EEPROM on TEENSY 4.0 with ESP8266-AT shield](#5-teensy40_esp8266shield-using-eeprom-on-teensy-40-with-esp8266-at-shield)
   * [6. RP2040_ESP8266Shield using LittleFS on RASPBERRY_PI_PICO with ESP8266-AT shield](#6-rp2040_esp8266shield-using-littlefs-on-raspberry_pi_pico-with-esp8266-at-shield)
-  * [7. RP2040_ESP8266Shield on MBED RASPBERRY_PI_PICO with ESP8266-AT shield](#6-rp2040_esp8266shield-on-mbed-raspberry_pi_pico-with-esp8266-at-shield)
+    * [6.1. No ConfigDat or Forced Config Portal => Config Portal](#61-no-configdat-or-forced-config-portal--config-portal)
+    * [6.2. Save => Exit Config Portal and run normally](#62-save--exit-config-portal-and-run-normally)
+  * [7. RP2040_ESP8266Shield on MBED RASPBERRY_PI_PICO with ESP8266-AT shield](#7-rp2040_esp8266shield-on-mbed-raspberry_pi_pico-with-esp8266-at-shield)
 * [Debug](#debug)
 * [Troubleshooting](#troubleshooting)
 * [Releases](#releases)
@@ -111,7 +113,7 @@ This library is designed to help you to eliminate `hardcoding` your Wifi and Bly
 
 The **RP2040-based boards, such as RASPBERRY_PI_PICO**, are currently supported using [**Earle Philhower's arduino-pico** core v1.4.0+](https://github.com/earlephilhower/arduino-pico) with Blynk/WiFiManager features thanks to LittleFS support. 
 
-The support to [**Arduino-mbed RP2040** core](https://github.com/arduino/ArduinoCore-mbed) with Blynk/WiFiManager features will be added in the future using **simulated-EEPROM or LittleFS** if ready then. NOw you can use this core without Blynk/WiFiManager features.
+The support to [**Arduino-mbed RP2040** core](https://github.com/arduino/ArduinoCore-mbed) with Blynk/WiFiManager features will be added in the future using **simulated-EEPROM or LittleFS** if ready then. Now you can use this core without Blynk/WiFiManager features.
 
 New recent features:
 
@@ -243,15 +245,16 @@ With version `v1.0.0` or later, you now can configure:
  9. [`Adafruit nRF52 v0.21.0+`](https://github.com/adafruit/Adafruit_nRF52_Arduino) for nRF52 boards such as Adafruit NRF52840_FEATHER, NRF52832_FEATHER, NRF52840_FEATHER_SENSE, NRF52840_ITSYBITSY, NRF52840_CIRCUITPLAY, NRF52840_CLUE, NRF52840_METRO, NRF52840_PCA10056, PARTICLE_XENON, **NINA_B302_ublox**, etc. [![GitHub release](https://img.shields.io/github/release/adafruit/Adafruit_nRF52_Arduino.svg)](https://github.com/adafruit/Adafruit_nRF52_Arduino/releases/latest)
 10. [`Earle Philhower's arduino-pico core v1.4.0+`](https://github.com/earlephilhower/arduino-pico) for RP2040-based boards such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, etc. [![GitHub release](https://img.shields.io/github/release/earlephilhower/arduino-pico.svg)](https://github.com/earlephilhower/arduino-pico/releases/latest)
 11. [`Arduino mbed_rp2040 core 2.1.0+`](https://github.com/arduino/ArduinoCore-mbed) for Arduino (Use Arduino Board Manager) RP2040-based boards, such as RASPBERRY_PI_PICO. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-mbed.svg)](https://github.com/arduino/ArduinoCore-mbed/releases/latest)
-20. [`ESP_AT_Lib v1.2.0+`](https://github.com/khoih-prog/ESP_AT_Lib) for ESP8266/ESP32-AT shields. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/ESP_AT_Lib.svg?)](https://www.ardu-badge.com/ESP_AT_Lib). [![GitHub release](https://img.shields.io/github/release/khoih-prog/ESP_AT_Lib.svg)](https://github.com/khoih-prog/ESP_AT_Lib/releases/latest)
-12. [`ESP8266_AT_WebServer v1.2.0+`](https://github.com/khoih-prog/ESP8266_AT_WebServer). To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/ESP8266_AT_WebServer.svg?)](https://www.ardu-badge.com/ESP8266_AT_WebServer). [![GitHub release](https://img.shields.io/github/release/khoih-prog/ESP8266_AT_WebServer.svg)](https://github.com/khoih-prog/ESP8266_AT_WebServer/releases/latest)
-13. [`FlashStorage_SAMD library v1.1.0+`](https://github.com/khoih-prog/FlashStorage_SAMD) for SAMD21 and SAMD51 boards (ZERO, MKR, NANO_33_IOT, M0, M0 Pro, AdaFruit Itsy-Bitsy M4, etc.). [![GitHub release](https://img.shields.io/github/release/khoih-prog/FlashStorage_SAMD.svg)](https://github.com/khoih-prog/FlashStorage_SAMD/releases/latest)
-14. [`FlashStorage_STM32 v1.1.0+`](https://github.com/khoih-prog/FlashStorage_STM32) for STM32F/L/H/G/WB/MP1 boards. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/FlashStorage_STM32.svg?)](https://www.ardu-badge.com/FlashStorage_STM32). [![GitHub release](https://img.shields.io/github/release/khoih-prog/FlashStorage_STM32.svg)](https://github.com/khoih-prog/FlashStorage_STM32/releases/latest)
-15. [`DueFlashStorage library v1.0.0+`](https://github.com/sebnil/DueFlashStorage) for SAM DUE. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/DueFlashStorage.svg?)](https://www.ardu-badge.com/DueFlashStorage)
-16. [`Ai-Thinker AT Firmware v1.5.4`](AT_Firmwares/At_firmware_bin1.54.zip) or [`AT Firmware v1.7.4.0`](AT_Firmwares/AT_Firmware_bin_1.7.4.0.zip) for ESP8266-AT shields.
-17. [`AT version_2.1.0.0_dev`](AT_Firmwares/AT_version_2.1.0.0_dev.zip) for ESP32-AT shields.
-18. [`Adafruit's LittleFS/InternalFS`](https://www.adafruit.com) for nRF52
-19. [`DoubleResetDetector_Generic v1.0.3+`](https://github.com/khoih-prog/DoubleResetDetector_Generic). To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/DoubleResetDetector_Generic.svg?)](https://www.ardu-badge.com/DoubleResetDetector_Generic). [![GitHub release](https://img.shields.io/github/release/khoih-prog/DoubleResetDetector_Generic.svg)](https://github.com/khoih-prog/DoubleResetDetector_Generic/releases/latest)
+12. [`ESP_AT_Lib v1.2.0+`](https://github.com/khoih-prog/ESP_AT_Lib) for ESP8266/ESP32-AT shields. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/ESP_AT_Lib.svg?)](https://www.ardu-badge.com/ESP_AT_Lib). [![GitHub release](https://img.shields.io/github/release/khoih-prog/ESP_AT_Lib.svg)](https://github.com/khoih-prog/ESP_AT_Lib/releases/latest)
+13. [`ESP8266_AT_WebServer v1.2.0+`](https://github.com/khoih-prog/ESP8266_AT_WebServer). To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/ESP8266_AT_WebServer.svg?)](https://www.ardu-badge.com/ESP8266_AT_WebServer). [![GitHub release](https://img.shields.io/github/release/khoih-prog/ESP8266_AT_WebServer.svg)](https://github.com/khoih-prog/ESP8266_AT_WebServer/releases/latest)
+14. [`FlashStorage_SAMD library v1.1.0+`](https://github.com/khoih-prog/FlashStorage_SAMD) for SAMD21 and SAMD51 boards (ZERO, MKR, NANO_33_IOT, M0, M0 Pro, AdaFruit Itsy-Bitsy M4, etc.). [![GitHub release](https://img.shields.io/github/release/khoih-prog/FlashStorage_SAMD.svg)](https://github.com/khoih-prog/FlashStorage_SAMD/releases/latest)
+15. [`FlashStorage_STM32 v1.1.0+`](https://github.com/khoih-prog/FlashStorage_STM32) for STM32F/L/H/G/WB/MP1 boards. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/FlashStorage_STM32.svg?)](https://www.ardu-badge.com/FlashStorage_STM32). [![GitHub release](https://img.shields.io/github/release/khoih-prog/FlashStorage_STM32.svg)](https://github.com/khoih-prog/FlashStorage_STM32/releases/latest)
+16. [`DueFlashStorage library v1.0.0+`](https://github.com/sebnil/DueFlashStorage) for SAM DUE. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/DueFlashStorage.svg?)](https://www.ardu-badge.com/DueFlashStorage)
+17. [`DoubleResetDetector_Generic v1.2.0+`](https://github.com/khoih-prog/DoubleResetDetector_Generic). To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/DoubleResetDetector_Generic.svg?)](https://www.ardu-badge.com/DoubleResetDetector_Generic). [![GitHub release](https://img.shields.io/github/release/khoih-prog/DoubleResetDetector_Generic.svg)](https://github.com/khoih-prog/DoubleResetDetector_Generic/releases/latest)
+18. [`Ai-Thinker AT Firmware v1.5.4`](AT_Firmwares/At_firmware_bin1.54.zip) or [`AT Firmware v1.7.4.0`](AT_Firmwares/AT_Firmware_bin_1.7.4.0.zip) for ESP8266-AT shields.
+19. [`AT version_2.1.0.0_dev`](AT_Firmwares/AT_version_2.1.0.0_dev.zip) for ESP32-AT shields.
+20. [`Adafruit's LittleFS/InternalFS`](https://www.adafruit.com) for nRF52
+
 
 
 ---
@@ -950,7 +953,7 @@ Then click `Save`. After you restarted, you will see your built-in LED turned OF
     b) ESP8266-AT version:1.7.4.0(May 11 2020 19:13:04)
        SDK version:3.0.4(9532ceb)
        compile time:May 27 2020 10:12:22
-       Bin version(Wroom 02):1.7.4
+       Bin version(Wroom 02):1.7.4     
 
     2) These versions don't work on SAMD,  but work on Mega (hanging when connect to Blynk, WiFi OK)
        To find bug and fix in Blynk ESP8266_Lib or Blynk library
@@ -961,12 +964,9 @@ Then click `Save`. After you restarted, you will see your built-in LED turned OF
 #if USE_BLYNK_WM
   #include "Credentials.h"
   #include "dynamicParams.h"
-#endif
 
-ESP8266 wifi(&EspSerial);
-
-#define BLYNK_PIN_FORCED_CONFIG           V10
-#define BLYNK_PIN_FORCED_PERS_CONFIG      V20
+  #define BLYNK_PIN_FORCED_CONFIG           V10
+  #define BLYNK_PIN_FORCED_PERS_CONFIG      V20
 
 // Use button V10 (BLYNK_PIN_FORCED_CONFIG) to forced Config Portal
 BLYNK_WRITE(BLYNK_PIN_FORCED_CONFIG)
@@ -991,6 +991,10 @@ BLYNK_WRITE(BLYNK_PIN_FORCED_PERS_CONFIG)
     Blynk.resetAndEnterConfigPortalPersistent();
   }
 }
+
+#endif
+
+ESP8266 wifi(&EspSerial);
 
 void heartBeatPrint()
 {
@@ -1042,11 +1046,13 @@ void setup()
   
   Serial.print(F("\nStart nRF52_ESP8266Shield on ")); Serial.println(BOARD_NAME);
   Serial.println(BLYNK_ESP8266AT_WM_VERSION);
+  Serial.println(ESP_AT_LIB_VERSION);
 
   // initialize serial for ESP module
   EspSerial.begin(ESP8266_BAUD);
   
 #if USE_BLYNK_WM
+  Serial.println(DOUBLERESETDETECTOR_GENERIC_VERSION);
   Serial.println(F("Start Blynk_ESP8266AT_WM"));
 
   // Optional to change default AP IP(192.168.4.1) and channel(10)
@@ -1061,35 +1067,30 @@ void setup()
   Serial.print(F("Start Blynk no WM with BlynkServer = "));
   Serial.print(BlynkServer);
   Serial.print(F(" and Token = "));
+  Serial.println(auth);
+  
   Blynk.begin(auth, wifi, ssid, pass, BlynkServer.c_str(), BLYNK_SERVER_HARDWARE_PORT);
 #endif
 }
 
-#if USE_DYNAMIC_PARAMETERS
+#if (USE_BLYNK_WM && USE_DYNAMIC_PARAMETERS)
 void displayCredentials()
 {
-  Serial.println(F("\nYour stored Credentials :"));
+  Serial.println("\nYour stored Credentials :");
 
-  for (uint16_t i = 0; i < NUM_MENU_ITEMS; i++)
+  for (uint8_t i = 0; i < NUM_MENU_ITEMS; i++)
   {
-    Serial.print(myMenuItems[i].displayName);
-    Serial.print(F(" = "));
-    Serial.println(myMenuItems[i].pdata);
+    Serial.println(String(myMenuItems[i].displayName) + " = " + myMenuItems[i].pdata);
   }
 }
-#endif
 
-void loop()
+void displayCredentialsInLoop()
 {
-  Blynk.run();
-  check_status();
-
-#if USE_DYNAMIC_PARAMETERS
   static bool displayedCredentials = false;
 
   if (!displayedCredentials)
   {
-    for (uint16_t i = 0; i < NUM_MENU_ITEMS; i++)
+    for (uint8_t i = 0; i < NUM_MENU_ITEMS; i++)
     {
       if (!strlen(myMenuItems[i].pdata))
       {
@@ -1103,7 +1104,17 @@ void loop()
       }
     }
   }
-#endif  
+}
+#endif
+
+void loop()
+{
+  Blynk.run();
+  check_status();
+
+#if (USE_BLYNK_WM && USE_DYNAMIC_PARAMETERS)
+  displayCredentialsInLoop();
+#endif 
 }
 ```
 
