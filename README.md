@@ -15,17 +15,7 @@
   * [Features](#features)
   * [Currently Supported Boards](#currently-supported-boards)
   * [Currently Supported AT-command shields](#currently-supported-at-command-shields)
-* [Changelog](#changelog)
-  * [Major Releases v1.3.0](#major-releases-v130)
-  * [Releases v1.2.0](#releases-v120)
-  * [Releases v1.1.1](#releases-v111)
-  * [Major Releases v1.1.0](#major-releases-v110)
-  * [Releases v1.0.7](#releases-v107)
-  * [Releases v1.0.6](#releases-v106)
-  * [Major Releases v1.0.5](#major-releases-v105)
-  * [Releases v1.0.4](#releases-v104)
-  * [Releases v1.0.3](#releases-v103)
-  * [Releases v1.0.2](#releases-v102)
+* [Changelog](changelog.md)
 * [Prerequisites](#prerequisites)
 * [Important Notes about AT Firmwares](#important-notes-about-at-firmwares)
   * [1. Tested OK with ESP8266-AT shields](#1-tested-ok-with-esp8266-at-shields)
@@ -90,7 +80,6 @@
   * [7. RP2040_ESP8266Shield on MBED RASPBERRY_PI_PICO with ESP8266-AT shield](#7-rp2040_esp8266shield-on-mbed-raspberry_pi_pico-with-esp8266-at-shield)
 * [Debug](#debug)
 * [Troubleshooting](#troubleshooting)
-* [Releases](#releases)
 * [Issues](#issues)
 * [TO DO](#to-do)
 * [DONE](#done)
@@ -156,101 +145,25 @@ New recent features:
 ---
 ---
 
-## Changelog
-
-### Major Releases v1.3.0
-
-1. Add support to RP2040-based boards, such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, using [**Earle Philhower's arduino-pico core** v1.4.0+](https://github.com/earlephilhower/arduino-pico) to use with or without Blynk/WiFiManager features.
-2. Add support to RP2040-based boards, such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, using [**Arduino-mbed RP2040** core](https://github.com/arduino/ArduinoCore-mbed) to use without Blynk/WiFiManager features.
-3. Fix bug
-4. Optimize code
-5. Update examples with new features
-
-### Releases v1.2.0
-
-1. Use new and more efficient [FlashStorage_STM32](https://github.com/khoih-prog/FlashStorage_STM32) and [FlashStorage_SAMD](https://github.com/khoih-prog/FlashStorage_SAMD) library versions.
-2. Fix Config Portal bug
-
-### Releases v1.1.1
-
-1. Add support to **Teensy 3.x boards**, using only Teensy core v1.51 if Config Portal is needed.
-
-### Major Releases v1.1.0
-
-1. Restore support to **Teensy 4.x boards**, using only Teensy core v1.51 if Config Portal is needed.
-2. Add STM32 emulated-EEPROM feature so that saving to EEPROM is usable and much faster.
-3. Add functions to control Config Portal from software or Virtual Switches. Check [How to trigger a Config Portal from code #25](https://github.com/khoih-prog/Blynk_WM/issues/25)
-4. Renew all examples to demo the new Virtual ConfigPortal SW feature
-5. Optimize code and fix many bugs.
-
-### Releases v1.0.7
-
-1. Add support to all **STM32F/L/H/G/WB/MP1** (Nucleo-144 NUCLEO_F767ZI, Nucleo-64 NUCLEO_L053R8, etc.)
-2. Add support to **Seeeduino SAMD21/SAMD51 boards** (SEEED_WIO_TERMINAL, SEEED_FEMTO_M0, SEEED_XIAO_M0, Wio_Lite_MG126, WIO_GPS_BOARD, SEEEDUINO_ZERO, SEEEDUINO_LORAWAN, SEEED_GROVE_UI_WIRELESS, etc.)
-3. Sync with latest [**ESP8266_AT_WebServer Library v1.0.12**](https://github.com/khoih-prog/ESP8266_AT_WebServer/releases/tag/v1.0.12)
-
-### Releases v1.0.6
-
-1. Add support to **ESP32-AT**
-2. Use new [**ESP_AT_Lib**](https://github.com/khoih-prog/ESP_AT_Lib) to support ESP8266/ESP32-AT
-3. Enhance MultiWiFi connection logic.
-4. New logic for `USE_DEFAULT_CONFIG_DATA` to autoload Config / Dynamic Data in developing stage.
-
-### Major Releases v1.0.5
-
-1. Add support to ***nRF52 (AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B302_ublox, NINA_B112_ublox, etc.)***. Dynamic custom parameters to be saved ***automatically in LittleFS***.
-2. Add support to ***Adafruit SAMD21/SAM51 (Itsy-Bitsy M0/M4, Metro M0/M4, Grand Central M4, Feather M0/M4 Express, etc.)***. Dynamic custom parameters to be saved ***automatically in FlashStorage***.
-3. Add ***MultiWiFi*** features for WiFi
-4. Add ***DoubleResetDetector*** (DRD) feature.
-5. Increase WPA2 SSID and PW to 63 chars. Permit special chars such as !,@,#,$,%,^,&,* into data fields.
-6. Restructure examples separate Credentials / Defines / Dynamic Params / Code.
-7. Drop support to **Teensy** boards.
-
-### Releases v1.0.4
-
-1. Add support to **SAM DUE**
-2. Reduce html and code size for faster Config Portal response. 
-3. Enhance GUI.
-4. Config Portal AP SSID and Password will use 4 bytes of hardware unique macAddress, only for Teensy.
-
-### Releases v1.0.3
-
-1. Add support to **STM32F/L/H/G/WB/MP1** boards. STM32F0 boards are not supported.
-2. Add clearConfigData() function.
-
-### Releases v1.0.2
-
-1. Add support to **SAMD** (ZERO, MKR, NANO_33_IOT, M0, M0 Pro, AdaFruit CIRCUITPLAYGROUND_EXPRESS, etc.) boards
-
-To help you to eliminate `hardcoding` your Wifi and Blynk credentials for Mega/Teensy boards running ESP8266 AT shields, and updating/reflashing every time when you need to change them. Configuration data are saved in configurable locatioon in EEPROM.
-
-With version `v1.0.0` or later, you now can configure:
-
-1. `Config Portal Static IP address, Name and Password.`
-2. `Static IP address, Gateway, Subnet Mask and 2 DNS Servers IP addresses.`
-
----
----
-
 ## Prerequisites
 
- 1. [`Arduino IDE 1.8.13+` for Arduino](https://www.arduino.cc/en/Main/Software)
+ 1. [`Arduino IDE 1.8.16+` for Arduino](https://www.arduino.cc/en/Main/Software)
  2. [`Arduino AVR core 1.8.3+`](https://github.com/arduino/ArduinoCore-avr) for Arduino (Use Arduino Board Manager) for AVR boards. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-avr.svg)](https://github.com/arduino/ArduinoCore-avr/releases/latest)
  3. [`Arduino Core for STM32 v2.0.0+`](https://github.com/stm32duino/Arduino_Core_STM32) for STM32F/L/H/G/WB/MP1 boards (Nucleo-144 NUCLEO_F767ZI, Nucleo-64 NUCLEO_L053R8, etc.). [![GitHub release](https://img.shields.io/github/release/stm32duino/Arduino_Core_STM32.svg)](https://github.com/stm32duino/Arduino_Core_STM32/releases/latest)
  4. [`Teensy core 1.51`](https://www.pjrc.com/teensy/td_download.html) for Teensy (4.1, 4.0, 3.6, 3.5, 3,2, 3.1, 3.0, LC) boards. **Must use Teensy core v1.51, otherwise, the Config Portal can't run.**
  5. [`Arduino SAM DUE core v1.6.12+`](https://github.com/arduino/ArduinoCore-sam) for SAM DUE ARM Cortex-M3 boards.
  6. [`Arduino SAMD core 1.8.11+`](https://github.com/arduino/ArduinoCore-samd) for SAMD ARM Cortex-M0+ boards. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-samd.svg)](https://github.com/arduino/ArduinoCore-samd/releases/latest)
- 7. [`Adafruit SAMD core 1.6.8+`](https://github.com/adafruit/ArduinoCore-samd) for SAMD ARM Cortex-M0+ and M4 boards (Nano 33 IoT, etc.). [![GitHub release](https://img.shields.io/github/release/adafruit/ArduinoCore-samd.svg)](https://github.com/adafruit/ArduinoCore-samd/releases/latest)
+ 7. [`Adafruit SAMD core 1.7.5+`](https://github.com/adafruit/ArduinoCore-samd) for SAMD ARM Cortex-M0+ and M4 boards (Nano 33 IoT, etc.). [![GitHub release](https://img.shields.io/github/release/adafruit/ArduinoCore-samd.svg)](https://github.com/adafruit/ArduinoCore-samd/releases/latest)
  8. [`Seeeduino SAMD core 1.8.1+`](https://github.com/Seeed-Studio/ArduinoCore-samd) for SAMD21/SAMD51 boards (XIAO M0, Wio Terminal, etc.). [![Latest release](https://img.shields.io/github/release/Seeed-Studio/ArduinoCore-samd.svg)](https://github.com/Seeed-Studio/ArduinoCore-samd/releases/latest/)
- 9. [`Adafruit nRF52 v0.21.0+`](https://github.com/adafruit/Adafruit_nRF52_Arduino) for nRF52 boards such as Adafruit NRF52840_FEATHER, NRF52832_FEATHER, NRF52840_FEATHER_SENSE, NRF52840_ITSYBITSY, NRF52840_CIRCUITPLAY, NRF52840_CLUE, NRF52840_METRO, NRF52840_PCA10056, PARTICLE_XENON, **NINA_B302_ublox**, etc. [![GitHub release](https://img.shields.io/github/release/adafruit/Adafruit_nRF52_Arduino.svg)](https://github.com/adafruit/Adafruit_nRF52_Arduino/releases/latest)
-10. [`Earle Philhower's arduino-pico core v1.4.0+`](https://github.com/earlephilhower/arduino-pico) for RP2040-based boards such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, etc. [![GitHub release](https://img.shields.io/github/release/earlephilhower/arduino-pico.svg)](https://github.com/earlephilhower/arduino-pico/releases/latest)
-11. [`Arduino mbed_rp2040 core 2.1.0+`](https://github.com/arduino/ArduinoCore-mbed) for Arduino (Use Arduino Board Manager) RP2040-based boards, such as RASPBERRY_PI_PICO. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-mbed.svg)](https://github.com/arduino/ArduinoCore-mbed/releases/latest)
-12. [`ESP_AT_Lib v1.2.0+`](https://github.com/khoih-prog/ESP_AT_Lib) for ESP8266/ESP32-AT shields. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/ESP_AT_Lib.svg?)](https://www.ardu-badge.com/ESP_AT_Lib). [![GitHub release](https://img.shields.io/github/release/khoih-prog/ESP_AT_Lib.svg)](https://github.com/khoih-prog/ESP_AT_Lib/releases/latest)
-13. [`ESP8266_AT_WebServer v1.2.0+`](https://github.com/khoih-prog/ESP8266_AT_WebServer). To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/ESP8266_AT_WebServer.svg?)](https://www.ardu-badge.com/ESP8266_AT_WebServer). [![GitHub release](https://img.shields.io/github/release/khoih-prog/ESP8266_AT_WebServer.svg)](https://github.com/khoih-prog/ESP8266_AT_WebServer/releases/latest)
-14. [`FlashStorage_SAMD library v1.1.0+`](https://github.com/khoih-prog/FlashStorage_SAMD) for SAMD21 and SAMD51 boards (ZERO, MKR, NANO_33_IOT, M0, M0 Pro, AdaFruit Itsy-Bitsy M4, etc.). [![GitHub release](https://img.shields.io/github/release/khoih-prog/FlashStorage_SAMD.svg)](https://github.com/khoih-prog/FlashStorage_SAMD/releases/latest)
+ 9. [`Adafruit nRF52 v1.0.0+`](https://github.com/adafruit/Adafruit_nRF52_Arduino) for nRF52 boards such as Adafruit NRF52840_FEATHER, NRF52832_FEATHER, NRF52840_FEATHER_SENSE, NRF52840_ITSYBITSY, NRF52840_CIRCUITPLAY, NRF52840_CLUE, NRF52840_METRO, NRF52840_PCA10056, PARTICLE_XENON, **NINA_B302_ublox**, etc. [![GitHub release](https://img.shields.io/github/release/adafruit/Adafruit_nRF52_Arduino.svg)](https://github.com/adafruit/Adafruit_nRF52_Arduino/releases/latest)
+10. [`Earle Philhower's arduino-pico core v1.9.4+`](https://github.com/earlephilhower/arduino-pico) for RP2040-based boards such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, etc. [![GitHub release](https://img.shields.io/github/release/earlephilhower/arduino-pico.svg)](https://github.com/earlephilhower/arduino-pico/releases/latest)
+11. [`Arduino mbed_rp2040 core 2.4.1+`](https://github.com/arduino/ArduinoCore-mbed) for Arduino (Use Arduino Board Manager) RP2040-based boards, such as RASPBERRY_PI_PICO. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-mbed.svg)](https://github.com/arduino/ArduinoCore-mbed/releases/latest)
+12. [`ESP_AT_Lib v1.4.0+`](https://github.com/khoih-prog/ESP_AT_Lib) for ESP8266/ESP32-AT shields. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/ESP_AT_Lib.svg?)](https://www.ardu-badge.com/ESP_AT_Lib). [![GitHub release](https://img.shields.io/github/release/khoih-prog/ESP_AT_Lib.svg)](https://github.com/khoih-prog/ESP_AT_Lib/releases/latest)
+13. [`ESP8266_AT_WebServer v1.4.0+`](https://github.com/khoih-prog/ESP8266_AT_WebServer). To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/ESP8266_AT_WebServer.svg?)](https://www.ardu-badge.com/ESP8266_AT_WebServer). [![GitHub release](https://img.shields.io/github/release/khoih-prog/ESP8266_AT_WebServer.svg)](https://github.com/khoih-prog/ESP8266_AT_WebServer/releases/latest)
+14. [`FlashStorage_SAMD library v1.2.0+`](https://github.com/khoih-prog/FlashStorage_SAMD) for SAMD21 and SAMD51 boards (ZERO, MKR, NANO_33_IOT, M0, M0 Pro, AdaFruit Itsy-Bitsy M4, etc.). [![GitHub release](https://img.shields.io/github/release/khoih-prog/FlashStorage_SAMD.svg)](https://github.com/khoih-prog/FlashStorage_SAMD/releases/latest)
 15. [`FlashStorage_STM32 v1.1.0+`](https://github.com/khoih-prog/FlashStorage_STM32) for STM32F/L/H/G/WB/MP1 boards. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/FlashStorage_STM32.svg?)](https://www.ardu-badge.com/FlashStorage_STM32). [![GitHub release](https://img.shields.io/github/release/khoih-prog/FlashStorage_STM32.svg)](https://github.com/khoih-prog/FlashStorage_STM32/releases/latest)
 16. [`DueFlashStorage library v1.0.0+`](https://github.com/sebnil/DueFlashStorage) for SAM DUE. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/DueFlashStorage.svg?)](https://www.ardu-badge.com/DueFlashStorage)
-17. [`DoubleResetDetector_Generic v1.2.0+`](https://github.com/khoih-prog/DoubleResetDetector_Generic). To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/DoubleResetDetector_Generic.svg?)](https://www.ardu-badge.com/DoubleResetDetector_Generic). [![GitHub release](https://img.shields.io/github/release/khoih-prog/DoubleResetDetector_Generic.svg)](https://github.com/khoih-prog/DoubleResetDetector_Generic/releases/latest)
+17. [`DoubleResetDetector_Generic v1.7.2+`](https://github.com/khoih-prog/DoubleResetDetector_Generic). To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/DoubleResetDetector_Generic.svg?)](https://www.ardu-badge.com/DoubleResetDetector_Generic). [![GitHub release](https://img.shields.io/github/release/khoih-prog/DoubleResetDetector_Generic.svg)](https://github.com/khoih-prog/DoubleResetDetector_Generic/releases/latest)
 18. [`Ai-Thinker AT Firmware v1.5.4`](AT_Firmwares/At_firmware_bin1.54.zip) or [`AT Firmware v1.7.4.0`](AT_Firmwares/AT_Firmware_bin_1.7.4.0.zip) for ESP8266-AT shields.
 19. [`AT version_2.1.0.0_dev`](AT_Firmwares/AT_version_2.1.0.0_dev.zip) for ESP32-AT shields.
 20. [`Adafruit's LittleFS/InternalFS`](https://www.adafruit.com) for nRF52
@@ -2810,91 +2723,8 @@ If you get compilation errors, more often than not, you may need to install a ne
 
 Sometimes, the library will only work if you update the `ESP8266 AT shield` core to the newer or older version because some function compatibility.
 
+
 ---
----
-
-## Releases
-
-### Major Releases v1.3.0
-
-1. Add support to RP2040-based boards, such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, using [**Earle Philhower's arduino-pico core** v1.4.0+](https://github.com/earlephilhower/arduino-pico) to use with or without Blynk/WiFiManager features.
-2. Add support to RP2040-based boards, such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, using [**Arduino-mbed RP2040** core](https://github.com/arduino/ArduinoCore-mbed) to use without Blynk/WiFiManager features.
-3. Fix bug
-4. Optimize code
-5. Update examples with new features
-
-### Releases v1.2.0
-
-1. Use new and more efficient [FlashStorage_STM32](https://github.com/khoih-prog/FlashStorage_STM32) and [FlashStorage_SAMD](https://github.com/khoih-prog/FlashStorage_SAMD) library versions.
-2. Fix Config Portal bug
-
-### Releases v1.1.1
-
-1. Add support to **Teensy 3.x boards**, using only Teensy core v1.51 if Config Portal is needed.
-
-### Major Releases v1.1.0
-
-1. Restore support to **Teensy 4.x boards**, using only Teensy core v1.51 if Config Portal is needed.
-2. Add STM32 emulated-EEPROM feature so that saving to EEPROM is usable and much faster.
-3. Add functions to control Config Portal from software or Virtual Switches. Check [How to trigger a Config Portal from code #25](https://github.com/khoih-prog/Blynk_WM/issues/25)
-4. Renew all examples to demo the new Virtual ConfigPortal SW feature
-5. Optimize code and fix many bugs.
-
-### Releases v1.0.7
-
-1. Add support to all **STM32F/L/H/G/WB/MP1** (Nucleo-144 NUCLEO_F767ZI, Nucleo-64 NUCLEO_L053R8, etc.)
-2. Add support to **Seeeduino SAMD21/SAMD51 boards** (SEEED_WIO_TERMINAL, SEEED_FEMTO_M0, SEEED_XIAO_M0, Wio_Lite_MG126, WIO_GPS_BOARD, SEEEDUINO_ZERO, SEEEDUINO_LORAWAN, SEEED_GROVE_UI_WIRELESS, etc.)
-3. Sync with latest [**ESP8266_AT_WebServer Library v1.0.12**](https://github.com/khoih-prog/ESP8266_AT_WebServer/releases/tag/v1.0.12)
-
-### Releases v1.0.6
-
-1. Add support to **ESP32-AT**
-2. Use new [**ESP_AT_Lib**](https://github.com/khoih-prog/ESP_AT_Lib) to support ESP8266/ESP32-AT
-3. Enhance MultiWiFi connection logic.
-4. New logic for `USE_DEFAULT_CONFIG_DATA` to autoload Config / Dynamic Data in developing stage.
-
-### Major Releases v1.0.5
-
-1. Add support to ***nRF52 (AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B302_ublox, NINA_B112_ublox, etc.)***. Dynamic custom parameters to be saved ***automatically in LittleFS***.
-2. Add support to ***Adafruit SAMD21/SAM51 (Itsy-Bitsy M0/M4, Metro M0/M4, Grand Central M4, Feather M0/M4 Express, etc.)***. Dynamic custom parameters to be saved ***automatically in FlashStorage***.
-3. Add ***MultiWiFi*** features for WiFi
-4. Add ***DoubleResetDetector*** (DRD) feature.
-5. Increase WPA2 SSID and PW to 63 chars. Permit special chars such as !,@,#,$,%,^,&,* into data fields.
-6. Restructure examples separate Credentials / Defines / Dynamic Params / Code.
-7. Drop support to **Teensy** boards.
-
-### Releases v1.0.4
-
-1. Add support to **SAM DUE**
-2. Reduce html and code size for faster Config Portal response. 
-3. Enhance GUI.
-4. Config Portal AP SSID and Password will use 4 bytes of hardware unique macAddress, only for Teensy.
-
-### Releases v1.0.3
-
-1. Add support to **STM32F/L/H/G/WB/MP1** boards. STM32F0 boards are not supported.
-2. Add clearConfigData() function.
-
-### Releases v1.0.2
-
-1. Add support to **SAMD** (ZERO, MKR, NANO_33_IOT, M0, M0 Pro, AdaFruit CIRCUITPLAYGROUND_EXPRESS, etc.) boards
-
-#### Releases v1.0.1
-
-1. Add ESP8266_AT_WebServer dependency for auto-install via Library Manager
-2. Add prerequisite to README.md
-3. Add checksum, fix bug
-
-#### Releases v1.0.0
-
-***Features***
-
-1. This release of very-easy-to-use will help you to eliminate hardcoding your Wifi and Blynk credentials for Mega/Teensy boards running ESP8266 AT shields, and updating/reflashing every time when you need to change them.
-2. Configuration data are stored in configurable location in EEPROM.
-3. When WiFi and/or Blynk connection is lost, the WM will try auto-reconnect.
-4. `Config Portal Static IP address, Name and Password.`
-5. `Static IP address, Gateway, Subnet Mask.`
-
 ---
 
 ### Issues
