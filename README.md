@@ -1374,7 +1374,7 @@ uint16_t NUM_MENU_ITEMS = 0;
 Start nRF52_ESP8266Shield on NRF52840_ITSYBITSY
 Blynk_Esp8266AT_WM v1.3.1
 ESP_AT_Lib v1.2.0
-DoubleResetDetector_Generic v1.2.0
+DoubleResetDetector_Generic v1.7.2
 Start Blynk_ESP8266AT_WM
 [7691] AT version:1.7.4.0(May 11 2020 19:13:04)
 SDK version:3.0.4(9532ceb)
@@ -1485,7 +1485,7 @@ FFFFFFF
 Start nRF52_ESP8266Shield on NRF52840_ITSYBITSY
 Blynk_Esp8266AT_WM v1.3.1
 ESP_AT_Lib v1.2.0
-DoubleResetDetector_Generic v1.2.0
+DoubleResetDetector_Generic v1.7.2
 Start Blynk_ESP8266AT_WM
 [7919] AT version:1.7.4.0(May 11 2020 19:13:04)
 SDK version:3.0.4(9532ceb)
@@ -1575,7 +1575,7 @@ CP Button Hit. Rebooting
 Start nRF52_ESP8266Shield on NRF52840_ITSYBITSY
 Blynk_Esp8266AT_WM v1.3.1
 ESP_AT_Lib v1.2.0
-DoubleResetDetector_Generic v1.2.0
+DoubleResetDetector_Generic v1.7.2
 Start Blynk_ESP8266AT_WM
 [7466] AT version:1.7.4.0(May 11 2020 19:13:04)
 SDK version:3.0.4(9532ceb)
@@ -1644,7 +1644,7 @@ Persistent CP Button Hit. Rebooting
 Start nRF52_ESP8266Shield on NRF52840_ITSYBITSY
 Blynk_Esp8266AT_WM v1.3.1
 ESP_AT_Lib v1.2.0
-DoubleResetDetector_Generic v1.2.0
+DoubleResetDetector_Generic v1.7.2
 Start Blynk_ESP8266AT_WM
 [7441] AT version:1.7.4.0(May 11 2020 19:13:04)
 SDK version:3.0.4(9532ceb)
@@ -1705,7 +1705,7 @@ Port = 1883
 Start STM32_ESP8266Shield on NUCLEO_F767ZI
 Blynk_Esp8266AT_WM v1.3.1
 ESP_AT_Lib v1.2.0
-DoubleResetDetector_Generic v1.2.0
+DoubleResetDetector_Generic v1.7.2
 Start Blynk_ESP8266AT_WM
 [6769] AT version:1.1.0.0(May 11 2016 18:09:56)
 SDK version:1.5.4(baaeaebb)
@@ -1765,7 +1765,7 @@ FFF[60707] h:repl
 Start STM32_ESP8266Shield on NUCLEO_F767ZI
 Blynk_Esp8266AT_WM v1.3.1
 ESP_AT_Lib v1.2.0
-DoubleResetDetector_Generic v1.2.0
+DoubleResetDetector_Generic v1.7.2
 Start Blynk_ESP8266AT_WM
 [6768] AT version:1.1.0.0(May 11 2016 18:09:56)
 SDK version:1.5.4(baaeaebb)
@@ -1828,7 +1828,7 @@ CP Button Hit. Rebooting
 Start STM32_ESP8266Shield on NUCLEO_F767ZI
 Blynk_Esp8266AT_WM v1.3.1
 ESP_AT_Lib v1.2.0
-DoubleResetDetector_Generic v1.2.0
+DoubleResetDetector_Generic v1.7.2
 Start Blynk_ESP8266AT_WM
 [6769] AT version:1.1.0.0(May 11 2016 18:09:56)
 SDK version:1.5.4(baaeaebb)
@@ -1869,7 +1869,7 @@ Persistent CP Button Hit. Rebooting
 Start STM32_ESP8266Shield on NUCLEO_F767ZI
 Blynk_Esp8266AT_WM v1.3.1
 ESP_AT_Lib v1.2.0
-DoubleResetDetector_Generic v1.2.0
+DoubleResetDetector_Generic v1.7.2
 Start Blynk_ESP8266AT_WM
 [6769] AT version:1.1.0.0(May 11 2016 18:09:56)
 SDK version:1.5.4(baaeaebb)
@@ -1911,7 +1911,7 @@ FFFFFF
 Start SAM_DUE_ESP8266Shield on SAM DUE
 Blynk_Esp8266AT_WM v1.3.1
 ESP_AT_Lib v1.2.0
-DoubleResetDetector_Generic v1.2.0
+DoubleResetDetector_Generic v1.7.2
 Start Blynk_ESP8266AT_WM
 [6779] AT version:1.1.0.0(May 11 2016 18:09:56)
 SDK version:1.5.4(baaeaebb)
@@ -1984,7 +1984,7 @@ FFFF[126459] h:repl id
 Start SAM_DUE_ESP8266Shield on SAM DUE
 Blynk_Esp8266AT_WM v1.3.1
 ESP_AT_Lib v1.2.0
-DoubleResetDetector_Generic v1.2.0
+DoubleResetDetector_Generic v1.7.2
 Start Blynk_ESP8266AT_WM
 [6771] AT version:1.1.0.0(May 11 2016 18:09:56)
 SDK version:1.5.4(baaeaebb)
@@ -2051,7 +2051,7 @@ CP Button Hit. Rebooting
 Start SAM_DUE_ESP8266Shield on SAM DUE
 Blynk_Esp8266AT_WM v1.3.1
 ESP_AT_Lib v1.2.0
-DoubleResetDetector_Generic v1.2.0
+DoubleResetDetector_Generic v1.7.2
 Start Blynk_ESP8266AT_WM
 [6771] AT version:1.1.0.0(May 11 2016 18:09:56)
 SDK version:1.5.4(baaeaebb)
@@ -2096,7 +2096,7 @@ Persistent CP Button Hit. Rebooting
 Start SAM_DUE_ESP8266Shield on SAM DUE
 Blynk_Esp8266AT_WM v1.3.1
 ESP_AT_Lib v1.2.0
-DoubleResetDetector_Generic v1.2.0
+DoubleResetDetector_Generic v1.7.2
 Start Blynk_ESP8266AT_WM
 [6771] AT version:1.1.0.0(May 11 2016 18:09:56)
 SDK version:1.5.4(baaeaebb)
@@ -2141,7 +2141,7 @@ MQTT Server = default-mqtt-server
 Start SAMD_ESP8266Shield on ITSYBITSY_M4
 Blynk_Esp8266AT_WM v1.3.1
 ESP_AT_Lib v1.2.0
-DoubleResetDetector_Generic v1.2.0
+DoubleResetDetector_Generic v1.7.2
 Start Blynk_ESP8266AT_WM
 [30676] AT version:1.7.4.0(May 11 2020 19:13:04)
 SDK version:3.0.4(9532ceb)
@@ -2184,7 +2184,7 @@ F
 Start SAMD_ESP8266Shield on ITSYBITSY_M4
 Blynk_Esp8266AT_WM v1.3.1
 ESP_AT_Lib v1.2.0
-DoubleResetDetector_Generic v1.2.0
+DoubleResetDetector_Generic v1.7.2
 Start Blynk_ESP8266AT_WM
 [35347] AT version:1.7.4.0(May 11 2020 19:13:04)
 SDK version:3.0.4(9532ceb)
@@ -2255,7 +2255,7 @@ CP Button Hit. Rebooting
 Start SAMD_ESP8266Shield on ITSYBITSY_M4
 Blynk_Esp8266AT_WM v1.3.1
 ESP_AT_Lib v1.2.0
-DoubleResetDetector_Generic v1.2.0
+DoubleResetDetector_Generic v1.7.2
 Start Blynk_ESP8266AT_WM
 [30676] AT version:1.7.4.0(May 11 2020 19:13:04)
 SDK version:3.0.4(9532ceb)
@@ -2344,7 +2344,7 @@ FF
 Start Teensy_ESP8266Shield on TEENSY 4.1/4.0
 Blynk_Esp8266AT_WM v1.3.1
 ESP_AT_Lib v1.2.0
-DoubleResetDetector_Generic v1.2.0
+DoubleResetDetector_Generic v1.7.2
 [8878] AT version:1.7.4.0(May 11 2020 19:13:04)
 SDK version:3.0.4(9532ceb)
 compile time:May 27 2020 10:12:17
@@ -2425,7 +2425,7 @@ FFFF[106580] h:repl id
 Start Teensy_ESP8266Shield on TEENSY 4.1/4.0
 Blynk_Esp8266AT_WM v1.3.1
 ESP_AT_Lib v1.2.0
-DoubleResetDetector_Generic v1.2.0
+DoubleResetDetector_Generic v1.7.2
 Start Blynk_ESP8266AT_WM
 [80347] AT version:1.7.4.0(May 11 2020 19:13:04)
 SDK version:3.0.4(9532ceb)
@@ -2508,7 +2508,7 @@ The following is the sample terminal output when running example [RP2040_ESP8266
 Start RP2040_ESP8266Shield on RASPBERRY_PI_PICO
 Blynk_Esp8266AT_WM v1.3.1
 ESP_AT_Lib v1.2.0
-DoubleResetDetector_Generic v1.2.0
+DoubleResetDetector_Generic v1.7.2
 Start Blynk_ESP8266AT_WM
 [7447] AT version:1.7.4.0(May 11 2020 19:13:04)
 SDK version:3.0.4(9532ceb)
@@ -2624,7 +2624,7 @@ FFFFF[111550] h: Init menuItemUpdated
 Start RP2040_ESP8266Shield on RASPBERRY_PI_PICO
 Blynk_Esp8266AT_WM v1.3.1
 ESP_AT_Lib v1.2.0
-DoubleResetDetector_Generic v1.2.0
+DoubleResetDetector_Generic v1.7.2
 Start Blynk_ESP8266AT_WM
 [120835] AT version:1.7.4.0(May 11 2020 19:13:04)
 SDK version:3.0.4(9532ceb)
