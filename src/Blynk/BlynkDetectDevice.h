@@ -23,7 +23,7 @@
   @date       Jun 2015
   @brief
 
-  Version: 1.3.0
+  Version: 1.3.1
 
   Version Modified By   Date        Comments
   ------- -----------  ----------   -----------
@@ -40,6 +40,7 @@
   1.1.1   K Hoang      24/01/2021  Add support to Teensy 3.x, to be used only with Teensy core v1.51.
   1.2.0   K Hoang      28/01/2021  Fix bug. Use more efficient FlashStorage_STM32 and FlashStorage_SAMD.
   1.3.0   K Hoang      17/05/2021  Add support to RP2040-based boards such as RASPBERRY_PI_PICO
+  1.3.1   K Hoang      09/10/2021  Update `platform.ini` and `library.json` 
  *****************************************************************************************************************************/
 
 #ifndef BlynkDetectDevice_h

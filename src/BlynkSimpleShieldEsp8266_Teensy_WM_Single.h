@@ -17,7 +17,7 @@
   @date       Jun 2015
   @brief
 
-  Version: 1.3.0
+  Version: 1.3.1
 
   Version Modified By   Date        Comments
   ------- -----------  ----------   -----------
@@ -34,6 +34,7 @@
   1.1.1   K Hoang      24/01/2021  Add support to Teensy 3.x, to be used only with Teensy core v1.51.
   1.2.0   K Hoang      28/01/2021  Fix bug. Use more efficient FlashStorage_STM32 and FlashStorage_SAMD.
   1.3.0   K Hoang      17/05/2021  Add support to RP2040-based boards such as RASPBERRY_PI_PICO
+  1.3.1   K Hoang      09/10/2021  Update `platform.ini` and `library.json` 
  *****************************************************************************************************************************/
 
 #ifndef BlynkSimpleShieldEsp8266_Teensy_WM_Single_h
@@ -53,7 +54,7 @@
   //#error This code is intended to run only on the Teensy code v1.51 ! Please check your Teensy core.
 #endif
 
-#define BLYNK_ESP8266AT_WM_VERSION    "Blynk_Esp8266AT_WM v1.3.0"
+#define BLYNK_ESP8266AT_WM_VERSION    "Blynk_Esp8266AT_WM v1.3.1"
 
 //////////////////////////////////////////////
 // From v1.3.0 to display correct BLYNK_INFO_DEVICE
