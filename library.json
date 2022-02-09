@@ -12,7 +12,7 @@
   "repository":
   {
     "type": "git",
-    "url": "//https://github.com/khoih-prog/Blynk_Esp8266AT_WM"
+    "url": "https://github.com/khoih-prog/Blynk_Esp8266AT_WM"
   },
   "homepage": "http://blynk.cc",
   "export": {
@@ -33,31 +33,31 @@
     {
       "owner": "khoih-prog",
       "name": "ESP8266_AT_WebServer",
-      "version": "^1.4.0",
+      "version": "^1.5.3",
       "platforms": ["*"]
     },
     {
       "owner": "khoih-prog",
       "name": "DoubleResetDetector_Generic",
-      "version": "^1.7.2",
+      "version": "^1.8.0",
       "platforms": ["*"]
     },
     {
       "owner": "khoih-prog",
       "name": "FlashStorage_SAMD",
-      "version": "^1.2.0",
+      "version": "^1.3.2",
       "platforms": ["*"]
     },
     {
       "owner": "khoih-prog",
       "name": "FlashStorage_STM32",
-      "version": "^1.1.0",
+      "version": "^1.2.0",
       "platforms": ["*"]
     },
     {
       "owner": "khoih-prog",
       "name": "ESP_AT_Lib",
-      "version": "^1.4.0",
+      "version": "^1.4.1",
       "platforms": ["*"]
     }
   ],
